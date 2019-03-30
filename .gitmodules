@@ -4,3 +4,6 @@
 [submodule "Razor/vendor/GLFW"]
 	path = Razor/vendor/GLFW
 	url = https://github.com/TheCherno/GLFW
+[submodule "Razor/vendor/imgui"]
+	path = Razor/vendor/imgui
+	url = https://github.com/TheCherno/imgui

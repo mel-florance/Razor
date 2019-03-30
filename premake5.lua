@@ -12,8 +12,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Razor/vendor/GLFW/include"
+IncludeDir["Glad"] = "Razor/vendor/Glad/include"
+IncludeDir["ImGui"] = "Razor/vendor/imgui"
 
 include "Razor/vendor/GLFW"
+include "Razor/vendor/Glad"
+include "Razor/vendor/ImGui"
 
 project "Razor"
 	location "Razor"
@@ -36,12 +40,16 @@ project "Razor"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
 	{
 		"GLFW",
+		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -53,7 +61,8 @@ project "Razor"
 		defines
 		{
 			"RZ_PLATFORM_WINDOWS",
-			"RZ_BUILD_DLL"
+			"RZ_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands

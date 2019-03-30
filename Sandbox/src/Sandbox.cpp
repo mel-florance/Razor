@@ -5,7 +5,7 @@ class Sandbox : public Razor::Application
 public:
 	Sandbox()
 	{
-
+		PushOverlay(new Razor::ImGuiLayer());
 	}
 
 	~Sandbox()

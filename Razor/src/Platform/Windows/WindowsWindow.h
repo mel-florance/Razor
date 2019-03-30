@@ -2,7 +2,8 @@
 
 #include "Razor/Window.h"
 
-#include <GLFW/glfw3.h>
+
+struct GLFWwindow;
 
 namespace Razor {
 

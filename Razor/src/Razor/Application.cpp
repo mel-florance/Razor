@@ -3,12 +3,19 @@
 #include "Application.h"
 #include "Razor/Events/ApplicationEvent.h"
 #include "Razor/Log.h"
-#include "GLFW/glfw3.h"
+
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Razor {
 
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application()
 	{
+		RZ_CORE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(RZ_BIND_EVENT_FN(Application::OnEvent));
 	}
@@ -20,11 +27,13 @@ namespace Razor {
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
 		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
