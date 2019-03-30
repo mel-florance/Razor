@@ -1,3 +1,6 @@
 [submodule "Razor/vendor/spdlog"]
 	path = Razor/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Razor/vendor/GLFW"]
+	path = Razor/vendor/GLFW
+	url = https://github.com/TheCherno/GLFW

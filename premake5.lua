@@ -10,6 +10,11 @@ workspace "Razor"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "Razor/vendor/GLFW/include"
+
+include "Razor/vendor/GLFW"
+
 project "Razor"
 	location "Razor"
 	kind "SharedLib"
@@ -30,7 +35,14 @@ project "Razor"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -51,14 +63,17 @@ project "Razor"
 
 	filter "configurations:Debug"
 		defines "RZ_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "RZ_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 		
 	filter "configurations:Dist"
 		defines "RZ_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 
