@@ -4,6 +4,9 @@
     <Filter Include="Razor">
       <UniqueIdentifier>{F31F020E-5F34-2ABF-28B6-CD1E948926F0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Razor\Events">
+      <UniqueIdentifier>{77FC7BFE-635F-0BA3-0CE5-4359F826D725}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Razor.h" />
@@ -16,9 +19,22 @@
     <ClInclude Include="src\Razor\Entrypoint.h">
       <Filter>Razor</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Events\ApplicationEvent.h">
+      <Filter>Razor\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Events\Event.h">
+      <Filter>Razor\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Events\KeyEvent.h">
+      <Filter>Razor\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Events\MouseEvent.h">
+      <Filter>Razor\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Log.h">
       <Filter>Razor</Filter>
     </ClInclude>
+    <ClInclude Include="src\rzpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Razor\Application.cpp">
@@ -27,5 +43,6 @@
     <ClCompile Include="src\Razor\Log.cpp">
       <Filter>Razor</Filter>
     </ClCompile>
+    <ClCompile Include="src\rzpch.cpp" />
   </ItemGroup>
 </Project>
