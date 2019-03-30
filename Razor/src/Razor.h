@@ -2,6 +2,7 @@
 
 // For use in Razor applications
 #include "Razor/Application.h"
+#include "Razor/Log.h"
 
 // --- Entrypoint ---
 #include "Razor/Entrypoint.h"

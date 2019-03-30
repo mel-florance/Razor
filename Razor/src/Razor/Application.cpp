@@ -6,13 +6,14 @@ namespace Razor {
 	{
 	}
 
-	void Application::run()
-	{
-		while (true);
-
-	}
 	Application::~Application()
 	{
 	}
+
+	void Application::run()
+	{
+		while (true);
+	}
+
 }
 

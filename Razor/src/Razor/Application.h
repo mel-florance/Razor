@@ -8,10 +8,8 @@ namespace Razor {
 	{
 	public:
 		Application();
-
-		void run();
-
 		virtual ~Application();
+		void run();
 	};
 
 	Application* createApplication();
