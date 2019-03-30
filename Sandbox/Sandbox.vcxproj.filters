@@ -15,21 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Razor\Core.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Application.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Entrypoint.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Razor\Application.cpp">
+    <ClCompile Include="src\Sandbox.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
