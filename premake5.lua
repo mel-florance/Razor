@@ -19,6 +19,8 @@ include "Razor/vendor/GLFW"
 include "Razor/vendor/Glad"
 include "Razor/vendor/ImGui"
 
+startproject "Sandbox"
+
 project "Razor"
 	location "Razor"
 	kind "SharedLib"
