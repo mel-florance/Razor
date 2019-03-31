@@ -16,6 +16,7 @@ namespace Razor {
 		virtual void OnDetach() {};
 		virtual void OnUpdate() {};
 		virtual void OnEvent(Event& event) {}
+		virtual void OnImGuiRender() {}
 
 		inline const std::string& GetName() const { return m_DebugName; }
 

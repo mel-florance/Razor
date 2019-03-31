@@ -5,6 +5,7 @@
 #include "Razor/LayerStack.h"
 #include "Razor/Events/Event.h"
 #include "Razor/Events/ApplicationEvent.h"
+#include "Razor/ImGui/ImGuiLayer.h"
 
 namespace Razor {
 
@@ -25,6 +26,7 @@ namespace Razor {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 
 		LayerStack m_LayerStack;

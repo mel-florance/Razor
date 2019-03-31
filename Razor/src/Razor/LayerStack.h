@@ -24,7 +24,7 @@ namespace Razor {
 
 	private:
 		LayerList m_Layers;
-		LayerIter m_LayerInsert;
+		unsigned int m_LayerInsertIndex = 0;
 	};
 
 }

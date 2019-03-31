@@ -53,7 +53,6 @@ public:
 	Sandbox()
 	{
 		PushLayer(new TestLayer());
-		PushOverlay(new Razor::ImGuiLayer());
 	}
 
 	~Sandbox()
