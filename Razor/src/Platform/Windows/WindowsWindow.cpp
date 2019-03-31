@@ -54,13 +54,13 @@ namespace Razor {
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		RZ_CORE_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(false);
+		SetVSync(true);
 
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			data.Width = width;
-			data.Height = height;
+			data.Width = (float)width;
+			data.Height = (float)height;
 
 			WindowResizeEvent event(width, height);
 			data.EventCallback(event);

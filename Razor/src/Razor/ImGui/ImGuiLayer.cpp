@@ -1,7 +1,7 @@
 #include "rzpch.h"
-
-#include "ImGuiLayer.h"
 #include "imgui.h"
+#include "ImGuiLayer.h"
+
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include "examples/imgui_impl_opengl3.h"
@@ -26,29 +26,24 @@ namespace Razor {
 
 	void ImGuiLayer::OnAttach()
 	{
-		IMGUI_CHECKVERSION();
+		//IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
+
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-		ImGui::StyleColorsDark();
-		ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
+		io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;
 
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true),
 		ImGui_ImplOpenGL3_Init("#version 410");
+
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -60,8 +55,8 @@ namespace Razor {
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+		//static bool show = true;
+		//ImGui::ShowDemoWindow(&show);
 	}
 
 	void ImGuiLayer::Begin()

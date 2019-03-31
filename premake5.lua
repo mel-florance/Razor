@@ -24,6 +24,7 @@ include "Razor/vendor/ImGui"
 project "Razor"
 	location "Razor"
 	kind "SharedLib"
+	staticruntime "off"
 	language "C++"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -65,9 +66,11 @@ project "Razor"
 
 		defines
 		{
+			"IMGUI_API=__declspec(dllexport)",
 			"RZ_PLATFORM_WINDOWS",
 			"RZ_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
+			"GLFW_INCLUDE_NONE",
+			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 		postbuildcommands
@@ -109,6 +112,7 @@ project "Sandbox"
 	{
 		"Razor/vendor/spdlog/include",
 		"Razor/src",
+		"Razor/vendor",
 		"%{IncludeDir.glm}"
 	}
 
