@@ -1,5 +1,6 @@
 workspace "Razor"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -14,12 +15,11 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Razor/vendor/GLFW/include"
 IncludeDir["Glad"] = "Razor/vendor/Glad/include"
 IncludeDir["ImGui"] = "Razor/vendor/imgui"
+IncludeDir["glm"] = "Razor/vendor/glm"
 
 include "Razor/vendor/GLFW"
 include "Razor/vendor/Glad"
 include "Razor/vendor/ImGui"
-
-startproject "Sandbox"
 
 project "Razor"
 	location "Razor"
@@ -35,7 +35,9 @@ project "Razor"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	includedirs
@@ -44,7 +46,8 @@ project "Razor"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -74,17 +77,17 @@ project "Razor"
 
 	filter "configurations:Debug"
 		defines "RZ_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "RZ_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 		
 	filter "configurations:Dist"
 		defines "RZ_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 
@@ -105,7 +108,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Razor/vendor/spdlog/include",
-		"Razor/src"
+		"Razor/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links

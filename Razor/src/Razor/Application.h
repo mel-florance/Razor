@@ -11,9 +11,9 @@ namespace Razor {
 	class RZ_API Application
 	{
 	public:
-		Application();
+		Application();	
 		virtual ~Application();
-		void run();
+		void run();	
 		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);
