@@ -11,10 +11,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "Razor\vendor\ImGui
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Razor", "Razor\Razor.vcxproj", "{F31F020E-5F34-2ABF-28B6-CD1E948926F0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "assimp", "Razor\vendor\assimp\assimp.vcxproj", "{724885F2-5EEA-AFC8-47A5-C31C33E63619}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cinder-assimp", "Razor\vendor\assimp\cinder-assimp.vcxproj", "{D43490B1-40F5-0BE8-0930-556575AF50C4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -52,15 +48,6 @@ Global
 		{F31F020E-5F34-2ABF-28B6-CD1E948926F0}.Dist|x64.Build.0 = Dist|x64
 		{F31F020E-5F34-2ABF-28B6-CD1E948926F0}.Release|x64.ActiveCfg = Release|x64
 		{F31F020E-5F34-2ABF-28B6-CD1E948926F0}.Release|x64.Build.0 = Release|x64
-		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Debug|x64.ActiveCfg = Debug|x64
-		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Debug|x64.Build.0 = Debug|x64
-		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Dist|x64.ActiveCfg = Dist|x64
-		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Dist|x64.Build.0 = Dist|x64
-		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Release|x64.ActiveCfg = Release|x64
-		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Release|x64.Build.0 = Release|x64
-		{D43490B1-40F5-0BE8-0930-556575AF50C4}.Debug|x64.ActiveCfg = Debug|x64
-		{D43490B1-40F5-0BE8-0930-556575AF50C4}.Dist|x64.ActiveCfg = Dist|x64
-		{D43490B1-40F5-0BE8-0930-556575AF50C4}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

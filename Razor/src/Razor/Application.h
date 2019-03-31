@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+
 #include "Window.h"
 #include "Razor/LayerStack.h"
 #include "Razor/Events/Event.h"
@@ -27,6 +28,7 @@ namespace Razor {
 		bool OnWindowClose(WindowCloseEvent& e);
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
+		class Editor* m_Editor;
 		bool m_Running = true;
 
 		LayerStack m_LayerStack;

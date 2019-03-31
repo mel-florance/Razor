@@ -1,5 +1,5 @@
 #include "rzpch.h"
-
+#include "Editor/Editor.h"
 #include "Application.h"
 #include "Razor/Events/ApplicationEvent.h"
 #include "Razor/Log.h"
@@ -22,7 +22,10 @@ namespace Razor {
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(RZ_BIND_EVENT_FN(Application::OnEvent));
 
-		m_ImGuiLayer = new ImGuiLayer();
+		m_Editor = new Editor();
+
+		m_ImGuiLayer = m_Editor->getLayer();
+		PushLayer(m_Editor);
 		PushOverlay(m_ImGuiLayer);
 	}
 

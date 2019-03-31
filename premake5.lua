@@ -16,12 +16,12 @@ IncludeDir["GLFW"] = "Razor/vendor/GLFW/include"
 IncludeDir["Glad"] = "Razor/vendor/Glad/include"
 IncludeDir["ImGui"] = "Razor/vendor/imgui"
 IncludeDir["glm"] = "Razor/vendor/glm"
-IncludeDir["assimp"] = "Razor/vendor/assimp/assimp/include"
+IncludeDir["assimp"] = "Razor/vendor/assimp/include"
 
 include "Razor/vendor/GLFW"
 include "Razor/vendor/Glad"
 include "Razor/vendor/ImGui"
-include "Razor/vendor/assimp"
+--include "Razor/vendor/assimp"
 
 project "Razor"
 	location "Razor"
@@ -40,7 +40,8 @@ project "Razor"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/assimp/include/**"
 	}
 
 	includedirs
@@ -51,16 +52,19 @@ project "Razor"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.assimp}"
+		"%{prj.name}/vendor/assimp/include",
+		"%{prj.name}/vendor/assimp/build/include"
 	}
+
+	libdirs { "%{prj.name}/vendor/assimp/build/code/Release" }
 
 	links
 	{
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"assimp",
-		"opengl32.lib"
+		"opengl32.lib",
+		"assimp"
 	}
 
 	filter "system:windows"
@@ -79,7 +83,8 @@ project "Razor"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox",
+			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/" .. outputdir .. "/Sandbox"
 		}
 
 	filter "configurations:Debug"
@@ -115,7 +120,6 @@ project "Sandbox"
 	includedirs
 	{
 		"Razor/vendor/spdlog/include",
-		"Razor/vendor/assimp/assimp/include",
 		"Razor/src",
 		"Razor/vendor",
 		"%{IncludeDir.glm}"
