@@ -4,6 +4,7 @@
 #include "Razor/Application.h"
 #include "Razor/Layer.h"
 #include "Razor/Log.h"
+#include "Razor/Node.h"
 #include "Razor/Imgui/ImGuiLayer.h"
 #include "Razor/Input.h"
 

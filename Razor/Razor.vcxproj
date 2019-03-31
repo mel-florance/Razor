@@ -155,6 +155,9 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Razor\Material.h" />
+    <ClInclude Include="src\Razor\Mesh.h" />
+    <ClInclude Include="src\Razor\Node.h" />
     <ClInclude Include="src\Editor\AssimpImporter.h" />
     <ClInclude Include="src\Editor\Editor.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
@@ -624,6 +627,9 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Razor\Material.cpp" />
+    <ClCompile Include="src\Razor\Mesh.cpp" />
+    <ClCompile Include="src\Razor\Node.cpp" />
     <ClCompile Include="src\Editor\AssimpImporter.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />

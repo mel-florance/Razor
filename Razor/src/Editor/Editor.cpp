@@ -9,7 +9,7 @@ namespace Razor {
 	{
 		m_ImGuiLayer = new ImGuiLayer();
 		AssimpImporter importer;
-		importer.load("test");
+		importer.importMesh("test.fbx");
 	}
 
 	void Editor::OnUpdate()

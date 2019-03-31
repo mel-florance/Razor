@@ -1464,6 +1464,9 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Node.h" />
+    <ClInclude Include="src\Razor\Mesh.h" />
+    <ClInclude Include="src\Razor\Material.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\AssimpImporter.cpp">
@@ -1499,6 +1502,9 @@
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Node.cpp" />
+    <ClCompile Include="src\Razor\Mesh.cpp" />
+    <ClCompile Include="src\Razor\Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">
