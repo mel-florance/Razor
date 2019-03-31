@@ -9,7 +9,7 @@ namespace Razor {
 	{
 		m_ImGuiLayer = new ImGuiLayer();
 		AssimpImporter importer;
-		importer.importMesh("test.fbx");
+		importer.importMesh("house_wood_1.fbx");
 	}
 
 	void Editor::OnUpdate()
@@ -115,8 +115,7 @@ namespace Razor {
 		ImGui::Begin("Tools");
 		ImGui::End();
 
-		ImGui::Begin("Viewport");
-		ImGui::End();
+
 
 		ImGui::Begin("Assets Manager");
 		ImGui::End();

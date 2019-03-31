@@ -84,7 +84,8 @@ project "Razor"
 		postbuildcommands
 		{
 			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox",
-			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/" .. outputdir .. "/Sandbox"
+			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Release-windows-x86_64/Sandbox",
+			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Debug-windows-x86_64/Sandbox"
 		}
 
 	filter "configurations:Debug"

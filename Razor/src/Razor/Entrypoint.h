@@ -13,6 +13,8 @@ int main(int argc, char** argv)
 	auto app = Razor::createApplication();
 	app->run();
 	delete app;
+
+
 }
 
 #endif

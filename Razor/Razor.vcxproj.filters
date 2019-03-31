@@ -117,7 +117,16 @@
     <ClInclude Include="src\Razor\Log.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Material.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Mesh.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\MouseButtons.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Node.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Window.h">
@@ -1464,9 +1473,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Node.h" />
-    <ClInclude Include="src\Razor\Mesh.h" />
-    <ClInclude Include="src\Razor\Material.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\AssimpImporter.cpp">
@@ -1499,12 +1505,18 @@
     <ClCompile Include="src\Razor\Log.cpp">
       <Filter>src\Razor</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Material.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Mesh.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Node.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Node.cpp" />
-    <ClCompile Include="src\Razor\Mesh.cpp" />
-    <ClCompile Include="src\Razor\Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">
