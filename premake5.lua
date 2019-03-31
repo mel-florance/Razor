@@ -16,10 +16,12 @@ IncludeDir["GLFW"] = "Razor/vendor/GLFW/include"
 IncludeDir["Glad"] = "Razor/vendor/Glad/include"
 IncludeDir["ImGui"] = "Razor/vendor/imgui"
 IncludeDir["glm"] = "Razor/vendor/glm"
+IncludeDir["assimp"] = "Razor/vendor/assimp/assimp/include"
 
 include "Razor/vendor/GLFW"
 include "Razor/vendor/Glad"
 include "Razor/vendor/ImGui"
+include "Razor/vendor/assimp"
 
 project "Razor"
 	location "Razor"
@@ -48,7 +50,8 @@ project "Razor"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.assimp}"
 	}
 
 	links
@@ -56,6 +59,7 @@ project "Razor"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"assimp",
 		"opengl32.lib"
 	}
 
@@ -111,6 +115,7 @@ project "Sandbox"
 	includedirs
 	{
 		"Razor/vendor/spdlog/include",
+		"Razor/vendor/assimp/assimp/include",
 		"Razor/src",
 		"Razor/vendor",
 		"%{IncludeDir.glm}"

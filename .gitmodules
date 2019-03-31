@@ -10,3 +10,6 @@
 [submodule "Razor/vendor/glm"]
 	path = Razor/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "Razor/vendor/assimp"]
+	path = Razor/vendor/assimp
+	url = https://github.com/jing-interactive/Cinder-Assimp

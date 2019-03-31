@@ -5,6 +5,10 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #include "imgui/imgui.h"
 
 glm::mat4 camera(float Translate, glm::vec2 const& Rotate)
