@@ -9,6 +9,9 @@
 #include <chrono>
 #include <thread>
 #include <future>
+#include <queue>
+#include <condition_variable>
+#include <mutex>
 
 #include <string>
 #include <sstream>

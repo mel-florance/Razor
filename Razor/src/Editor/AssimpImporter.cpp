@@ -46,8 +46,6 @@ namespace Razor {
 			return false;
 		}
 
-		RZ_CORE_INFO("Loaded model: {0}", scene->mRootNode->mName.C_Str());
-
 		return true;
 	}
 
@@ -77,7 +75,7 @@ namespace Razor {
 	std::shared_ptr<Mesh> AssimpImporter::processMesh(aiMesh* object)
 	{
 		const char* name = object->mName.length != 0 ? object->mName.C_Str() : "";
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(name);
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
 
 		if (object->HasFaces())
 		{

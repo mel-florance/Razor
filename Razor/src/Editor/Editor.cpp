@@ -1,6 +1,6 @@
 #include "rzpch.h"
 #include "Editor.h"
-
+#include "Razor/Mesh.h"
 
 #include "imgui.h"
 
@@ -9,38 +9,35 @@ namespace Razor {
 	Editor::Editor()
 	{
 		m_ImGuiLayer = new ImGuiLayer();
-		AssimpImporter importer;
-		importer.importMesh("house_wood_1.fbx");
+		tasksManager = new TasksManager();
 
-		this->fileWatcher = new FileWatcher({ "./", std::chrono::milliseconds(1000) });
-
-		std::thread fileWatcher_thread(&FileWatcher::start, this->fileWatcher, [](std::string path_to_watch, FileWatcher::Status status)
-		{
-			if (!std::filesystem::is_regular_file(std::filesystem::path(path_to_watch)) && status != FileWatcher::Status::erased) {
-				return;
-			}
-
-			switch (status) {
-			case FileWatcher::Status::created:
-				std::cout << "File created: " << path_to_watch << '\n';
-				break;
-			case FileWatcher::Status::modified:
-				std::cout << "File modified: " << path_to_watch << '\n';
-				break;
-			case FileWatcher::Status::erased:
-				std::cout << "File erased: " << path_to_watch << '\n';
-				break;
-			default:
-				std::cout << "Error! Unknown file status.\n";
-			}
-		});
-
-		fileWatcher_thread.detach();
+		Mesh mesh, mesh1, mesh2, mesh3;
+		tasksManager->add(&mesh, &Editor::watch, &Editor::finished, Variant("house_wood_1.fbx"), "Import task 1", 50);
+		tasksManager->add(&mesh1, &Editor::watch, &Editor::finished, Variant("house_wood_2.fbx"), "Import task 2", 200);
+		tasksManager->add(&mesh2, &Editor::watch, &Editor::finished, Variant("house_wood_3.fbx"), "Import task 3", 23);
+		tasksManager->add(&mesh3, &Editor::watch, &Editor::finished, Variant("house_wood_4.fbx"), "Import task 4", 74);
 	}
 
-	void Editor::watch()
+	void Editor::watch(void* result, TaskFinished tf, Variant opts)
 	{
-		
+		RZ_CORE_TRACE("Task Arguments: {0}", opts.toString());
+
+		AssimpImporter importer;
+		bool imported = importer.importMesh(opts.toString());
+
+		if (imported) {
+			result = new Mesh();
+			static_cast<Mesh*>(result)->setName(importer.getNodeData()->name);
+			tf(result);
+		}
+	}
+
+	void Editor::finished(void* result)
+	{
+		Mesh* mesh = static_cast<Mesh*>(result);
+
+		if(mesh != nullptr)
+			RZ_CORE_INFO("Successfully imported mesh: {0}", mesh->getName());
 	}
 
 	void Editor::OnUpdate()

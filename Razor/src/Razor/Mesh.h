@@ -8,7 +8,7 @@ namespace Razor {
 	class RZ_API Mesh
 	{
 	public:
-		Mesh(const std::string& name);
+		Mesh();
 		~Mesh();
 
 		inline std::string& getName() { return this->name; }

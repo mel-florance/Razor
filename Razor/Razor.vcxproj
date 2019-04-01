@@ -158,6 +158,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Editor\AssetsManager.h" />
     <ClInclude Include="src\Razor\FileWatcher.h" />
     <ClInclude Include="src\Editor\AssimpImporter.h" />
     <ClInclude Include="src\Editor\Editor.h" />
@@ -181,9 +182,11 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="src\Razor\Mesh.h" />
     <ClInclude Include="src\Razor\MouseButtons.h" />
     <ClInclude Include="src\Razor\Node.h" />
+    <ClInclude Include="src\Razor\Task.h" />
     <ClInclude Include="src\Razor\Window.h" />
     <ClInclude Include="src\rzpch.h" />
-    <ClInclude Include="TasksManager.h" />
+    <ClInclude Include="src\Razor\TasksManager.h" />
+    <ClInclude Include="src\Razor\Variant.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BaseImporter.h" />
     <ClInclude Include="vendor\assimp\include\assimp\Bitmap.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BlobIOSystem.h" />
@@ -632,6 +635,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\AssetsManager.cpp" />
     <ClCompile Include="src\Razor\FileWatcher.cpp" />
     <ClCompile Include="src\Editor\AssimpImporter.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
@@ -646,10 +650,12 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClCompile Include="src\Razor\Material.cpp" />
     <ClCompile Include="src\Razor\Mesh.cpp" />
     <ClCompile Include="src\Razor\Node.cpp" />
+    <ClCompile Include="src\Razor\Task.cpp" />
     <ClCompile Include="src\rzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TasksManager.cpp" />
+    <ClCompile Include="src\Razor\TasksManager.cpp" />
+    <ClCompile Include="src\Razor\Variant.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig" />

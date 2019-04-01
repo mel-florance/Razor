@@ -14,11 +14,6 @@ namespace Razor {
 		}
 	}
 
-
-	FileWatcher::~FileWatcher()
-	{
-	}
-
 	void FileWatcher::start(const std::function<void(std::string, Status)>& action)
 	{
 		FilePaths::iterator it;

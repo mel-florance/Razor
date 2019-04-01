@@ -3,7 +3,7 @@
 
 namespace Razor {
 
-	Mesh::Mesh(const std::string& name) : name(name)
+	Mesh::Mesh()
 	{
 	}
 

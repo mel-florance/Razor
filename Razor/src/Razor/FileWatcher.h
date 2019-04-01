@@ -8,7 +8,6 @@ namespace Razor {
 	{
 	public:
 		FileWatcher(std::string path_to_watch, std::chrono::duration<int, std::milli> delay);
-		~FileWatcher();
 
 		enum class Status { created, modified, erased };
 
