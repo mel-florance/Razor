@@ -5,7 +5,7 @@
 #include "Razor/Input.h"
 #include "Razor/MouseButtons.h"
 #include "Razor/ImGui/ImGuiLayer.h"
-
+#include "Razor/FileWatcher.h"
 #include "AssimpImporter.h"
 
 namespace Razor {
@@ -16,6 +16,7 @@ namespace Razor {
 		Editor();
 		~Editor();
 
+		void watch();
 		void OnUpdate() override;
 		void OnEvent(Razor::Event& event) override;
 		void OnImGuiRender() override;
@@ -24,6 +25,7 @@ namespace Razor {
 
 	private:
 		ImGuiLayer* m_ImGuiLayer;
+		FileWatcher* fileWatcher;
 	};
 
 }

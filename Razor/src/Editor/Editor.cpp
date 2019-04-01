@@ -1,6 +1,7 @@
 #include "rzpch.h"
 #include "Editor.h"
 
+
 #include "imgui.h"
 
 namespace Razor {
@@ -10,6 +11,36 @@ namespace Razor {
 		m_ImGuiLayer = new ImGuiLayer();
 		AssimpImporter importer;
 		importer.importMesh("house_wood_1.fbx");
+
+		this->fileWatcher = new FileWatcher({ "./", std::chrono::milliseconds(1000) });
+
+		std::thread fileWatcher_thread(&FileWatcher::start, this->fileWatcher, [](std::string path_to_watch, FileWatcher::Status status)
+		{
+			if (!std::filesystem::is_regular_file(std::filesystem::path(path_to_watch)) && status != FileWatcher::Status::erased) {
+				return;
+			}
+
+			switch (status) {
+			case FileWatcher::Status::created:
+				std::cout << "File created: " << path_to_watch << '\n';
+				break;
+			case FileWatcher::Status::modified:
+				std::cout << "File modified: " << path_to_watch << '\n';
+				break;
+			case FileWatcher::Status::erased:
+				std::cout << "File erased: " << path_to_watch << '\n';
+				break;
+			default:
+				std::cout << "Error! Unknown file status.\n";
+			}
+		});
+
+		fileWatcher_thread.detach();
+	}
+
+	void Editor::watch()
+	{
+		
 	}
 
 	void Editor::OnUpdate()

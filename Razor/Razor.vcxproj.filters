@@ -1473,6 +1473,8 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\FileWatcher.h" />
+    <ClInclude Include="TasksManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\AssimpImporter.cpp">
@@ -1517,6 +1519,8 @@
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\FileWatcher.cpp" />
+    <ClCompile Include="TasksManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">
