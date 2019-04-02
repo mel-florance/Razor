@@ -1,16 +1,17 @@
 #pragma once
 
 #include "Razor/Core.h"
+#include "Editor/EditorComponent.h"
 
 namespace Razor {
 
-	class RAZOR_API MainMenu
+	class RAZOR_API MainMenu : public EditorComponent
 	{
 	public:
-		MainMenu();
+		MainMenu(Editor* editor);
 		~MainMenu();
 
-		static void setup();
+		void render() override;
 	};
 
 }

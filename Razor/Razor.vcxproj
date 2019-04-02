@@ -158,9 +158,13 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Razor\FileWatcher.h" />
+    <ClInclude Include="src\Editor\Components\Logger.h" />
+    <ClInclude Include="src\Editor\EditorComponent.h" />
     <ClInclude Include="src\Editor\Components\Console.h" />
     <ClInclude Include="src\Editor\Components\MainMenu.h" />
     <ClInclude Include="src\Editor\Components\AssetsManager.h" />
+    <ClInclude Include="src\Editor\Components\Outliner.h" />
     <ClInclude Include="src\Editor\Components\PropertiesEditor.h" />
     <ClInclude Include="src\Editor\Components\Tools.h" />
     <ClInclude Include="src\Editor\Components\Viewport.h" />
@@ -176,7 +180,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="src\Razor\Events\Event.h" />
     <ClInclude Include="src\Razor\Events\KeyEvent.h" />
     <ClInclude Include="src\Razor\Events\MouseEvent.h" />
-    <ClInclude Include="src\Razor\FileWatcher.h" />
+    <ClInclude Include="src\Razor\DirectoryWatcher.h" />
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Razor\Input.h" />
     <ClInclude Include="src\Razor\Input\KeyCodes.h" />
@@ -640,9 +644,13 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Razor\FileWatcher.cpp" />
+    <ClCompile Include="src\Editor\Components\Logger.cpp" />
+    <ClCompile Include="src\Editor\EditorComponent.cpp" />
     <ClCompile Include="src\Editor\Components\Console.cpp" />
     <ClCompile Include="src\Editor\Components\MainMenu.cpp" />
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp" />
+    <ClCompile Include="src\Editor\Components\Outliner.cpp" />
     <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp" />
     <ClCompile Include="src\Editor\Components\Tools.cpp" />
     <ClCompile Include="src\Editor\Components\Viewport.cpp" />
@@ -651,7 +659,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Razor\Application.cpp" />
-    <ClCompile Include="src\Razor\FileWatcher.cpp" />
+    <ClCompile Include="src\Razor\DirectoryWatcher.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Razor\Layer.cpp" />

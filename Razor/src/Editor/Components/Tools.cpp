@@ -1,9 +1,10 @@
 #include "rzpch.h"
+#include "imgui.h"
 #include "Tools.h"
 
 namespace Razor {
 
-	Tools::Tools()
+	Tools::Tools(Editor* editor) : EditorComponent(editor)
 	{
 	}
 
@@ -11,9 +12,10 @@ namespace Razor {
 	{
 	}
 
-	void Tools::setup()
+	void Tools::render()
 	{
-
+		ImGui::Begin("Tools");
+		ImGui::End();
 	}
 
 }

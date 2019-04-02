@@ -99,9 +99,6 @@
     <ClInclude Include="src\Razor\Events\MouseEvent.h">
       <Filter>src\Razor\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\FileWatcher.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h">
       <Filter>src\Razor\ImGui</Filter>
     </ClInclude>
@@ -1496,6 +1493,13 @@
     <ClInclude Include="src\Editor\Components\PropertiesEditor.h" />
     <ClInclude Include="src\Editor\Components\Viewport.h" />
     <ClInclude Include="src\Editor\Components\Tools.h" />
+    <ClInclude Include="src\Editor\Components\Outliner.h" />
+    <ClInclude Include="src\Editor\EditorComponent.h" />
+    <ClInclude Include="src\Editor\Components\Logger.h" />
+    <ClInclude Include="src\Razor\DirectoryWatcher.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\FileWatcher.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Editor.cpp">
@@ -1508,9 +1512,6 @@
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Application.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\FileWatcher.cpp">
       <Filter>src\Razor</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\ImGui\ImGuiBuild.cpp">
@@ -1560,6 +1561,13 @@
     <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp" />
     <ClCompile Include="src\Editor\Components\Viewport.cpp" />
     <ClCompile Include="src\Editor\Components\Tools.cpp" />
+    <ClCompile Include="src\Editor\Components\Outliner.cpp" />
+    <ClCompile Include="src\Editor\EditorComponent.cpp" />
+    <ClCompile Include="src\Editor\Components\Logger.cpp" />
+    <ClCompile Include="src\Razor\DirectoryWatcher.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\FileWatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">

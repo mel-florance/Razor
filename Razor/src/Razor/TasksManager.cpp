@@ -1,7 +1,5 @@
 #include "rzpch.h"
 #include "TasksManager.h"
-#include "Mesh.h"
-#include "Editor/Importers/AssimpImporter.h"
 
 namespace Razor {
 
@@ -19,7 +17,7 @@ namespace Razor {
 	{
 		while (true)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(2));
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 			std::unique_lock<std::mutex> lock(mutex);
 			condition.wait(lock, [=] { return !tasks.empty(); });

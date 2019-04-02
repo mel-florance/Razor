@@ -5,7 +5,7 @@
 
 namespace Razor {
 
-	MainMenu::MainMenu()
+	MainMenu::MainMenu(Editor* editor) : EditorComponent(editor)
 	{
 	}
 
@@ -13,7 +13,7 @@ namespace Razor {
 	{
 	}
 
-	void MainMenu::setup()
+	void MainMenu::render()
 	{
 		if (ImGui::BeginMenuBar())
 		{
@@ -42,26 +42,30 @@ namespace Razor {
 
 			if (ImGui::BeginMenu("Edit"))
 			{
-				ImGui::MenuItem("Cut", "Ctrl + X", false, true);
-				ImGui::MenuItem("Copy", "Ctrl + C", false, true);
-				ImGui::MenuItem("Paste", "Ctrl + V", false, true);
-				ImGui::MenuItem("Delete", "Del", false, true);
+				ImGui::MenuItem("Cut", "Ctrl + X");
+				ImGui::MenuItem("Copy", "Ctrl + C");
+				ImGui::MenuItem("Paste", "Ctrl + V");
+				ImGui::MenuItem("Delete", "Del");
 
 				ImGui::EndMenu();
 			}
 
 			if (ImGui::BeginMenu("Window"))
 			{
-				ImGui::MenuItem("Toggle Console", NULL, false, true);
+				ImGui::MenuItem("Assets Manager");
+				ImGui::MenuItem("Console");
+				ImGui::MenuItem("Outliner");
+				ImGui::MenuItem("Properties Editor");
+				ImGui::MenuItem("Tools");
 
 				ImGui::EndMenu();
 			}
 
 			if (ImGui::BeginMenu("Help"))
 			{
-				ImGui::MenuItem("Manual", NULL, false, true);
-				ImGui::MenuItem("Release notes", NULL, false, true);
-				ImGui::MenuItem("Report a bug", NULL, false, true);
+				ImGui::MenuItem("Manual");
+				ImGui::MenuItem("Release notes");
+				ImGui::MenuItem("Report a bug");
 
 				ImGui::EndMenu();
 			}

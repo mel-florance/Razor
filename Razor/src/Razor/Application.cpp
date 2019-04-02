@@ -9,7 +9,6 @@
 
 #include "Input.h"
 
-
 namespace Razor {
 
 	Application* Application::s_Instance = nullptr;
@@ -24,7 +23,7 @@ namespace Razor {
 
 		m_Editor = new Editor();
 
-		m_ImGuiLayer = m_Editor->getLayer();
+		m_ImGuiLayer = m_Editor->getLayer().get();
 		PushLayer(m_Editor);
 		PushOverlay(m_ImGuiLayer);
 	}

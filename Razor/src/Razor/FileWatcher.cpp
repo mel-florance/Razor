@@ -1,52 +1,36 @@
 #include "rzpch.h"
 #include "FileWatcher.h"
 
-namespace fs = std::filesystem;
-
 namespace Razor {
 
-	FileWatcher::FileWatcher(std::string path_to_watch, std::chrono::duration<int, std::milli> delay) :
-		path_to_watch { path_to_watch },
-		delay { delay }
+	FileWatcher::FileWatcher()
 	{
-		for (auto &file : fs::recursive_directory_iterator(path_to_watch)) {
-			paths_[file.path().string()] = fs::last_write_time(file);
-		}
 	}
 
-	void FileWatcher::start(const std::function<void(std::string, Status)>& action)
+	FileWatcher::~FileWatcher()
 	{
-		FilePaths::iterator it;
+	}
 
-		while (running_) {
-		
-			std::this_thread::sleep_for(delay);
+	std::vector<std::string> FileWatcher::tail(const std::string& path, int n)
+	{
+		std::ifstream file(path);
+		std::string line;
+		std::vector<std::string> buffer, out;
+		int i = 0, j = 0;
 
-			for (auto it = paths_.rbegin(); it != paths_.rend();) {
-				if (!fs::exists(it->first)) {
-					action(it->first, Status::erased);
-					it = decltype(it){ paths_.erase(std::next(it).base()) };
-				}
-				else
-					++it;
-			}
-
-			for (auto &file : fs::recursive_directory_iterator(path_to_watch))
-			{
-				auto current_file_last_write_time = fs::last_write_time(file);
-
-				if (!contains(file.path().string())) {
-					paths_[file.path().string()] = current_file_last_write_time;
-					action(file.path().string(), Status::created);
-				}
-				else {
-					if (paths_[file.path().string()] != current_file_last_write_time) {
-						paths_[file.path().string()] = current_file_last_write_time;
-						action(file.path().string(), Status::modified);
-					}
-				}
+		while (std::getline(file, line))
+		{
+			if (!line.empty()) {
+				buffer.push_back(line);
+				i++;
 			}
 		}
+
+		i = 0;
+		for (j = buffer.size() - 1; buffer.size() > j && i < n; --j, ++i)
+			out.push_back(buffer[j]);
+
+		return out;
 	}
 
 }

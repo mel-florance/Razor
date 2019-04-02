@@ -1,16 +1,17 @@
 #pragma once
 
 #include "Razor/Core.h"
+#include "Editor/EditorComponent.h"
 
 namespace Razor {
 
-	class RAZOR_API Viewport
+	class RAZOR_API Viewport : public EditorComponent
 	{
 	public:
-		Viewport();
+		Viewport(Editor* editor);
 		~Viewport();
 
-		static void setup();
+		void render() override;
 	};
 
 }

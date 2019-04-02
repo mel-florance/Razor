@@ -1,29 +1,41 @@
 #include "rzpch.h"
+#include "imgui.h"
 #include "AssetsManager.h"
+#include "Logger.h"
+#include "Editor/Editor.h"
 
 namespace Razor {
 
-	AssetsManager::AssetsManager()
+	AssetsManager::AssetsManager(Editor* editor) : EditorComponent(editor)
 	{
-		this->fileWatcher = new FileWatcher({ "./", std::chrono::milliseconds(500) });
+		this->directoryWatcher = std::make_shared<DirectoryWatcher>("./", std::chrono::milliseconds(500));
+		this->fileWatcher = std::make_shared<FileWatcher>();
+		watch();
 	}
 
 	void AssetsManager::watch()
 	{
-		std::thread fileWatcher_thread(&FileWatcher::start, this->fileWatcher, [](std::string path_to_watch, FileWatcher::Status status)
+		std::thread directoryWatcher_thread(&DirectoryWatcher::start, this->directoryWatcher, [=](std::string path_to_watch, DirectoryWatcher::Status status)
 		{
-			if (!std::filesystem::is_regular_file(std::filesystem::path(path_to_watch)) && status != FileWatcher::Status::erased) {
+			if (!std::filesystem::is_regular_file(std::filesystem::path(path_to_watch)) && status != DirectoryWatcher::Status::erased) {
 				return;
 			}
 
 			switch (status) {
-			case FileWatcher::Status::created:
+			case DirectoryWatcher::Status::created:
 				RZ_CORE_INFO("File created: {0}", path_to_watch);
 				break;
-			case FileWatcher::Status::modified:
+			case DirectoryWatcher::Status::modified:
+				if (path_to_watch == "./Razor.log") {
+					std::vector<std::string> lines = fileWatcher->tail("./Razor.log", 1);
+					Logger* logger = (Logger*)this->getEditor()->getComponents()["Logger"];
+
+					for (auto line : lines)
+						logger->addLog(("\n" + line).c_str());
+				}
 				RZ_CORE_INFO("File modified: {0}", path_to_watch);
 				break;
-			case FileWatcher::Status::erased:
+			case DirectoryWatcher::Status::erased:
 				RZ_CORE_WARN("File erased: {0}", path_to_watch);
 				break;
 			default:
@@ -31,12 +43,13 @@ namespace Razor {
 			}
 		});
 
-		fileWatcher_thread.detach();
+		directoryWatcher_thread.detach();
 	}
 
-	void AssetsManager::setup()
+	void AssetsManager::render()
 	{
-
+		ImGui::Begin("Assets Manager");
+		ImGui::End();
 	}
 
 	AssetsManager::~AssetsManager()

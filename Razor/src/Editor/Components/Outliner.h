@@ -5,11 +5,11 @@
 
 namespace Razor {
 
-	class RAZOR_API PropertiesEditor : public EditorComponent
+	class RAZOR_API Outliner : public EditorComponent
 	{
 	public:
-		PropertiesEditor(Editor* editor);
-		~PropertiesEditor();
+		Outliner(Editor* editor);
+		~Outliner();
 
 		void render() override;
 	};

@@ -1,9 +1,10 @@
 #include "rzpch.h"
+#include "imgui.h"
 #include "PropertiesEditor.h"
 
 namespace Razor {
 
-	PropertiesEditor::PropertiesEditor()
+	PropertiesEditor::PropertiesEditor(Editor* editor) : EditorComponent(editor)
 	{
 	}
 
@@ -11,9 +12,10 @@ namespace Razor {
 	{
 	}
 
-	void PropertiesEditor::setup()
+	void PropertiesEditor::render()
 	{
-
+		ImGui::Begin("Properties Editor");
+		ImGui::End();
 	}
 
 }

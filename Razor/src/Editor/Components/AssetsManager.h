@@ -1,21 +1,24 @@
 #pragma once
 
 #include "Razor/Core.h"
+#include "Editor/EditorComponent.h"
+#include "Razor/DirectoryWatcher.h"
 #include "Razor/FileWatcher.h"
 
 namespace Razor {
 
-	class RAZOR_API AssetsManager
+	class RAZOR_API AssetsManager : public EditorComponent
 	{
 	public:
-		AssetsManager();
+		AssetsManager(Editor* editor);
 		~AssetsManager();
 
 		void watch();
-		static void setup();
+		void render() override;
 
 	private:
-		FileWatcher* fileWatcher;
+		std::shared_ptr<DirectoryWatcher> directoryWatcher;
+		std::shared_ptr<FileWatcher> fileWatcher;
 	};
 
 }

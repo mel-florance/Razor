@@ -11,6 +11,8 @@ namespace Razor {
 	public:
 		static void init();
 		
+		std::function<void(const std::string&)> callback;
+
 		static std::shared_ptr<spdlog::logger> s_coreLogger;
 		static std::shared_ptr<spdlog::logger> s_clientLogger;
 		static std::shared_ptr<spdlog::logger> s_fileLogger;

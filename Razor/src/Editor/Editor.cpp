@@ -9,10 +9,17 @@ namespace Razor {
 
 	Editor::Editor()
 	{
-		m_ImGuiLayer = new ImGuiLayer();
-		tasksManager = new TasksManager();
-		assetsManager = new AssetsManager();
-		assetsManager->watch();
+		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
+		tasksManager = std::make_unique<TasksManager>();
+
+		components["AssetsManager"] = new AssetsManager(this);
+		components["Console"] = new Console(this);
+		components["MainMenu"] = new MainMenu(this);
+		components["Outliner"] = new Outliner(this);
+		components["PropertiesEditor"] = new PropertiesEditor(this);
+		components["Tools"] = new Tools(this);
+		components["Viewport"] = new Viewport(this);
+		components["Logger"] = new Logger(this);
 
 		Mesh mesh, mesh1, mesh2, mesh3;
 		tasksManager->add({ &mesh,  &Editor::import, &Editor::finished, Variant("data/house.fbx"), "Import task 1", 50 });
@@ -40,7 +47,7 @@ namespace Razor {
 		Mesh* mesh = static_cast<Mesh*>(result);
 
 		if(mesh != nullptr)
-			RZ_CORE_INFO("Successfully imported mesh: {0}", mesh->getName());
+			RZ_FILE_INFO("Successfully imported mesh: {0}", mesh->getName());
 	}
 
 	void Editor::OnUpdate()
@@ -88,31 +95,16 @@ namespace Razor {
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);
 		}
 
-		//ImGui::SetWindowFontScale(1.1f);
+		ComponentsMap::iterator it;
+		for (it = components.begin(); it != components.end(); ++it)
+			it->second->render();
 
-		MainMenu::setup();
-
-		ImGui::End();
-
-		ImGui::Begin("Tools");
-		ImGui::End();
-
-		ImGui::Begin("Assets Manager");
-		ImGui::End();
-
-		ImGui::Begin("Outliner");
-		ImGui::End();
-
-		ImGui::Begin("Console");
-		ImGui::End();
-
-		ImGui::Begin("Properties Editor");
 		ImGui::End();
 	}
 
 	Editor::~Editor()
 	{
-		delete m_ImGuiLayer;
+
 	}
 
 }

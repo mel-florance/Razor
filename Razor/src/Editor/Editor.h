@@ -14,8 +14,12 @@
 #include "Components/PropertiesEditor.h"
 #include "Components/Tools.h"
 #include "Components/Viewport.h"
+#include "Components/Outliner.h"
+#include "Components/Logger.h"
 
 namespace Razor {
+
+	typedef std::map<std::string, EditorComponent*> ComponentsMap;
 
 	class RAZOR_API Editor : public Razor::Layer
 	{
@@ -29,13 +33,23 @@ namespace Razor {
 		void OnEvent(Razor::Event& event) override;
 		void OnImGuiRender() override;
 
-		inline ImGuiLayer* getLayer() { return m_ImGuiLayer;  }
+		inline std::shared_ptr<ImGuiLayer> getLayer() { return m_ImGuiLayer;  }
+		inline ComponentsMap& getComponents() { return components; }
+
+		template<class T>
+		inline T getComponent(const std::string& name) {
+			auto it = components.find(name);
+
+			if (it != components.end())
+				return it->second;
+		}
 
 	private:
-		ImGuiLayer* m_ImGuiLayer;
-		TasksManager* tasksManager;
-		AssimpImporter* assimpImporter;
-		AssetsManager* assetsManager;
+		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
+		std::unique_ptr<TasksManager> tasksManager;
+		std::unique_ptr<AssimpImporter> assimpImporter;
+
+		ComponentsMap components;
 	};
 
 }

@@ -3,7 +3,7 @@
 
 namespace Razor {
 
-	Viewport::Viewport()
+	Viewport::Viewport(Editor* editor) : EditorComponent(editor)
 	{
 	}
 
@@ -11,9 +11,8 @@ namespace Razor {
 	{
 	}
 
-	void Viewport::setup()
+	void Viewport::render()
 	{
-
 	}
 
 }
