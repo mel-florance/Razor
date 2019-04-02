@@ -10,7 +10,7 @@
 
 namespace Razor {
 
-	class RZ_API Application
+	class RAZOR_API Application
 	{
 	public:
 		Application();	
@@ -23,13 +23,14 @@ namespace Razor {
 
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
+		inline void close() { m_Running = false; }
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		class Editor* m_Editor;
-		bool m_Running = true;
+		bool m_Running;
 
 		LayerStack m_LayerStack;
 

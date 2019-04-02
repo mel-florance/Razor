@@ -4,7 +4,7 @@
 
 namespace Razor {
 
-	class RZ_API KeyEvent : public Event
+	class RAZOR_API KeyEvent : public Event
 	{
 	public:
 		inline int GetKeyCode() const { return m_KeyCode; }
@@ -16,7 +16,7 @@ namespace Razor {
 		int m_KeyCode;
 	};
 
-	class RZ_API KeyPressedEvent : public KeyEvent
+	class RAZOR_API KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, int repeatCount) :
@@ -37,7 +37,7 @@ namespace Razor {
 		int m_RepeatCount;
 	};
 
-	class RZ_API KeyReleasedEvent : public KeyEvent
+	class RAZOR_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
@@ -52,7 +52,7 @@ namespace Razor {
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-	class RZ_API KeyTypedEvent : public KeyEvent
+	class RAZOR_API KeyTypedEvent : public KeyEvent
 	{
 	public:
 		KeyTypedEvent(int keycode) : KeyEvent(keycode) {}

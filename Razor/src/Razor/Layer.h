@@ -6,7 +6,7 @@
 
 namespace Razor {
 
-	class RZ_API Layer
+	class RAZOR_API Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");

@@ -1,12 +1,13 @@
 #include "rzpch.h"
 #include "TasksManager.h"
 #include "Mesh.h"
+#include "Editor/Importers/AssimpImporter.h"
 
 namespace Razor {
 
 	TasksManager::TasksManager()
 	{
-		for (unsigned int i = 0; i < getMaxThreads(); i++)
+		for (unsigned int i = 0; i < this->getMaxThreads(); i++)
 		{
 			std::thread* thread = new std::thread(&TasksManager::run, this);
 			thread->detach();
@@ -26,16 +27,19 @@ namespace Razor {
 			Task task = tasks.top();
 			tasks.pop();
 			
-			RZ_CORE_TRACE("Executing task \"{0}\" with priority {1} in thread {2}", task.getName(), task.getPriority(), std::this_thread::get_id());
-
+			RZ_CORE_TRACE("Executing task \"{0}\" with priority {1} in thread {2}",
+				task.getName(),
+				task.getPriority(),
+				std::this_thread::get_id());
+		
 			task.execute();
 		}
 	}
 
-	void TasksManager::add(void* result, TaskCallback fn, TaskFinished tf,  Variant opts, const std::string& name, unsigned int priority)
+	void TasksManager::add(const TaskData& data)
 	{
 		std::unique_lock<std::mutex> lock(mutex);
-		tasks.push(Task(result, tf, fn, opts, name, priority));
+		tasks.push(Task(data));
 		condition.notify_one();
 	}
 

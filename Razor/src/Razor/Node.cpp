@@ -3,7 +3,12 @@
 
 namespace Razor {
 
-	Node::Node()
+	Node::Node() :
+		name(),
+		nodes({}),
+		meshes({}),
+		parent(),
+		id(0)
 	{
 	}
 

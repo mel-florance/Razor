@@ -1,8 +1,9 @@
 #include "rzpch.h"
-#include "Editor.h"
-#include "Razor/Mesh.h"
-
 #include "imgui.h"
+#include "Editor.h"
+
+#include "Razor/Mesh.h"
+#include "Razor/Application.h"
 
 namespace Razor {
 
@@ -10,24 +11,26 @@ namespace Razor {
 	{
 		m_ImGuiLayer = new ImGuiLayer();
 		tasksManager = new TasksManager();
+		assetsManager = new AssetsManager();
+		assetsManager->watch();
 
 		Mesh mesh, mesh1, mesh2, mesh3;
-		tasksManager->add(&mesh, &Editor::watch, &Editor::finished, Variant("house_wood_1.fbx"), "Import task 1", 50);
-		tasksManager->add(&mesh1, &Editor::watch, &Editor::finished, Variant("house_wood_2.fbx"), "Import task 2", 200);
-		tasksManager->add(&mesh2, &Editor::watch, &Editor::finished, Variant("house_wood_3.fbx"), "Import task 3", 23);
-		tasksManager->add(&mesh3, &Editor::watch, &Editor::finished, Variant("house_wood_4.fbx"), "Import task 4", 74);
+		tasksManager->add({ &mesh,  &Editor::import, &Editor::finished, Variant("data/house.fbx"), "Import task 1", 50 });
+		tasksManager->add({ &mesh1, &Editor::import, &Editor::finished, Variant("data/Lia.fbx"), "Import task 2", 200 });
+		tasksManager->add({ &mesh2, &Editor::import, &Editor::finished, Variant("house_wood_3.fbx"), "Import task 3", 23 });
+		tasksManager->add({ &mesh3, &Editor::import, &Editor::finished, Variant("house_wood_4.fbx"), "Import task 4", 74 });
 	}
 
-	void Editor::watch(void* result, TaskFinished tf, Variant opts)
+	void Editor::import(void* result, TaskFinished tf, Variant opts)
 	{
 		RZ_CORE_TRACE("Task Arguments: {0}", opts.toString());
 
-		AssimpImporter importer;
-		bool imported = importer.importMesh(opts.toString());
+		AssimpImporter* importer = new AssimpImporter();
+		bool imported = importer->importMesh(opts.toString());
 
 		if (imported) {
 			result = new Mesh();
-			static_cast<Mesh*>(result)->setName(importer.getNodeData()->name);
+			static_cast<Mesh*>(result)->setName(importer->getNodeData()->name);
 			tf(result);
 		}
 	}
@@ -70,7 +73,6 @@ namespace Razor {
 		ImGui::SetNextWindowSize(viewport->Size);
 		ImGui::SetNextWindowViewport(viewport->ID);
 
-
 		bool p_open;
 		static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_DockNodeHost;
@@ -88,67 +90,23 @@ namespace Razor {
 
 		//ImGui::SetWindowFontScale(1.1f);
 
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				ImGui::MenuItem("New", "Ctrl + N", false, true);
-				ImGui::MenuItem("Open", "Ctrl + O", false, true);
-				ImGui::MenuItem("Open Recent...", "Ctrl + Shift + O", false, true);
-				ImGui::Separator();
-				ImGui::MenuItem("Save", "Ctrl + S", false, true);
-				ImGui::MenuItem("Save As...", "Ctrl + Shift + S", false, true);
-				ImGui::Separator();
-				ImGui::MenuItem("Preferences", NULL, false, true);
-				ImGui::Separator();
-				ImGui::MenuItem("Import...", NULL, false, true);
-				ImGui::MenuItem("Export...", NULL, false, true);
-				ImGui::Separator();
-				ImGui::MenuItem("Quit", "Ctrl + Q", false, true);
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Edit"))
-			{
-				ImGui::MenuItem("Cut", "Ctrl + X", false, true);
-				ImGui::MenuItem("Copy", "Ctrl + C", false, true);
-				ImGui::MenuItem("Paste", "Ctrl + V", false, true);
-				ImGui::MenuItem("Delete", "Del", false, true);
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Window"))
-			{
-				ImGui::MenuItem("Toggle Console", NULL, false, true);
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Help"))
-			{
-				ImGui::MenuItem("Manual", NULL, false, true);
-				ImGui::MenuItem("Release notes", NULL, false, true);
-				ImGui::MenuItem("Report a bug", NULL, false, true);
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenuBar();
-		}
+		MainMenu::setup();
 
 		ImGui::End();
 
 		ImGui::Begin("Tools");
 		ImGui::End();
 
-
-
 		ImGui::Begin("Assets Manager");
 		ImGui::End();
 
 		ImGui::Begin("Outliner");
+		ImGui::End();
+
+		ImGui::Begin("Console");
+		ImGui::End();
+
+		ImGui::Begin("Properties Editor");
 		ImGui::End();
 	}
 

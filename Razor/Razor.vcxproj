@@ -158,9 +158,13 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Editor\AssetsManager.h" />
-    <ClInclude Include="src\Razor\FileWatcher.h" />
-    <ClInclude Include="src\Editor\AssimpImporter.h" />
+    <ClInclude Include="src\Editor\Components\Console.h" />
+    <ClInclude Include="src\Editor\Components\MainMenu.h" />
+    <ClInclude Include="src\Editor\Components\AssetsManager.h" />
+    <ClInclude Include="src\Editor\Components\PropertiesEditor.h" />
+    <ClInclude Include="src\Editor\Components\Tools.h" />
+    <ClInclude Include="src\Editor\Components\Viewport.h" />
+    <ClInclude Include="src\Editor\Importers\AssimpImporter.h" />
     <ClInclude Include="src\Editor\Editor.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
@@ -172,21 +176,22 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="src\Razor\Events\Event.h" />
     <ClInclude Include="src\Razor\Events\KeyEvent.h" />
     <ClInclude Include="src\Razor\Events\MouseEvent.h" />
+    <ClInclude Include="src\Razor\FileWatcher.h" />
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Razor\Input.h" />
-    <ClInclude Include="src\Razor\KeyCodes.h" />
+    <ClInclude Include="src\Razor\Input\KeyCodes.h" />
+    <ClInclude Include="src\Razor\Input\MouseButtons.h" />
     <ClInclude Include="src\Razor\Layer.h" />
     <ClInclude Include="src\Razor\LayerStack.h" />
     <ClInclude Include="src\Razor\Log.h" />
     <ClInclude Include="src\Razor\Material.h" />
     <ClInclude Include="src\Razor\Mesh.h" />
-    <ClInclude Include="src\Razor\MouseButtons.h" />
     <ClInclude Include="src\Razor\Node.h" />
     <ClInclude Include="src\Razor\Task.h" />
-    <ClInclude Include="src\Razor\Window.h" />
-    <ClInclude Include="src\rzpch.h" />
     <ClInclude Include="src\Razor\TasksManager.h" />
     <ClInclude Include="src\Razor\Variant.h" />
+    <ClInclude Include="src\Razor\Window.h" />
+    <ClInclude Include="src\rzpch.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BaseImporter.h" />
     <ClInclude Include="vendor\assimp\include\assimp\Bitmap.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BlobIOSystem.h" />
@@ -635,13 +640,18 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Editor\AssetsManager.cpp" />
-    <ClCompile Include="src\Razor\FileWatcher.cpp" />
-    <ClCompile Include="src\Editor\AssimpImporter.cpp" />
+    <ClCompile Include="src\Editor\Components\Console.cpp" />
+    <ClCompile Include="src\Editor\Components\MainMenu.cpp" />
+    <ClCompile Include="src\Editor\Components\AssetsManager.cpp" />
+    <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp" />
+    <ClCompile Include="src\Editor\Components\Tools.cpp" />
+    <ClCompile Include="src\Editor\Components\Viewport.cpp" />
+    <ClCompile Include="src\Editor\Importers\AssimpImporter.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Razor\Application.cpp" />
+    <ClCompile Include="src\Razor\FileWatcher.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Razor\Layer.cpp" />
@@ -651,11 +661,11 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClCompile Include="src\Razor\Mesh.cpp" />
     <ClCompile Include="src\Razor\Node.cpp" />
     <ClCompile Include="src\Razor\Task.cpp" />
+    <ClCompile Include="src\Razor\TasksManager.cpp" />
+    <ClCompile Include="src\Razor\Variant.cpp" />
     <ClCompile Include="src\rzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Razor\TasksManager.cpp" />
-    <ClCompile Include="src\Razor\Variant.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig" />

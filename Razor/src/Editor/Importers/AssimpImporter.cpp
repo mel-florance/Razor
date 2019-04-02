@@ -4,14 +4,23 @@
 
 namespace Razor {
 
-	AssimpImporter::AssimpImporter()
+	AssimpImporter::AssimpImporter() : ProgressHandler()
 	{
-		this->importer = std::make_unique<Assimp::Importer>();
+		percent = 0.0f;
 	}
 
+	bool AssimpImporter::Update(float percentage)
+	{
+		percent = percentage;
+		return true;
+	}
+	
 	bool AssimpImporter::importMesh(const std::string& filename)
 	{
-		const aiScene* scene = importer->ReadFile(filename,
+		Assimp::Importer importer;
+		importer.SetProgressHandler((Assimp::ProgressHandler*)this);
+
+		const aiScene* scene = importer.ReadFile(filename,
 			aiProcess_CalcTangentSpace |
 			aiProcess_GenSmoothNormals |
 			aiProcess_Triangulate
@@ -19,14 +28,17 @@ namespace Razor {
 
 		if (!scene)
 		{
-			RZ_CORE_WARN(importer->GetErrorString());
+			RZ_CORE_WARN(importer.GetErrorString());
 			return false;
-		}
-
+		}	
+	
 		if (scene->HasMeshes())
 		{
-			for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
-				this->meshes.push_back(this->processMesh(scene->mMeshes[i]));
+			for (unsigned i = 0; i < scene->mNumMeshes; ++i) {
+				std::shared_ptr<Mesh> mesh = processMesh(scene->mMeshes[i]);
+				meshes.resize(i);
+				meshes.push_back(mesh);
+			}
 		}
 		else
 		{
@@ -36,8 +48,8 @@ namespace Razor {
 
 		if (scene->mRootNode != NULL)
 		{
-			this->rootNode = new Node();
-			this->processNode(scene, scene->mRootNode, 0, this->rootNode);
+			rootNode = new Node();
+			processNode(scene, scene->mRootNode, 0, rootNode);
 			//this->rootNode.reset(rootNode);
 		}
 		else
@@ -61,8 +73,7 @@ namespace Razor {
 
 		for (unsigned int i = 0; i < node->mNumMeshes; ++i)
 		{
-			std::shared_ptr<Mesh> mesh = meshes[node->mMeshes[i]];
-			newNode->meshes[i] = mesh.get();
+			newNode->meshes[i] = meshes[node->mMeshes[i]].get();
 		}	
 
 		for (unsigned int i = 0; i < node->mNumChildren; ++i)
@@ -76,6 +87,7 @@ namespace Razor {
 	{
 		const char* name = object->mName.length != 0 ? object->mName.C_Str() : "";
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+		mesh->setName(name);
 
 		if (object->HasFaces())
 		{

@@ -6,7 +6,7 @@
 
 namespace Razor {
 
-	class RZ_API Log
+	class RAZOR_API Log
 	{
 	public:
 		static void init();

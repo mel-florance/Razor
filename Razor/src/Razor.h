@@ -10,8 +10,8 @@
 #include "Razor/TasksManager.h"
 #include "Razor/Variant.h"
 
-#include "Razor/MouseButtons.h"
-#include "Razor/KeyCodes.h"
+#include "Razor/Input/MouseButtons.h"
+#include "Razor/Input/KeyCodes.h"
 
 // --- Entrypoint ---
 #include "Razor/Entrypoint.h"

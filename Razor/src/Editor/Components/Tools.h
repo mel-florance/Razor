@@ -4,13 +4,13 @@
 
 namespace Razor {
 
-	class RAZOR_API Material
+	class RAZOR_API Tools
 	{
 	public:
-		Material();
-		~Material();
+		Tools();
+		~Tools();
+
+		static void setup();
 	};
 
 }
-
-

@@ -8,7 +8,7 @@
 
 namespace Razor {
 
-	class RZ_API ImGuiLayer : public Layer
+	class RAZOR_API ImGuiLayer : public Layer
 	{
 	public:
 		ImGuiLayer();

@@ -7,20 +7,29 @@ namespace Razor {
 
 	typedef std::function<void(void*)> TaskFinished;
 	typedef std::function<void(void*, TaskFinished, Variant)> TaskCallback;
+	typedef struct {
+		void* result;
+		TaskCallback fn;
+		TaskFinished tf;
+		Variant opts;
+		const char* name;
+		unsigned int priority;
+	} TaskData;
 
-	class RZ_API Task
+	class RAZOR_API Task
 	{
 	public:
-		Task(void* result, TaskFinished tf, TaskCallback fn, Variant opts, const std::string& name, unsigned int priority = 0) :
-			result(result),
-			tf(std::bind(tf, result)),
-			fn(std::bind(fn, result, tf, opts)),
-			opts(opts),
-			name(name),
-			priority(priority) {}
+		Task(const TaskData& data) :
+		result(data.result),
+		tf(std::bind(data.tf, data.result)),
+		fn(std::bind(data.fn, data.result, data.tf, data.opts)),
+		opts(data.opts),
+		name(data.name),
+		priority(data.priority)
+			{}
 
 		void execute() {
-			run(fn, tf, opts);
+			run(result, fn, opts, tf);
 		}
 
 		~Task() {
@@ -28,9 +37,11 @@ namespace Razor {
 		}
 
 		inline std::string& getName() { return name; }
+		inline void setName(const std::string& name) { this->name = name; }
 		inline unsigned int getPriority() { return priority; }
-
-		void run(TaskCallback fn, TaskFinished tf, Variant opts) {
+		inline void setPriority(unsigned int priority) { this->priority = priority; }
+ 
+		void run(void* result, TaskCallback fn, Variant opts, TaskFinished tf) {
 			fn(result, tf, opts);
 		}
 
@@ -41,7 +52,7 @@ namespace Razor {
 		void* result;
 		Variant opts;
 		TaskCallback fn;
-		TaskFinished tf;
+		std::function<void(void*)> tf;
 
 	private:
 		std::string name;

@@ -21,7 +21,7 @@ namespace Razor {
 		}
 	};
 
-	class RZ_API Window
+	class RAZOR_API Window
 	{
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;

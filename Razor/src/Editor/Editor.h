@@ -1,22 +1,29 @@
 #pragma once
 
-#include "Razor/KeyCodes.h"
+#include "Razor/Input/KeyCodes.h"
+#include "Razor/Input/MouseButtons.h"
 #include "Razor/Layer.h"
 #include "Razor/Input.h"
-#include "Razor/MouseButtons.h"
 #include "Razor/ImGui/ImGuiLayer.h"
 #include "Razor/TasksManager.h"
-#include "AssimpImporter.h"
+
+#include "Importers/AssimpImporter.h"
+#include "Components/AssetsManager.h"
+#include "Components/MainMenu.h"
+#include "Components/Console.h"
+#include "Components/PropertiesEditor.h"
+#include "Components/Tools.h"
+#include "Components/Viewport.h"
 
 namespace Razor {
 
-	class RZ_API Editor : public Razor::Layer
+	class RAZOR_API Editor : public Razor::Layer
 	{
 	public:
 		Editor();
 		~Editor();
 
-		static void watch(void* result, TaskFinished tf, Variant opts);
+		static void import(void* result, TaskFinished tf, Variant opts);
 		static void finished(void* result);
 		void OnUpdate() override;
 		void OnEvent(Razor::Event& event) override;
@@ -27,6 +34,8 @@ namespace Razor {
 	private:
 		ImGuiLayer* m_ImGuiLayer;
 		TasksManager* tasksManager;
+		AssimpImporter* assimpImporter;
+		AssetsManager* assetsManager;
 	};
 
 }

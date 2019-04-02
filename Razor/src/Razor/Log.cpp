@@ -7,9 +7,9 @@
 
 namespace Razor {
 
-	RZ_API std::shared_ptr<spdlog::logger> Log::s_coreLogger;
-	RZ_API std::shared_ptr<spdlog::logger> Log::s_clientLogger;
-	RZ_API std::shared_ptr<spdlog::logger> Log::s_fileLogger;
+	RAZOR_API std::shared_ptr<spdlog::logger> Log::s_coreLogger;
+	RAZOR_API std::shared_ptr<spdlog::logger> Log::s_clientLogger;
+	RAZOR_API std::shared_ptr<spdlog::logger> Log::s_fileLogger;
 
 	void Log::init()
 	{

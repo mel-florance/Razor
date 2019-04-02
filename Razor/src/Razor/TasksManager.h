@@ -4,8 +4,8 @@
 #include "Razor/Task.h"
 
 namespace Razor {
-	
-	class RZ_API TasksManager
+
+	class RAZOR_API TasksManager
 	{
 	public:
 		TasksManager();
@@ -13,9 +13,9 @@ namespace Razor {
 		
 		void run();
 
-		void add(void* result, TaskCallback fn, TaskFinished tf,  Variant opts, const std::string& name, unsigned int priority);
+		void add(const TaskData& data);
 
-		inline unsigned int getMaxThreads() { return std::thread::hardware_concurrency(); };
+		unsigned int getMaxThreads() { return std::thread::hardware_concurrency(); };
 
 	private:
 		inline void emplace(const Task& task) { tasks.emplace(task); }

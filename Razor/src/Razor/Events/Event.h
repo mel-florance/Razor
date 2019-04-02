@@ -29,7 +29,7 @@ namespace Razor {
 
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
-	class RZ_API Event
+	class RAZOR_API Event
 	{
 	public:
 		bool Handled = false;

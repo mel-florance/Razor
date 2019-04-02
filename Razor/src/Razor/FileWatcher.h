@@ -4,7 +4,7 @@
 
 namespace Razor {
 
-	class RZ_API FileWatcher
+	class RAZOR_API FileWatcher
 	{
 	public:
 		FileWatcher(std::string path_to_watch, std::chrono::duration<int, std::milli> delay);

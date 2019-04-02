@@ -4,7 +4,7 @@
 
 namespace Razor {
 
-	class RZ_API WindowResizeEvent : public Event
+	class RAZOR_API WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
@@ -26,7 +26,7 @@ namespace Razor {
 		unsigned int m_Width, m_Height;
 	};
 
-	class RZ_API WindowCloseEvent : public Event
+	class RAZOR_API WindowCloseEvent : public Event
 	{
 	public:
 		WindowCloseEvent() {}
@@ -35,7 +35,7 @@ namespace Razor {
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class RZ_API AppTickEvent : public Event
+	class RAZOR_API AppTickEvent : public Event
 	{
 	public:
 		AppTickEvent() {}
@@ -44,7 +44,7 @@ namespace Razor {
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class RZ_API AppUpdateEvent : public Event
+	class RAZOR_API AppUpdateEvent : public Event
 	{
 	public:
 		AppUpdateEvent() {}
@@ -53,7 +53,7 @@ namespace Razor {
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class RZ_API AppRenderEvent : public Event
+	class RAZOR_API AppRenderEvent : public Event
 	{
 	public:
 		AppRenderEvent() {}

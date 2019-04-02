@@ -5,7 +5,7 @@
 
 namespace Razor {
 
-	class RZ_API Node
+	class RAZOR_API Node
 	{
 	public:
 		Node();

@@ -4,7 +4,7 @@
 
 namespace Razor {
 
-	class RZ_API Input
+	class RAZOR_API Input
 	{
 	public:
 		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedImpl(keycode); };

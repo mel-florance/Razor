@@ -2,14 +2,16 @@
 
 #include "Razor/Core.h"
 #include "Razor/Node.h"
+#include "Razor/Variant.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/ProgressHandler.hpp>
 
 namespace Razor {
 
-	class RZ_API AssimpImporter
+	class AssimpImporter : public Assimp::ProgressHandler
 	{
 	public:
 		AssimpImporter();
@@ -20,12 +22,13 @@ namespace Razor {
 		void processNode(const aiScene* scene, aiNode* node, Node* parentNode, Node* newNode);
 		std::shared_ptr<Mesh> processMesh(aiMesh* object);
 
-	private:
-		std::unique_ptr<Assimp::Importer> importer;
+		bool Update(float percentage = -1.f);
+		float percent;
 
 		Node* rootNode;
 		std::vector<std::shared_ptr<Mesh>> meshes;
 
+	private:
 		std::vector<unsigned int> m_indices;
 		std::vector<float> m_vertices;
 		std::vector<float> m_uvs;

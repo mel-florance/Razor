@@ -5,7 +5,7 @@
 
 namespace Razor {
 
-	class RZ_API Mesh
+	class RAZOR_API Mesh
 	{
 	public:
 		Mesh();

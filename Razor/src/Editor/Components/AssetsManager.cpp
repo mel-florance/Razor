@@ -6,7 +6,10 @@ namespace Razor {
 	AssetsManager::AssetsManager()
 	{
 		this->fileWatcher = new FileWatcher({ "./", std::chrono::milliseconds(500) });
+	}
 
+	void AssetsManager::watch()
+	{
 		std::thread fileWatcher_thread(&FileWatcher::start, this->fileWatcher, [](std::string path_to_watch, FileWatcher::Status status)
 		{
 			if (!std::filesystem::is_regular_file(std::filesystem::path(path_to_watch)) && status != FileWatcher::Status::erased) {
@@ -29,6 +32,11 @@ namespace Razor {
 		});
 
 		fileWatcher_thread.detach();
+	}
+
+	void AssetsManager::setup()
+	{
+
 	}
 
 	AssetsManager::~AssetsManager()

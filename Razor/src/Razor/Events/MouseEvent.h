@@ -4,7 +4,7 @@
 
 namespace Razor {
 
-	class RZ_API MouseMovedEvent : public Event
+	class RAZOR_API MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float x, float y) :
@@ -28,7 +28,7 @@ namespace Razor {
 		float m_MouseX, m_MouseY;
 	};
 
-	class RZ_API MouseScrolledEvent : public Event
+	class RAZOR_API MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset) :
@@ -51,7 +51,7 @@ namespace Razor {
 		float m_XOffset, m_YOffset;
 	};
 
-	class RZ_API MouseButtonEvent : public Event
+	class RAZOR_API MouseButtonEvent : public Event
 	{
 	public:
 		inline int GetMouseButton() const { return m_Button; }
@@ -63,7 +63,7 @@ namespace Razor {
 		int m_Button;
 	};
 
-	class RZ_API MouseButtonPressedEvent : public MouseButtonEvent
+	class RAZOR_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
@@ -78,7 +78,7 @@ namespace Razor {
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class RZ_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class RAZOR_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}
