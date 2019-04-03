@@ -16,12 +16,13 @@ IncludeDir["GLFW"] = "Razor/vendor/GLFW/include"
 IncludeDir["Glad"] = "Razor/vendor/Glad/include"
 IncludeDir["ImGui"] = "Razor/vendor/imgui"
 IncludeDir["glm"] = "Razor/vendor/glm"
+IncludeDir["stb"] = "Razor/vendor/stb"
 IncludeDir["assimp"] = "Razor/vendor/assimp/include"
 
 include "Razor/vendor/GLFW"
 include "Razor/vendor/Glad"
 include "Razor/vendor/ImGui"
---include "Razor/vendor/assimp"
+
 
 project "Razor"
 	location "Razor"
@@ -52,6 +53,7 @@ project "Razor"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb}",
 		"%{prj.name}/vendor/assimp/include",
 		"%{prj.name}/vendor/assimp/build/include"
 	}
@@ -84,8 +86,11 @@ project "Razor"
 		postbuildcommands
 		{
 			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox",
+			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Server",
 			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Release-windows-x86_64/Sandbox",
-			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Debug-windows-x86_64/Sandbox"
+			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Debug-windows-x86_64/Sandbox",
+			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Release-windows-x86_64/Server",
+			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Debug-windows-x86_64/Server"
 		}
 
 	filter "configurations:Debug"
@@ -106,6 +111,60 @@ project "Razor"
 
 project "Sandbox"
 	location "Sandbox"
+
+	language "C++"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Razor/vendor/spdlog/include",
+		"Razor/src",
+		"Razor/vendor",
+		"%{IncludeDir.glm}"
+	}
+
+	links
+	{
+		"Razor"
+	}
+
+	filter "system:windows"
+		cppdialect "C++17"
+		staticruntime "On"
+		systemversion "10.0.17763.0"
+
+		defines
+		{
+			"RZ_PLATFORM_WINDOWS"
+		}
+
+	filter "configurations:Debug"
+		defines "RZ_DEBUG"
+		kind "ConsoleApp"
+		symbols "On"
+		
+	filter "configurations:Release"
+		defines "RZ_RELEASE"
+		optimize "On"
+		kind "WindowedApp"
+		entrypoint "mainCRTStartup" 
+		
+	filter "configurations:Dist"
+		defines "RZ_DIST"
+		optimize "On"
+		kind "WindowedApp"
+		entrypoint "mainCRTStartup" 
+
+project "Server"
+	location "Server"
 	kind "ConsoleApp"
 	language "C++"
 
