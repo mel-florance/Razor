@@ -18,6 +18,7 @@ namespace Razor {
 
 	protected:
 		Editor* editor;
+		bool isDirty;
 	};
 
 }

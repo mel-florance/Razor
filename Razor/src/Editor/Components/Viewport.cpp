@@ -1,4 +1,5 @@
 #include "rzpch.h"
+#include "imgui.h"
 #include "Viewport.h"
 
 namespace Razor {
@@ -13,6 +14,9 @@ namespace Razor {
 
 	void Viewport::render()
 	{
+		ImGui::Begin("Viewport");
+		
+		ImGui::End();
 	}
 
 }

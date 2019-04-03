@@ -4,6 +4,7 @@
 
 #include "Razor/Mesh.h"
 #include "Razor/Application.h"
+#include "Razor/Texture.h"
 
 namespace Razor {
 
@@ -19,35 +20,16 @@ namespace Razor {
 		components["PropertiesEditor"] = new PropertiesEditor(this);
 		components["Tools"] = new Tools(this);
 		components["Viewport"] = new Viewport(this);
-		components["Logger"] = new Logger(this);
+		components["Logger"] = new Logger(this); 
 
-		Mesh mesh, mesh1, mesh2, mesh3;
-		tasksManager->add({ &mesh,  &Editor::import, &Editor::finished, Variant("data/house.fbx"), "Import task 1", 50 });
-		tasksManager->add({ &mesh1, &Editor::import, &Editor::finished, Variant("data/Lia.fbx"), "Import task 2", 200 });
-		tasksManager->add({ &mesh2, &Editor::import, &Editor::finished, Variant("house_wood_3.fbx"), "Import task 3", 23 });
-		tasksManager->add({ &mesh3, &Editor::import, &Editor::finished, Variant("house_wood_4.fbx"), "Import task 4", 74 });
-	}
+		Variant v(2.3f);
+		Array<Variant> array = { {1.5f}, v, {3.5f} };
 
-	void Editor::import(void* result, TaskFinished tf, Variant opts)
-	{
-		RZ_CORE_TRACE("Task Arguments: {0}", opts.toString());
+		array += 1.2f;
+		array -= v;
 
-		AssimpImporter* importer = new AssimpImporter();
-		bool imported = importer->importMesh(opts.toString());
-
-		if (imported) {
-			result = new Mesh();
-			static_cast<Mesh*>(result)->setName(importer->getNodeData()->name);
-			tf(result);
-		}
-	}
-
-	void Editor::finished(void* result)
-	{
-		Mesh* mesh = static_cast<Mesh*>(result);
-
-		if(mesh != nullptr)
-			RZ_FILE_INFO("Successfully imported mesh: {0}", mesh->getName());
+		for (auto& item : array)
+			std::cout << item.toString() << std::endl;
 	}
 
 	void Editor::OnUpdate()
@@ -64,9 +46,15 @@ namespace Razor {
 		{
 			Razor::KeyPressedEvent& e = (Razor::KeyPressedEvent&)event;
 
-			if (e.GetKeyCode() == RZ_KEY_TAB)
+			if (e.GetKeyCode() == RZ_KEY_SPACE)
 			{
+				Texture* texture = new Texture("./icon.png");
 
+				Mesh mesh, mesh1, mesh2, mesh3;
+				tasksManager->add({ &mesh,  &AssetsManager::import, &AssetsManager::finished, Variant("data/house.fbx"), "Import task 1", 50 });
+				tasksManager->add({ &mesh1, &AssetsManager::import, &AssetsManager::finished, Variant("data/Lia.fbx"), "Import task 2", 200 });
+				tasksManager->add({ &mesh2, &AssetsManager::import, &AssetsManager::finished, Variant("house_wood_3.fbx"), "Import task 3", 23 });
+				tasksManager->add({ &mesh3, &AssetsManager::import, &AssetsManager::finished, Variant("house_wood_4.fbx"), "Import task 4", 74 });
 			}
 
 			RZ_INFO("{0}", (char)e.GetKeyCode());

@@ -27,8 +27,6 @@ namespace Razor {
 		Editor();
 		~Editor();
 
-		static void import(void* result, TaskFinished tf, Variant opts);
-		static void finished(void* result);
 		void OnUpdate() override;
 		void OnEvent(Razor::Event& event) override;
 		void OnImGuiRender() override;

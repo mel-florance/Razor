@@ -4,7 +4,9 @@
 
 namespace Razor {
 
-	EditorComponent::EditorComponent(Editor* editor) : editor(editor)
+	EditorComponent::EditorComponent(Editor* editor) : 
+		editor(editor),
+		isDirty(false)
 	{
 	}
 

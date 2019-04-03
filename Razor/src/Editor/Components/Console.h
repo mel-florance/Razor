@@ -32,6 +32,7 @@ namespace Razor {
 
 	private:
 		char input[256];
+
 		std::vector<char*> items;
 		std::vector<const char*> commands;
 		std::vector<char*> history;

@@ -1,4 +1,4 @@
-#include "rzpch.h"
+﻿#include "rzpch.h"
 #include "imgui.h"
 #include "Console.h"
 
@@ -14,7 +14,8 @@ namespace Razor {
 		commands.push_back("CLEAR");
 		autoScroll = true;
 		scrollToBottom = true;
-		addLog("Welcome to the razor engine!");
+
+		addLog("Razor Systems 1.0");
 	}
 
 	Console::~Console()	
