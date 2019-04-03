@@ -2,7 +2,7 @@
 
 #include "Razor/Core.h"
 #include "Razor/Node.h"
-#include "Razor/Variant.h"
+#include "Razor/Types/Variant.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

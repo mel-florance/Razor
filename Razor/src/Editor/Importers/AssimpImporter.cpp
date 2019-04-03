@@ -28,7 +28,7 @@ namespace Razor {
 
 		if (!scene)
 		{
-			RZ_CORE_WARN(importer.GetErrorString());
+			RZ_WARN(importer.GetErrorString());
 			return false;
 		}	
 	
@@ -42,7 +42,7 @@ namespace Razor {
 		}
 		else
 		{
-			RZ_CORE_WARN("Error: No meshes found");
+			RZ_WARN("Error: No meshes found");
 			return false;
 		}
 
@@ -54,7 +54,7 @@ namespace Razor {
 		}
 		else
 		{
-			RZ_CORE_WARN("Error loading model");
+			RZ_WARN("Error loading model");
 			return false;
 		}
 
