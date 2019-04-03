@@ -8,7 +8,8 @@
 #include "Razor/Imgui/ImGuiLayer.h"
 #include "Razor/Input.h"
 #include "Razor/TasksManager.h"
-#include "Razor/Variant.h"
+#include "Razor/Types/Variant.h"
+#include "Razor/Types/Array.h"
 
 #include "Razor/Input/MouseButtons.h"
 #include "Razor/Input/KeyCodes.h"
