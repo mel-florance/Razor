@@ -25,7 +25,7 @@ namespace Razor {
 			Task task = tasks.top();
 			tasks.pop();
 			
-			RZ_CORE_TRACE("Executing task \"{0}\" with priority {1} in thread {2}",
+			RZ_TRACE("Executing task \"{0}\" with priority {1} in thread {2}",
 				task.getName(),
 				task.getPriority(),
 				std::this_thread::get_id());

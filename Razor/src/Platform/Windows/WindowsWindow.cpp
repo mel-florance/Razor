@@ -14,7 +14,7 @@ namespace Razor {
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
-		RZ_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+		RZ_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
 	Window* Window::Create(const WindowProps& props)
@@ -38,13 +38,13 @@ namespace Razor {
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		RZ_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		RZ_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
 		{
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
-			RZ_CORE_ASSERT(success, "Could not intialize GLFW!");
+			RZ_ASSERT(success, "Could not intialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
@@ -52,7 +52,7 @@ namespace Razor {
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		RZ_CORE_ASSERT(status, "Failed to initialize Glad!");
+		RZ_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 

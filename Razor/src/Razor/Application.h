@@ -7,13 +7,14 @@
 #include "Razor/Events/Event.h"
 #include "Razor/Events/ApplicationEvent.h"
 #include "Razor/ImGui/ImGuiLayer.h"
+#include "Platform/Windows/WindowsWindow.h"
 
 namespace Razor {
 
 	class RAZOR_API Application
 	{
 	public:
-		Application();	
+		Application(bool headless = false);
 		virtual ~Application();
 		void run();	
 		void OnEvent(Event& e);
@@ -23,7 +24,7 @@ namespace Razor {
 
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
-		inline void close() { m_Running = false; }
+		inline void close();
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
@@ -35,6 +36,7 @@ namespace Razor {
 		LayerStack m_LayerStack;
 
 		static Application* s_Instance;
+		bool headless;
 	};
 
 	Application* createApplication();

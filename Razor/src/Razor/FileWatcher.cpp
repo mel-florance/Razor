@@ -27,7 +27,7 @@ namespace Razor {
 		}
 
 		i = 0;
-		for (j = buffer.size() - 1; buffer.size() > j && i < n; --j, ++i)
+		for (j = (int)buffer.size() - 1; (int)buffer.size() > j && i < n; --j, ++i)
 			out.push_back(buffer[j]);
 
 		return out;

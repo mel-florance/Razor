@@ -13,23 +13,32 @@ namespace Razor {
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application() : m_Running(true)
+	Application::Application(bool headless) : headless(headless), m_Running(true)
 	{
-		RZ_CORE_ASSERT(!s_Instance, "Application already exists!");
+		RZ_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(RZ_BIND_EVENT_FN(Application::OnEvent));
+		if (!headless) {
+			m_Window = std::unique_ptr<Window>(Window::Create());
+			m_Window->SetEventCallback(RZ_BIND_EVENT_FN(Application::OnEvent));
 
-		m_Editor = new Editor();
+			m_Editor = new Editor();
 
-		m_ImGuiLayer = m_Editor->getLayer().get();
-		PushLayer(m_Editor);
-		PushOverlay(m_ImGuiLayer);
+			m_ImGuiLayer = m_Editor->getLayer().get();
+			PushLayer(m_Editor);
+			PushOverlay(m_ImGuiLayer);
+		}
+
+
 	}
 
 	Application::~Application()
 	{
+	}
+
+	void Application::close()
+	{
+		glfwSetWindowShouldClose((GLFWwindow*)m_Window->GetNativeWindow(), GLFW_TRUE);
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -68,7 +77,7 @@ namespace Razor {
 
 	void Application::run()
 	{
-		while (m_Running)
+		while (!glfwWindowShouldClose((GLFWwindow*)m_Window->GetNativeWindow()))
 		{
 			glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);

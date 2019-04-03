@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Razor/Core.h"
-#include "Razor/Variant.h"
+#include "Razor/Types/Variant.h"
 
 namespace Razor {
 

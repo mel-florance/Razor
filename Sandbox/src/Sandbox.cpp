@@ -26,7 +26,7 @@ public:
 
 Razor::Application* Razor::createApplication()
 {
-	RZ_FILE_INFO("Started Application");
+	RZ_INFO("Started Application");
 
 	return new Sandbox();
 }
