@@ -5,7 +5,6 @@ class TestLayer : public Razor::Layer
 public:
 	TestLayer() : Layer("Test")
 	{
-		
 	}
 	
 };

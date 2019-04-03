@@ -156,7 +156,7 @@ namespace Razor {
 	const std::map<std::string, Variant>& Variant::toMap() const
 	{
 		if (_type != Type::Map)
-			throw "Can't convert objet to map.";
+			throw "Can't convert object to map.";
 
 		return *reinterpret_cast<std::map<std::string, Variant>*>(_ptr);
 	}

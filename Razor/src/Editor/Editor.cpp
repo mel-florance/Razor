@@ -22,14 +22,13 @@ namespace Razor {
 		components["Viewport"] = new Viewport(this);
 		components["Logger"] = new Logger(this); 
 
-		Variant v(2.3f);
-		Array<Variant> array = { {1.5f}, v, {3.5f} };
+		Array<Variant> arr({ {"test"}, {1.2f} });
 
-		array += 1.2f;
-		array -= v;
+		arr += true;
 
-		for (auto& item : array)
-			std::cout << item.toString() << std::endl;
+		for (auto& item : arr) {
+			RZ_INFO("value: {0}", item.toString());
+		}
 	}
 
 	void Editor::OnUpdate()

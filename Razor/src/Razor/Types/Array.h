@@ -6,7 +6,7 @@
 namespace Razor {
 
 	template <class T>
-	class Array : private std::vector<T>
+	class Array : public std::vector<T>
 	{
 	public:
 		using std::vector<T>::clear;

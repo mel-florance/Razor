@@ -95,7 +95,7 @@ project "Razor"
 
 	filter "configurations:Debug"
 		defines "RZ_DEBUG"
-		runtime "Debug"
+		buildoptions {"/MTd"}
 		symbols "On"
 		
 	filter "configurations:Release"
@@ -203,6 +203,7 @@ project "Server"
 	filter "configurations:Debug"
 		defines "RZ_DEBUG"
 		symbols "On"
+		buildoptions {"/MTd"}
 		
 	filter "configurations:Release"
 		defines "RZ_RELEASE"
