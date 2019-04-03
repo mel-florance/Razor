@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "Razor\vendor\ImGui
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Razor", "Razor\Razor.vcxproj", "{F31F020E-5F34-2ABF-28B6-CD1E948926F0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcxproj", "{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -48,6 +50,12 @@ Global
 		{F31F020E-5F34-2ABF-28B6-CD1E948926F0}.Dist|x64.Build.0 = Dist|x64
 		{F31F020E-5F34-2ABF-28B6-CD1E948926F0}.Release|x64.ActiveCfg = Release|x64
 		{F31F020E-5F34-2ABF-28B6-CD1E948926F0}.Release|x64.Build.0 = Release|x64
+		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Debug|x64.ActiveCfg = Debug|x64
+		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Debug|x64.Build.0 = Debug|x64
+		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Dist|x64.ActiveCfg = Dist|x64
+		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Dist|x64.Build.0 = Dist|x64
+		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Release|x64.ActiveCfg = Release|x64
+		{7C62DFD0-6804-0AA7-51BF-1DFB3D0091F7}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

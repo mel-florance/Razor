@@ -7,6 +7,12 @@
     <Filter Include="src\Editor">
       <UniqueIdentifier>{C3F37E0D-AFAB-C05A-18B3-99B6048A5B4B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Editor\Components">
+      <UniqueIdentifier>{F818EE8A-6485-A985-2D79-41E399A4CBED}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Editor\Importers">
+      <UniqueIdentifier>{17BAD45E-0349-5E28-AC67-722398D56ECE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -24,6 +30,9 @@
     </Filter>
     <Filter Include="src\Razor\Input">
       <UniqueIdentifier>{C9ED48F1-3579-B6B5-3E8A-39AAAA9412B6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Types">
+      <UniqueIdentifier>{6E0116F2-DA8C-83B6-E39D-06AB4FA8DFB6}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -66,8 +75,41 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Editor\Components\AssetsManager.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\Console.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\FileBrowser.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\Logger.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\MainMenu.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\Outliner.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\PropertiesEditor.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\Tools.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\Viewport.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Editor\Editor.h">
       <Filter>src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorComponent.h">
+      <Filter>src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Importers\AssimpImporter.h">
+      <Filter>src\Editor\Importers</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>src\Platform\Windows</Filter>
@@ -84,6 +126,9 @@
     <ClInclude Include="src\Razor\Core.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\DirectoryWatcher.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Entrypoint.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
@@ -98,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="src\Razor\Events\MouseEvent.h">
       <Filter>src\Razor\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\File.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\FileWatcher.h">
+      <Filter>src\Razor</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h">
       <Filter>src\Razor\ImGui</Filter>
@@ -129,13 +180,28 @@
     <ClInclude Include="src\Razor\Node.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Shader.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\ShadersManager.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Task.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\TasksManager.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Variant.h">
+    <ClInclude Include="src\Razor\Texture.h">
+      <Filter>src\Razor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Types\Array.h">
+      <Filter>src\Razor\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Types\Variant.h">
+      <Filter>src\Razor\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Utils.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Window.h">
@@ -1482,28 +1548,43 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\Components\AssetsManager.h">
-      <Filter>src\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\Components\Console.h" />
-    <ClInclude Include="src\Editor\Components\MainMenu.h" />
-    <ClInclude Include="src\Editor\Importers\AssimpImporter.h">
-      <Filter>src\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\Components\PropertiesEditor.h" />
-    <ClInclude Include="src\Editor\Components\Viewport.h" />
-    <ClInclude Include="src\Editor\Components\Tools.h" />
-    <ClInclude Include="src\Editor\Components\Outliner.h" />
-    <ClInclude Include="src\Editor\EditorComponent.h" />
-    <ClInclude Include="src\Editor\Components\Logger.h" />
-    <ClInclude Include="src\Razor\DirectoryWatcher.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\FileWatcher.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\Console.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\FileBrowser.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\Logger.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\MainMenu.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\Outliner.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\Tools.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\Viewport.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\Editor\Editor.cpp">
       <Filter>src\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorComponent.cpp">
+      <Filter>src\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Importers\AssimpImporter.cpp">
+      <Filter>src\Editor\Importers</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
@@ -1512,6 +1593,15 @@
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Application.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\DirectoryWatcher.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\File.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\FileWatcher.cpp">
       <Filter>src\Razor</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\ImGui\ImGuiBuild.cpp">
@@ -1538,36 +1628,30 @@
     <ClCompile Include="src\Razor\Node.cpp">
       <Filter>src\Razor</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Shader.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\ShadersManager.cpp">
+      <Filter>src\Razor</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Task.cpp">
       <Filter>src\Razor</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\TasksManager.cpp">
       <Filter>src\Razor</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Variant.cpp">
+    <ClCompile Include="src\Razor\Texture.cpp">
       <Filter>src\Razor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Types\Array.cpp">
+      <Filter>src\Razor\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Types\Variant.cpp">
+      <Filter>src\Razor\Types</Filter>
     </ClCompile>
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
-      <Filter>src\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\Components\Console.cpp" />
-    <ClCompile Include="src\Editor\Components\MainMenu.cpp" />
-    <ClCompile Include="src\Editor\Importers\AssimpImporter.cpp">
-      <Filter>src\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp" />
-    <ClCompile Include="src\Editor\Components\Viewport.cpp" />
-    <ClCompile Include="src\Editor\Components\Tools.cpp" />
-    <ClCompile Include="src\Editor\Components\Outliner.cpp" />
-    <ClCompile Include="src\Editor\EditorComponent.cpp" />
-    <ClCompile Include="src\Editor\Components\Logger.cpp" />
-    <ClCompile Include="src\Razor\DirectoryWatcher.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\FileWatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">

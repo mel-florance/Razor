@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;RZ_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,8 +95,11 @@
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST ..\bin\Debug-windows-x86_64\Razor\Razor.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Razor\Razor.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Razor\Razor.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\bin\Debug-windows-x86_64\Razor\Razor.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Razor\Razor.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Razor\Razor.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -105,7 +108,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;RZ_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -124,8 +127,11 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST ..\bin\Release-windows-x86_64\Razor\Razor.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Razor\Razor.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Razor\Razor.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\bin\Release-windows-x86_64\Razor\Razor.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Razor\Razor.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Razor\Razor.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -134,7 +140,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;RZ_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -153,34 +159,39 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST ..\bin\Dist-windows-x86_64\Razor\Razor.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\Razor\Razor.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\Razor\Razor.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\bin\Dist-windows-x86_64\Razor\Razor.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\Razor\Razor.dll ..\bin\Dist-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\Razor\Razor.dll ..\bin\Dist-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Razor\FileWatcher.h" />
-    <ClInclude Include="src\Editor\Components\Logger.h" />
-    <ClInclude Include="src\Editor\EditorComponent.h" />
-    <ClInclude Include="src\Editor\Components\Console.h" />
-    <ClInclude Include="src\Editor\Components\MainMenu.h" />
     <ClInclude Include="src\Editor\Components\AssetsManager.h" />
+    <ClInclude Include="src\Editor\Components\Console.h" />
+    <ClInclude Include="src\Editor\Components\FileBrowser.h" />
+    <ClInclude Include="src\Editor\Components\Logger.h" />
+    <ClInclude Include="src\Editor\Components\MainMenu.h" />
     <ClInclude Include="src\Editor\Components\Outliner.h" />
     <ClInclude Include="src\Editor\Components\PropertiesEditor.h" />
     <ClInclude Include="src\Editor\Components\Tools.h" />
     <ClInclude Include="src\Editor\Components\Viewport.h" />
-    <ClInclude Include="src\Editor\Importers\AssimpImporter.h" />
     <ClInclude Include="src\Editor\Editor.h" />
+    <ClInclude Include="src\Editor\EditorComponent.h" />
+    <ClInclude Include="src\Editor\Importers\AssimpImporter.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Razor.h" />
     <ClInclude Include="src\Razor\Application.h" />
     <ClInclude Include="src\Razor\Core.h" />
+    <ClInclude Include="src\Razor\DirectoryWatcher.h" />
     <ClInclude Include="src\Razor\Entrypoint.h" />
     <ClInclude Include="src\Razor\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Razor\Events\Event.h" />
     <ClInclude Include="src\Razor\Events\KeyEvent.h" />
     <ClInclude Include="src\Razor\Events\MouseEvent.h" />
-    <ClInclude Include="src\Razor\DirectoryWatcher.h" />
+    <ClInclude Include="src\Razor\File.h" />
+    <ClInclude Include="src\Razor\FileWatcher.h" />
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Razor\Input.h" />
     <ClInclude Include="src\Razor\Input\KeyCodes.h" />
@@ -191,9 +202,14 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="src\Razor\Material.h" />
     <ClInclude Include="src\Razor\Mesh.h" />
     <ClInclude Include="src\Razor\Node.h" />
+    <ClInclude Include="src\Razor\Shader.h" />
+    <ClInclude Include="src\Razor\ShadersManager.h" />
     <ClInclude Include="src\Razor\Task.h" />
     <ClInclude Include="src\Razor\TasksManager.h" />
-    <ClInclude Include="src\Razor\Variant.h" />
+    <ClInclude Include="src\Razor\Texture.h" />
+    <ClInclude Include="src\Razor\Types\Array.h" />
+    <ClInclude Include="src\Razor\Types\Variant.h" />
+    <ClInclude Include="src\Razor\Utils.h" />
     <ClInclude Include="src\Razor\Window.h" />
     <ClInclude Include="src\rzpch.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BaseImporter.h" />
@@ -644,22 +660,24 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Razor\FileWatcher.cpp" />
-    <ClCompile Include="src\Editor\Components\Logger.cpp" />
-    <ClCompile Include="src\Editor\EditorComponent.cpp" />
-    <ClCompile Include="src\Editor\Components\Console.cpp" />
-    <ClCompile Include="src\Editor\Components\MainMenu.cpp" />
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp" />
+    <ClCompile Include="src\Editor\Components\Console.cpp" />
+    <ClCompile Include="src\Editor\Components\FileBrowser.cpp" />
+    <ClCompile Include="src\Editor\Components\Logger.cpp" />
+    <ClCompile Include="src\Editor\Components\MainMenu.cpp" />
     <ClCompile Include="src\Editor\Components\Outliner.cpp" />
     <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp" />
     <ClCompile Include="src\Editor\Components\Tools.cpp" />
     <ClCompile Include="src\Editor\Components\Viewport.cpp" />
-    <ClCompile Include="src\Editor\Importers\AssimpImporter.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
+    <ClCompile Include="src\Editor\EditorComponent.cpp" />
+    <ClCompile Include="src\Editor\Importers\AssimpImporter.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Razor\Application.cpp" />
     <ClCompile Include="src\Razor\DirectoryWatcher.cpp" />
+    <ClCompile Include="src\Razor\File.cpp" />
+    <ClCompile Include="src\Razor\FileWatcher.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Razor\Layer.cpp" />
@@ -668,9 +686,13 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClCompile Include="src\Razor\Material.cpp" />
     <ClCompile Include="src\Razor\Mesh.cpp" />
     <ClCompile Include="src\Razor\Node.cpp" />
+    <ClCompile Include="src\Razor\Shader.cpp" />
+    <ClCompile Include="src\Razor\ShadersManager.cpp" />
     <ClCompile Include="src\Razor\Task.cpp" />
     <ClCompile Include="src\Razor\TasksManager.cpp" />
-    <ClCompile Include="src\Razor\Variant.cpp" />
+    <ClCompile Include="src\Razor\Texture.cpp" />
+    <ClCompile Include="src\Razor\Types\Array.cpp" />
+    <ClCompile Include="src\Razor\Types\Variant.cpp" />
     <ClCompile Include="src\rzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
