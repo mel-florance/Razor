@@ -12,6 +12,11 @@ namespace Razor {
 		~Viewport();
 
 		void render() override;
+
+		inline ImVec2& getSize() { return size; }
+
+	private:
+		ImVec2 size;
 	};
 
 }

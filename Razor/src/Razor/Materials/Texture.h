@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Razor/Core/Core.h"
-#include "glad/glad.h"
 
 namespace Razor {
 
@@ -11,6 +10,7 @@ namespace Razor {
 		Texture(const std::string& filename, bool mimaps = false);
 		virtual ~Texture();
 
+		inline unsigned int getId() { return id; }
 		void setLoadBias(float& value) { lodBias = value; }
 		float& getLodBias() { return lodBias; }
 		Texture* load();
@@ -18,7 +18,7 @@ namespace Razor {
 		void unbind();
 
 	private:
-		GLuint texture;
+		unsigned int id;
 		std::string filename;
 		bool mipmaps;
 		float lodBias;

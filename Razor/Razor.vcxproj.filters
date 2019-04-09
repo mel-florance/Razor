@@ -1559,6 +1559,11 @@
     <ClInclude Include="src\Razor\Application\Entrypoint.h">
       <Filter>src\Razor</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Cameras\Camera.h" />
+    <ClInclude Include="src\Razor\Lighting\Light.h" />
+    <ClInclude Include="src\Razor\Lighting\Directional.h" />
+    <ClInclude Include="src\Razor\Lighting\Spot.h" />
+    <ClInclude Include="src\Razor\Lighting\Point.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -1673,6 +1678,11 @@
     <ClCompile Include="src\Razor\Core\Log.cpp">
       <Filter>src\Razor</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Cameras\Camera.cpp" />
+    <ClCompile Include="src\Razor\Lighting\Light.cpp" />
+    <ClCompile Include="src\Razor\Lighting\Directional.cpp" />
+    <ClCompile Include="src\Razor\Lighting\Spot.cpp" />
+    <ClCompile Include="src\Razor\Lighting\Point.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">

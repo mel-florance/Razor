@@ -20,7 +20,6 @@ namespace Razor {
 		inline std::shared_ptr<Material> getMaterial() { return this->material; }
 		inline void setMaterial(std::shared_ptr<Material> material) { this->material = material; }
 
-
 		inline std::vector<unsigned int>& getIndices() { return this->indices; }
 		inline void setIndices(std::vector<unsigned int> indices) { this->indices = indices; }
 
@@ -53,14 +52,14 @@ namespace Razor {
 
 	private:
 		std::string name;
+		std::shared_ptr<Material> material;
+		unsigned int vertexCount;
+
 		std::vector<unsigned int> indices;
 		std::vector<float> vertices;
 		std::vector<float> uvs;
 		std::vector<float> normals;
 		std::vector<float> tangents;
-		std::shared_ptr<Material> material;
-
-		unsigned int vertexCount;
 
 		VertexArray* vao;
 		VertexBufferLayout* vbl;

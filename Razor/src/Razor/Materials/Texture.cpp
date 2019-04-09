@@ -2,6 +2,8 @@
 #include "Texture.h"
 #include "Razor/Core/Utils.h"
 
+#include "glad/glad.h"
+
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_IMPLEMENTATION
 #include "../stb/stb_image.h"
@@ -26,8 +28,8 @@ namespace Razor {
 			return nullptr;
 		}
 
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glGenTextures(1, &id);
+		glBindTexture(GL_TEXTURE_2D, id);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 
@@ -55,7 +57,7 @@ namespace Razor {
 		assert(unit >= 0 && unit <= 31);
 
 		glActiveTexture(GL_TEXTURE0 + unit);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindTexture(GL_TEXTURE_2D, id);
 	}
 
 	void Texture::unbind()
@@ -66,7 +68,7 @@ namespace Razor {
 
 	Texture::~Texture()
 	{
-		glDeleteTextures(1, &texture);
+		glDeleteTextures(1, &id);
 	}
 
 }

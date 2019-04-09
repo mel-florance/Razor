@@ -13,6 +13,8 @@
 
 namespace Razor {
 
+	class Editor;
+
 	class RAZOR_API Application
 	{
 	public:
@@ -27,20 +29,23 @@ namespace Razor {
 
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
+		inline Camera* getCamera() { return camera; }
+		inline Editor* getEditor() { return m_Editor; }
 
-		inline DeferredRenderer* getForwardRenderer() { return fRenderer; }
+		inline DeferredRenderer* getForwardRenderer() { return dRenderer; }
 
 	private:
 		
 		bool OnWindowClose(WindowCloseEvent& e);
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
-		class Editor* m_Editor;
+		Editor* m_Editor;
 		bool m_Running;
 		Log* m_log;
 		LayerStack m_LayerStack;
-		DeferredRenderer* fRenderer;
+		DeferredRenderer* dRenderer;
 		SceneGraph* sceneGraph;
+		Camera* camera;
 
 		static Application* s_Instance;
 		bool headless;

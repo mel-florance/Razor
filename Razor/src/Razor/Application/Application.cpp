@@ -8,6 +8,7 @@
 #include <glad/glad.h>
 
 #include "Razor/Input/Input.h"
+#include "Razor/Cameras/Camera.h"
 
 namespace Razor {
 
@@ -24,7 +25,9 @@ namespace Razor {
 			m_Window->SetEventCallback(RZ_BIND_EVENT_FN(Application::OnEvent));
 
 			sceneGraph = new SceneGraph();
-			fRenderer = new DeferredRenderer(sceneGraph);
+			camera = new Camera(m_Window.get(), glm::vec3(0.0f, 0.0f, 3.0f));
+			dRenderer = new DeferredRenderer(camera, sceneGraph);
+
 			m_log = new Log();
 			m_Editor = new Editor();
 			m_log->s_editorLogger = (Logger*)m_Editor->getComponents()["Logger"];
@@ -37,7 +40,7 @@ namespace Razor {
 
 	Application::~Application()
 	{
-		delete fRenderer;
+		delete dRenderer;
 		delete m_log;
 		delete m_Editor;
 	}
@@ -59,9 +62,9 @@ namespace Razor {
 		overlay->OnAttach();
 	}
 
-	void Application::OnEvent(Event& e)
+	void Application::OnEvent(Event& event)
 	{
-		EventDispatcher dispatcher(e);
+		EventDispatcher dispatcher(event);
 
 		dispatcher.Dispatch<WindowCloseEvent>(RZ_BIND_EVENT_FN(Application::OnWindowClose));
 
@@ -69,9 +72,29 @@ namespace Razor {
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
-			(*--it)->OnEvent(e);
+			(*--it)->OnEvent(event);
 
-			if (e.Handled)
+			if (event.GetEventType() == EventType::MouseButtonPressed) {
+				MouseButtonEvent& e = (MouseButtonEvent&)event;
+				camera->onMouseDown(e.GetMouseButton());
+			}
+			
+			if (event.GetEventType() == EventType::MouseButtonReleased) {
+				MouseButtonEvent& e = (MouseButtonEvent&)event;
+				camera->onMouseUp(e.GetMouseButton());
+			}
+
+			if (event.GetEventType() == EventType::MouseMoved) {
+				MouseMovedEvent& e = (MouseMovedEvent&)event;
+				camera->onMouseMoved(glm::vec2(e.GetX(), e.GetY()));
+			}
+
+			if (event.GetEventType() == EventType::MouseScrolled) {
+				MouseScrolledEvent& e = (MouseScrolledEvent&)event;
+				camera->onMouseScrolled(glm::vec2(e.GetXOffset(), e.GetYOffset()));
+			}
+
+			if (event.Handled)
 				break;
 		}
 	}
@@ -95,10 +118,13 @@ namespace Razor {
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			camera->setDelta(deltaTime);
+			camera->onEvent((GLFWwindow*)m_Window->GetNativeWindow());
+
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
-			fRenderer->update(deltaTime);
+			dRenderer->update(deltaTime);
 
 			m_ImGuiLayer->Begin();
 
@@ -107,7 +133,7 @@ namespace Razor {
 
 			m_ImGuiLayer->End();
 
-			fRenderer->render();
+			dRenderer->render(deltaTime);
 
 			//auto[x, y] = Input::getMousePosition();
 			//RZ_CORE_TRACE("{0}, {1}", x, y);

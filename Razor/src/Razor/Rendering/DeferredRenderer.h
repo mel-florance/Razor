@@ -3,10 +3,13 @@
 #include "Razor/Materials/ShadersManager.h"
 #include "Razor/Buffers/Buffers.h"
 #include "Razor/Geometry/Geometry.h"
+#include "Razor/Lighting/Light.h"
+#include "Razor/Materials/Texture.h"
 
 namespace Razor {
 
 	class SceneGraph;
+	class Camera;
 
 	class DeferredRenderer
 	{
@@ -17,11 +20,11 @@ namespace Razor {
 			DEPTH
 		};
 
-		DeferredRenderer(SceneGraph* sceneGraph);
+		DeferredRenderer(Camera* camera, SceneGraph* sceneGraph);
 		~DeferredRenderer();
 
 		void update(double delta);
-		void render();
+		void render(double delta);
 		void clear(ClearType type = ClearType::ALL);
 		void enableDepthTest();
 		void disableDepthTest();
@@ -34,6 +37,9 @@ namespace Razor {
 
 		ShadersManager* shadersManager;
 		SceneGraph* sceneGraph;
+		Camera* camera;
+		Light* light;
+
 		std::shared_ptr<Shader> defaultShader;
 		std::shared_ptr<Shader> viewportShader;
 
@@ -41,6 +47,13 @@ namespace Razor {
 		TextureAttachment* colorbuffer;
 
 		Plane* quad;
+
+		std::vector<glm::vec3> pointLightPositions;
+		Texture* diffuseMap;
+		Texture* specularMap;
+
+		float angle;
+		double deltaTime;
 	};
 
 }
