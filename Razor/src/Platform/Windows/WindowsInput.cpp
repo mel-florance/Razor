@@ -2,7 +2,7 @@
 #include "WindowsInput.h"
 
 #include <GLFW/glfw3.h>
-#include "Razor/Application.h"
+#include "Razor/Application/Application.h"
 
 namespace Razor {
 

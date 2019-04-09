@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Razor/Window.h"
-
+#include "Razor/Core/Window.h"
 
 struct GLFWwindow;
 

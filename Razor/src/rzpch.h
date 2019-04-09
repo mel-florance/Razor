@@ -16,7 +16,9 @@
 #include <limits>
 #include <typeinfo>
 
+#include <set>
 #include <any>
+#include <iterator>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -28,7 +30,8 @@
 
 #include "Razor/Types/Array.h"
 #include "Razor/Types/Variant.h"
-#include "Razor/Log.h"
+#include "Razor/Core/Log.h"
+#include "Razor/Core/Utils.h"
 
 #ifdef RZ_PLATFORM_WINDOWS
 	#include <Windows.h>

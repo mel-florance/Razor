@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Razor/Core.h"
-#include "Razor/Node.h"
+#include "Razor/Core/Core.h"
+#include "Razor/Scene/Node.h"
 #include "Razor/Types/Variant.h"
 
 #include <assimp/Importer.hpp>

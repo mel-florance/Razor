@@ -26,8 +26,8 @@ include "Razor/vendor/ImGui"
 
 project "Razor"
 	location "Razor"
-	kind "SharedLib"
-	staticruntime "off"
+	kind "StaticLib"
+	staticruntime "on"
 	language "C++"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -85,8 +85,8 @@ project "Razor"
 
 		postbuildcommands
 		{
-			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox",
-			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Server",
+			--"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox",
+			--"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Server",
 			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Release-windows-x86_64/Sandbox",
 			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Debug-windows-x86_64/Sandbox",
 			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Release-windows-x86_64/Server",

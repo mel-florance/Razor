@@ -1,5 +1,4 @@
 #include "rzpch.h"
-#include "imgui.h"
 #include "Logger.h"
 
 namespace Razor {
@@ -9,8 +8,6 @@ namespace Razor {
 		autoScroll = true;
 		scrollToBottom = false;
 		clear();
-
-		addLog("Welcome to the logger");
 	}
 
 	Logger::~Logger()

@@ -2,10 +2,10 @@
 
 #include "Razor/Input/KeyCodes.h"
 #include "Razor/Input/MouseButtons.h"
-#include "Razor/Layer.h"
-#include "Razor/Input.h"
+#include "Razor/Application/Layer.h"
+#include "Razor/Input/Input.h"
 #include "Razor/ImGui/ImGuiLayer.h"
-#include "Razor/TasksManager.h"
+#include "Razor/Core/TasksManager.h"
 
 #include "Importers/AssimpImporter.h"
 #include "Components/AssetsManager.h"
@@ -33,6 +33,7 @@ namespace Razor {
 
 		inline std::shared_ptr<ImGuiLayer> getLayer() { return m_ImGuiLayer;  }
 		inline ComponentsMap& getComponents() { return components; }
+		inline TasksManager* getTasksManager() { return tasksManager; }
 
 		template<class T>
 		inline T getComponent(const std::string& name) {
@@ -44,9 +45,8 @@ namespace Razor {
 
 	private:
 		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
-		std::unique_ptr<TasksManager> tasksManager;
+		TasksManager* tasksManager;
 		std::unique_ptr<AssimpImporter> assimpImporter;
-
 		ComponentsMap components;
 	};
 

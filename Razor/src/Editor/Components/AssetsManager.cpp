@@ -13,11 +13,17 @@ namespace Razor {
 		{AssetsManager::Type::Video, {"webm", "flv",   "ogv",  "mov", "mp4",  "3gp"}}
 	};
 
+	AssetsManager* FileBrowser::assetsManager = nullptr;
+	TasksManager* FileBrowser::tasksManager = nullptr;
+
 	AssetsManager::AssetsManager(Editor* editor) : EditorComponent(editor)
 	{
-		this->directoryWatcher = std::make_shared<DirectoryWatcher>("./", std::chrono::milliseconds(16));
+		this->directoryWatcher = std::make_shared<DirectoryWatcher>("F:/Razor/Razor/Sandbox", std::chrono::milliseconds(1000));
 		this->fileWatcher = std::make_shared<FileWatcher>();
-		this->fileBrowser = std::make_shared<FileBrowser>(editor);
+		this->fileBrowser = std::make_shared<FileBrowser>();
+		FileBrowser::assetsManager = this;
+		FileBrowser::tasksManager = editor->getTasksManager();
+
 		watch();
 	}
 
@@ -35,13 +41,13 @@ namespace Razor {
 				RZ_INFO("File created: {0}", path);
 				break;
 			case DirectoryWatcher::Status::modified:
-				if (path == "./Razor.log") {
+				/*if (path == "./Razor.log") {
 					std::vector<std::string> lines = fileWatcher->tail("./Razor.log", 1);
 					Logger* logger = (Logger*)this->getEditor()->getComponents()["Logger"];
 
 					for (auto line : lines)
 						logger->addLog(("\n" + line).c_str());
-				}
+				}*/
 				//RZ_INFO("File modified: {0}", path);
 				break;
 			case DirectoryWatcher::Status::erased:
@@ -72,32 +78,28 @@ namespace Razor {
 			std::string str = opts.toString();
 			auto ext = str.substr(str.find_last_of(".") + 1);
 			auto type = AssetsManager::getExt(ext);
+			AssimpImporter* importer = new AssimpImporter();
 
-			if (type == Type::Model)
-			{
-				AssimpImporter* importer = new AssimpImporter();
-				bool imported = importer->importMesh(opts.toString());
-
-				if (imported) {
+			switch (type) {
+			case Type::Model:
+				if (importer->importMesh(opts.toString())) {
 					result = new Mesh();
 					static_cast<Mesh*>(result)->setName(importer->getNodeData()->name);
 					tf(result);
 				}
-			}
-			else if (type == Type::Image) {
+				break;
+			case Type::Image:
 				RZ_WARN("No image format implemented for the extension: {0}", ext);
-				
-
-
-			}
-			else if (type == Type::Audio) {
+				break;
+			case Type::Audio:
 				RZ_WARN("No Audio format implemented for the extension: {0}", ext);
-			}
-			else if (type == Type::Video) {
+				break;
+			case Type::Video:
 				RZ_WARN("No Video format implemented for the extension: {0}", ext);
-			}
-			else
+				break;
+			default:
 				RZ_ERROR("Unrecognized file extension: {0}", ext);
+			}
 		}
 	}
 

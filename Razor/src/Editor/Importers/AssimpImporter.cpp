@@ -1,6 +1,6 @@
 #include "rzpch.h"
 #include "AssimpImporter.h"
-#include "Razor/Mesh.h"
+#include "Razor/Geometry/Mesh.h"
 
 namespace Razor {
 

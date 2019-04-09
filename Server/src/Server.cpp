@@ -6,6 +6,17 @@ namespace Razor { namespace Network {
 	{
 		std::cout << "Server started !" << std::endl;
 
+		Variant v("hehe");
+		Variant n(3);
+		Array<Variant> arr({ {false}, n, {"test"}, {8}, { 1.2f } });
+
+		arr += v;
+		arr -= n;
+
+		for (auto& item : arr) {
+			RZ_INFO("value: {0}", item.toString());
+		}
+
 		system("pause");
 	}
 

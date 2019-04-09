@@ -1,8 +1,8 @@
 #pragma once
 
 #include "imgui.h"
-#include "Razor/Core.h"
-#include "Razor/FileWatcher.h"
+#include "Razor/Core/Core.h"
+#include "Razor/Filesystem/FileWatcher.h"
 #include "Editor/EditorComponent.h"
 
 namespace Razor {

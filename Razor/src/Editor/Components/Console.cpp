@@ -117,10 +117,12 @@ namespace Razor {
 		char buf[1024];
 		va_list args;
 		va_start(args, fmt);
+
 		vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
 		buf[IM_ARRAYSIZE(buf) - 1] = 0;
 		va_end(args);
 		items.push_back(Strdup(buf));
+
 		if (autoScroll)
 			scrollToBottom = true;
 	}

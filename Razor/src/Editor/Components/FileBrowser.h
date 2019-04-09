@@ -1,17 +1,19 @@
 #pragma once
 
 #include "imgui.h"
-#include "Razor/Core.h"
-#include "Editor/EditorComponent.h"
+#include "Razor/Core/Core.h"
 
 namespace fs = std::experimental::filesystem;
 
 namespace Razor {
 
-	class RAZOR_API FileBrowser : public EditorComponent
+	class TasksManager;
+	class AssetsManager;
+
+	class RAZOR_API FileBrowser
 	{
 	public:
-		FileBrowser(Editor* editor);
+		FileBrowser();
 		~FileBrowser();
 
 		const struct File {
@@ -26,6 +28,8 @@ namespace Razor {
 		static void itemClicked(int id);
 
 		static std::vector<File> filesInScope;
+		static TasksManager* tasksManager;
+		static AssetsManager* assetsManager;
 
 	private:
 		int selection;

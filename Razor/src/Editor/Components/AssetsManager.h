@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Razor/Core.h"
+#include "Razor/Core/Core.h"
 #include "Editor/EditorComponent.h"
-#include "Razor/DirectoryWatcher.h"
-#include "Razor/FileWatcher.h"
-#include "Razor/TasksManager.h"
+#include "Razor/Filesystem/DirectoryWatcher.h"
+#include "Razor/Filesystem/FileWatcher.h"
+#include "Razor/Core/TasksManager.h"
 #include "FileBrowser.h"
-
+#
 namespace Razor {
 
 	class RAZOR_API AssetsManager : public EditorComponent
@@ -25,9 +25,9 @@ namespace Razor {
 
 		inline static Type getExt(const std::string& str)
 		{
-			ExtsMap::iterator it;
+			ExtsMap::iterator it = AssetsManager::exts.begin();
 
-			for (it = AssetsManager::exts.begin(); it != AssetsManager::exts.end(); ++it)
+			for (; it != AssetsManager::exts.end(); ++it)
 			{
 				auto item = std::find(it->second.begin(), it->second.end(), str);
 

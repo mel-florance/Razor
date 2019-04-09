@@ -44,7 +44,14 @@ namespace Razor {
 	template<class T>
 	void Array<T>::remove(const T& value)
 	{
-		std::vector<T>::erase(std::remove(begin(), end(), value), end());
+		for (int i = 0, c = size(); i < c; i++)
+		{
+			if (at(i) == value)
+			{
+				removeAt(i);
+				return;
+			}
+		}
 	}
 
 	template<class T>

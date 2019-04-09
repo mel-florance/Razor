@@ -2,16 +2,16 @@
 #include "imgui.h"
 #include "Editor.h"
 
-#include "Razor/Mesh.h"
-#include "Razor/Application.h"
-#include "Razor/Texture.h"
+#include "Razor/Geometry/Mesh.h"
+#include "Razor/Application/Application.h"
+#include "Razor/Materials/Texture.h"
 
 namespace Razor {
 
 	Editor::Editor()
 	{
 		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
-		tasksManager = std::make_unique<TasksManager>();
+		tasksManager = new TasksManager();
 
 		components["AssetsManager"] = new AssetsManager(this);
 		components["Console"] = new Console(this);
@@ -21,14 +21,6 @@ namespace Razor {
 		components["Tools"] = new Tools(this);
 		components["Viewport"] = new Viewport(this);
 		components["Logger"] = new Logger(this); 
-
-		Array<Variant> arr({ {"test"}, {1.2f} });
-
-		arr += true;
-
-		for (auto& item : arr) {
-			RZ_INFO("value: {0}", item.toString());
-		}
 	}
 
 	void Editor::OnUpdate()
