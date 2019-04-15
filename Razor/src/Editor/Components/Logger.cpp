@@ -37,7 +37,7 @@ namespace Razor {
 		lineOffsets.push_back(0);
 	}
 
-	void Logger::render()
+	void Logger::render(float delta)
 	{
 		ImGui::Begin("Log");
 

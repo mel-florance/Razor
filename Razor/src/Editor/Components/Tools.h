@@ -11,7 +11,7 @@ namespace Razor {
 		Tools(Editor* editor);
 		~Tools();
 
-		void render() override;
+		void render(float delta) override;
 	};
 
 }

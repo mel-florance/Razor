@@ -10,11 +10,11 @@ namespace Razor {
 		SceneGraph();
 		~SceneGraph();
 
-		inline std::vector<Node*>& getNodes() { return nodes; }
-		inline void addNode(Node* node) { nodes.push_back(node); }
+		inline std::vector<Node>& getNodes() { return nodes; }
+		void addNode(Node* node);
 
 	private:
-		std::vector<Node*> nodes;
+		std::vector<Node> nodes;
 	};
 
 }

@@ -12,7 +12,7 @@ namespace Razor {
 	{
 	}
 
-	void Outliner::render()
+	void Outliner::render(float delta)
 	{
 		ImGui::Begin("Outliner");
 		ImGui::End();

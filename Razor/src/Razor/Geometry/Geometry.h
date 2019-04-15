@@ -4,6 +4,13 @@
 
 namespace Razor {
 
+	class Quad : public Mesh
+	{
+	public:
+		Quad();
+		~Quad();
+	};
+
 	class Plane : public Mesh
 	{
 	public:

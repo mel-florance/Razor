@@ -17,7 +17,7 @@ namespace Razor {
 		Console(Editor* editor);
 		~Console();
 
-		void render() override;
+		void render(float delta) override;
 		void clearLog();
 		void addLog(const char* fmt, ...) IM_FMTARGS(2);
 		void execCommand(const char* command_line);

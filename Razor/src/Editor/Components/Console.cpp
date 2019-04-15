@@ -25,7 +25,7 @@ namespace Razor {
 			free(history[i]);
 	}
 
-	void Console::render()
+	void Console::render(float delta)
 	{
 		ImGui::Begin("Console");
 

@@ -4,6 +4,7 @@
 #include "AssetsManager.h"
 #include "Razor/Core/TasksManager.h"
 #include "Razor/Geometry/Mesh.h"
+#include "Editor/Editor.h"
 
 namespace Razor {
 
@@ -33,7 +34,7 @@ namespace Razor {
 			tasksManager->add({
 				&mesh, 
 				&AssetsManager::import,
-				&AssetsManager::finished, 
+				&Editor::importFinished, 
 				Variant(path),
 				"Import task"
 			});

@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;RZ_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -104,7 +104,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;RZ_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -135,7 +135,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;RZ_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -162,17 +162,21 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Razor\Lighting\Point.h" />
-    <ClInclude Include="src\Razor\Lighting\Spot.h" />
-    <ClInclude Include="src\Razor\Lighting\Directional.h" />
-    <ClInclude Include="src\Razor\Lighting\Light.h" />
-    <ClInclude Include="src\Razor\Cameras\Camera.h" />
-    <ClInclude Include="src\Razor\Buffers\RenderBuffer.h" />
-    <ClInclude Include="src\Razor\Scene\SceneGraph.h" />
-    <ClInclude Include="src\Razor\Buffers\Buffers.h" />
-    <ClInclude Include="src\Razor\Buffers\FrameBuffer.h" />
-    <ClInclude Include="src\Razor\Buffers\IndexBuffer.h" />
-    <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h" />
+    <ClInclude Include="src\Razor\Cameras\FPSCamera.h" />
+    <ClInclude Include="src\Razor\Rendering\Pipeline.h" />
+    <ClInclude Include="src\Razor\Rendering\RenderPass.h" />
+    <ClInclude Include="src\Razor\Core\Engine.h" />
+    <ClInclude Include="src\Razor\Core\Clock.h" />
+    <ClInclude Include="src\Razor\Core\GameLoop.h" />
+    <ClInclude Include="src\Razor\Core\Profiler.h" />
+    <ClInclude Include="src\Razor\Ecs\Entity.h" />
+    <ClInclude Include="src\Razor\Ecs\Component.h" />
+    <ClInclude Include="src\Razor\Ecs\Manager.h" />
+    <ClInclude Include="src\Razor\Ecs\System.h" />
+    <ClInclude Include="src\Razor\Filesystem\Config.h" />
+    <ClInclude Include="src\Editor\Components\ProjectsManager.h" />
+    <ClInclude Include="src\Razor\Scene\Scene.h" />
+    <ClInclude Include="src\Razor\Scene\ScenesManager.h" />
     <ClInclude Include="src\Editor\Components\AssetsManager.h" />
     <ClInclude Include="src\Editor\Components\Console.h" />
     <ClInclude Include="src\Editor\Components\FileBrowser.h" />
@@ -189,37 +193,57 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Razor.h" />
     <ClInclude Include="src\Razor\Application\Application.h" />
-    <ClInclude Include="src\Razor\Core\Core.h" />
-    <ClInclude Include="src\Razor\Filesystem\DirectoryWatcher.h" />
     <ClInclude Include="src\Razor\Application\Entrypoint.h" />
+    <ClInclude Include="src\Razor\Application\Layer.h" />
+    <ClInclude Include="src\Razor\Application\LayerStack.h" />
+    <ClInclude Include="src\Razor\Buffers\Buffers.h" />
+    <ClInclude Include="src\Razor\Buffers\FrameBuffer.h" />
+    <ClInclude Include="src\Razor\Buffers\IndexBuffer.h" />
+    <ClInclude Include="src\Razor\Buffers\RenderBuffer.h" />
+    <ClInclude Include="src\Razor\Buffers\TextureAttachment.h" />
+    <ClInclude Include="src\Razor\Buffers\UniformBuffer.h" />
+    <ClInclude Include="src\Razor\Buffers\VertexArray.h" />
+    <ClInclude Include="src\Razor\Buffers\VertexBuffer.h" />
+    <ClInclude Include="src\Razor\Buffers\VertexBufferLayout.h" />
+    <ClInclude Include="src\Razor\Cameras\Camera.h" />
+    <ClInclude Include="src\Razor\Core\Core.h" />
+    <ClInclude Include="src\Razor\Core\Log.h" />
+    <ClInclude Include="src\Razor\Core\Task.h" />
+    <ClInclude Include="src\Razor\Core\TasksManager.h" />
+    <ClInclude Include="src\Razor\Core\Transform.h" />
+    <ClInclude Include="src\Razor\Core\Utils.h" />
+    <ClInclude Include="src\Razor\Core\Window.h" />
     <ClInclude Include="src\Razor\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Razor\Events\Event.h" />
     <ClInclude Include="src\Razor\Events\KeyEvent.h" />
     <ClInclude Include="src\Razor\Events\MouseEvent.h" />
+    <ClInclude Include="src\Razor\Filesystem\DirectoryWatcher.h" />
     <ClInclude Include="src\Razor\Filesystem\File.h" />
     <ClInclude Include="src\Razor\Filesystem\FileWatcher.h" />
     <ClInclude Include="src\Razor\Geometry\Geometry.h" />
+    <ClInclude Include="src\Razor\Geometry\Mesh.h" />
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Razor\Input\Input.h" />
     <ClInclude Include="src\Razor\Input\KeyCodes.h" />
     <ClInclude Include="src\Razor\Input\MouseButtons.h" />
-    <ClInclude Include="src\Razor\Application\Layer.h" />
-    <ClInclude Include="src\Razor\Application\LayerStack.h" />
-    <ClInclude Include="src\Razor\Core\Log.h" />
+    <ClInclude Include="src\Razor\Lighting\Directional.h" />
+    <ClInclude Include="src\Razor\Lighting\Light.h" />
+    <ClInclude Include="src\Razor\Lighting\Point.h" />
+    <ClInclude Include="src\Razor\Lighting\Spot.h" />
     <ClInclude Include="src\Razor\Materials\Material.h" />
-    <ClInclude Include="src\Razor\Geometry\Mesh.h" />
-    <ClInclude Include="src\Razor\Scene\Node.h" />
     <ClInclude Include="src\Razor\Materials\Shader.h" />
     <ClInclude Include="src\Razor\Materials\ShadersManager.h" />
-    <ClInclude Include="src\Razor\Core\Task.h" />
-    <ClInclude Include="src\Razor\Core\TasksManager.h" />
     <ClInclude Include="src\Razor\Materials\Texture.h" />
+    <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h" />
+    <ClInclude Include="src\Razor\Scene\Node.h" />
+    <ClInclude Include="src\Razor\Scene\SceneGraph.h" />
     <ClInclude Include="src\Razor\Types\Array.h" />
     <ClInclude Include="src\Razor\Types\Variant.h" />
-    <ClInclude Include="src\Razor\Core\Utils.h" />
-    <ClInclude Include="src\Razor\Core\Window.h" />
     <ClInclude Include="src\rzpch.h" />
-    <ClInclude Include="src\Razor\Buffers\TextureAttachment.h" />
+    <ClInclude Include="src\Razor\Ecs\Components\TransformComponent.h" />
+    <ClInclude Include="src\Razor\Ecs\Components\StaticMeshComponent.h" />
+    <ClInclude Include="src\Razor\Core\Timer.h" />
+    <ClInclude Include="src\Razor\Cameras\TPSCamera.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BaseImporter.h" />
     <ClInclude Include="vendor\assimp\include\assimp\Bitmap.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BlobIOSystem.h" />
@@ -666,22 +690,23 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="vendor\glm\glm\vec3.hpp" />
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
-    <ClInclude Include="src\Razor\Buffers\VertexBuffer.h" />
-    <ClInclude Include="src\Razor\Buffers\VertexArray.h" />
-    <ClInclude Include="src\Razor\Buffers\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Razor\Lighting\Point.cpp" />
-    <ClCompile Include="src\Razor\Lighting\Spot.cpp" />
-    <ClCompile Include="src\Razor\Lighting\Directional.cpp" />
-    <ClCompile Include="src\Razor\Lighting\Light.cpp" />
-    <ClCompile Include="src\Razor\Cameras\Camera.cpp" />
-    <ClCompile Include="src\Razor\Buffers\RenderBuffer.cpp" />
-    <ClCompile Include="src\Razor\Scene\SceneGraph.cpp" />
-    <ClCompile Include="src\Razor\Geometry\Geometry.cpp" />
-    <ClCompile Include="src\Razor\Buffers\FrameBuffer.cpp" />
-    <ClCompile Include="src\Razor\Buffers\IndexBuffer.cpp" />
-    <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp" />
+    <ClCompile Include="src\Razor\Cameras\FPSCamera.cpp" />
+    <ClCompile Include="src\Razor\Rendering\Pipeline.cpp" />
+    <ClCompile Include="src\Razor\Rendering\RenderPass.cpp" />
+    <ClCompile Include="src\Razor\Core\Engine.cpp" />
+    <ClCompile Include="src\Razor\Core\Clock.cpp" />
+    <ClCompile Include="src\Razor\Core\GameLoop.cpp" />
+    <ClCompile Include="src\Razor\Core\Profiler.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Entity.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Component.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Manager.cpp" />
+    <ClCompile Include="src\Razor\Ecs\System.cpp" />
+    <ClCompile Include="src\Razor\Filesystem\Config.cpp" />
+    <ClCompile Include="src\Editor\Components\ProjectsManager.cpp" />
+    <ClCompile Include="src\Razor\Scene\Scene.cpp" />
+    <ClCompile Include="src\Razor\Scene\ScenesManager.cpp" />
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp" />
     <ClCompile Include="src\Editor\Components\Console.cpp" />
     <ClCompile Include="src\Editor\Components\FileBrowser.cpp" />
@@ -697,35 +722,50 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Razor\Application\Application.cpp" />
+    <ClCompile Include="src\Razor\Application\Layer.cpp" />
+    <ClCompile Include="src\Razor\Application\LayerStack.cpp" />
+    <ClCompile Include="src\Razor\Buffers\FrameBuffer.cpp" />
+    <ClCompile Include="src\Razor\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="src\Razor\Buffers\RenderBuffer.cpp" />
+    <ClCompile Include="src\Razor\Buffers\TextureAttachment.cpp" />
+    <ClCompile Include="src\Razor\Buffers\UniformBuffer.cpp" />
+    <ClCompile Include="src\Razor\Buffers\VertexArray.cpp" />
+    <ClCompile Include="src\Razor\Buffers\VertexBuffer.cpp" />
+    <ClCompile Include="src\Razor\Buffers\VertexBufferLayout.cpp" />
+    <ClCompile Include="src\Razor\Cameras\Camera.cpp" />
+    <ClCompile Include="src\Razor\Core\Log.cpp" />
+    <ClCompile Include="src\Razor\Core\Task.cpp" />
+    <ClCompile Include="src\Razor\Core\TasksManager.cpp" />
+    <ClCompile Include="src\Razor\Core\Transform.cpp" />
     <ClCompile Include="src\Razor\Filesystem\DirectoryWatcher.cpp" />
     <ClCompile Include="src\Razor\Filesystem\File.cpp" />
     <ClCompile Include="src\Razor\Filesystem\FileWatcher.cpp" />
+    <ClCompile Include="src\Razor\Geometry\Geometry.cpp" />
+    <ClCompile Include="src\Razor\Geometry\Mesh.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Razor\Application\Layer.cpp" />
-    <ClCompile Include="src\Razor\Application\LayerStack.cpp" />
-    <ClCompile Include="src\Razor\Core\Log.cpp" />
+    <ClCompile Include="src\Razor\Lighting\Directional.cpp" />
+    <ClCompile Include="src\Razor\Lighting\Light.cpp" />
+    <ClCompile Include="src\Razor\Lighting\Point.cpp" />
+    <ClCompile Include="src\Razor\Lighting\Spot.cpp" />
     <ClCompile Include="src\Razor\Materials\Material.cpp" />
-    <ClCompile Include="src\Razor\Geometry\Mesh.cpp" />
-    <ClCompile Include="src\Razor\Scene\Node.cpp" />
     <ClCompile Include="src\Razor\Materials\Shader.cpp" />
     <ClCompile Include="src\Razor\Materials\ShadersManager.cpp" />
-    <ClCompile Include="src\Razor\Core\Task.cpp" />
-    <ClCompile Include="src\Razor\Core\TasksManager.cpp" />
     <ClCompile Include="src\Razor\Materials\Texture.cpp" />
+    <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp" />
+    <ClCompile Include="src\Razor\Scene\Node.cpp" />
+    <ClCompile Include="src\Razor\Scene\SceneGraph.cpp" />
     <ClCompile Include="src\Razor\Types\Array.cpp" />
     <ClCompile Include="src\Razor\Types\Variant.cpp" />
     <ClCompile Include="src\rzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Razor\Buffers\VertexBuffer.cpp" />
-    <ClCompile Include="src\Razor\Buffers\VertexArray.cpp" />
-    <ClCompile Include="src\Razor\Buffers\VertexBufferLayout.cpp" />
-    <ClCompile Include="src\Razor\Buffers\TextureAttachment.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Components\TransformComponent.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Components\StaticMeshComponent.cpp" />
+    <ClCompile Include="src\Razor\Core\Timer.cpp" />
+    <ClCompile Include="src\Razor\Cameras\TPSCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Shaders\viewport.frag" />
-    <None Include="src\Shaders\viewport.vert" />
     <None Include="vendor\assimp\include\assimp\.editorconfig" />
     <None Include="vendor\assimp\include\assimp\config.h.in" />
   </ItemGroup>

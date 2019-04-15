@@ -9,8 +9,11 @@ namespace Razor {
 	public:
 		Material();
 		~Material();
+
+	private:
+		unsigned int diffuseMap;
+		unsigned int specularMap;
+		float shininess;
 	};
 
 }
-
-

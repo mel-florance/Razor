@@ -12,7 +12,7 @@ namespace Razor {
 		EditorComponent(Editor* editor = nullptr);
 		~EditorComponent();
 
-		virtual void render() {};
+		virtual void render(float delta) {};
 
 		Editor* getEditor();
 

@@ -15,7 +15,7 @@ namespace Razor {
 	{
 	}
 
-	void PropertiesEditor::render()
+	void PropertiesEditor::render(float delta)
 	{
 		static PropertiesEditor app(this->editor);
 

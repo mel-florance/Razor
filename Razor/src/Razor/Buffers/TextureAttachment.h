@@ -7,7 +7,7 @@ namespace Razor {
 	class TextureAttachment
 	{
 	public:
-		TextureAttachment(const glm::vec2& size);
+		TextureAttachment(const glm::vec2& size = glm::vec2(256.0f, 256.0f));
 		~TextureAttachment();
 
 		inline unsigned int getId() { return id; }

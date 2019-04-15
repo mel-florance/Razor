@@ -22,14 +22,44 @@
     <Filter Include="src\Razor">
       <UniqueIdentifier>{4A2EBFB3-B698-732A-FFD6-24D06B80517F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Razor\Application">
+      <UniqueIdentifier>{0D292A10-7995-E50A-4289-7D68AEB40773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Buffers">
+      <UniqueIdentifier>{C697FA5B-32AE-F8F1-7B25-8413E77AC979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Cameras">
+      <UniqueIdentifier>{35FCCB7A-A112-CA10-EA89-553256DF9A98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Core">
+      <UniqueIdentifier>{E2D082E0-CE9E-76E6-B732-E70CA39F524B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Razor\Events">
       <UniqueIdentifier>{EEA29C11-DA9B-BB63-03CE-A0E8EF259B6F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Filesystem">
+      <UniqueIdentifier>{3E6202DD-2AF1-8BA6-D30F-A0A1BF7D9C4C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Geometry">
+      <UniqueIdentifier>{E50E70BE-D1F2-3014-3A53-2B6726561B96}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\ImGui">
       <UniqueIdentifier>{F4B247F1-603E-B5B5-694F-38AAD55911B6}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Input">
       <UniqueIdentifier>{C9ED48F1-3579-B6B5-3E8A-39AAAA9412B6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Lighting">
+      <UniqueIdentifier>{0F75A67C-FB58-67D2-64B9-612550BC5154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Materials">
+      <UniqueIdentifier>{9B157405-0777-5113-90E4-97C5FC4488D2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Rendering">
+      <UniqueIdentifier>{17DCD02B-833D-AE39-0CAB-F4EB780BE5F8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Scene">
+      <UniqueIdentifier>{E7AAF7F1-5336-65B6-5C47-E8AAC851C1B6}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Types">
       <UniqueIdentifier>{6E0116F2-DA8C-83B6-E39D-06AB4FA8DFB6}</UniqueIdentifier>
@@ -120,6 +150,69 @@
     <ClInclude Include="src\Razor.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Application\Application.h">
+      <Filter>src\Razor\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Application\Entrypoint.h">
+      <Filter>src\Razor\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Application\Layer.h">
+      <Filter>src\Razor\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Application\LayerStack.h">
+      <Filter>src\Razor\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\Buffers.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\FrameBuffer.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\IndexBuffer.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\RenderBuffer.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\TextureAttachment.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\UniformBuffer.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\VertexArray.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\VertexBuffer.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\VertexBufferLayout.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Cameras\Camera.h">
+      <Filter>src\Razor\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Core.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Log.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Task.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\TasksManager.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Transform.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Utils.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Window.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Events\ApplicationEvent.h">
       <Filter>src\Razor\Events</Filter>
     </ClInclude>
@@ -132,14 +225,65 @@
     <ClInclude Include="src\Razor\Events\MouseEvent.h">
       <Filter>src\Razor\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Filesystem\DirectoryWatcher.h">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Filesystem\File.h">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Filesystem\FileWatcher.h">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Geometry\Geometry.h">
+      <Filter>src\Razor\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Geometry\Mesh.h">
+      <Filter>src\Razor\Geometry</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h">
       <Filter>src\Razor\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Input\Input.h">
+      <Filter>src\Razor\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Input\KeyCodes.h">
       <Filter>src\Razor\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Input\MouseButtons.h">
       <Filter>src\Razor\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Lighting\Directional.h">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Lighting\Light.h">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Lighting\Point.h">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Lighting\Spot.h">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Material.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Shader.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\ShadersManager.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Texture.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Scene\Node.h">
+      <Filter>src\Razor\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Scene\SceneGraph.h">
+      <Filter>src\Razor\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Types\Array.h">
       <Filter>src\Razor\Types</Filter>
@@ -1488,82 +1632,23 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Buffers\IndexBuffer.h" />
-    <ClInclude Include="src\Razor\Buffers\VertexBuffer.h" />
-    <ClInclude Include="src\Razor\Buffers\FrameBuffer.h" />
-    <ClInclude Include="src\Razor\Buffers\VertexArray.h" />
-    <ClInclude Include="src\Razor\Buffers\VertexBufferLayout.h" />
-    <ClInclude Include="src\Razor\Buffers\Buffers.h" />
-    <ClInclude Include="src\Razor\Geometry\Mesh.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Geometry\Geometry.h" />
-    <ClInclude Include="src\Razor\Buffers\RenderBuffer.h" />
-    <ClInclude Include="src\Razor\Buffers\TextureAttachment.h" />
-    <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h" />
-    <ClInclude Include="src\Razor\Filesystem\FileWatcher.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Filesystem\File.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Filesystem\DirectoryWatcher.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Input\Input.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Materials\Material.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Materials\Shader.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Materials\ShadersManager.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Materials\Texture.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Core\Core.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Core\Task.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Core\TasksManager.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Core\Utils.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Core\Window.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Scene\SceneGraph.h" />
-    <ClInclude Include="src\Razor\Scene\Node.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Application\Application.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Application\Layer.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Application\LayerStack.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Core\Log.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Application\Entrypoint.h">
-      <Filter>src\Razor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Cameras\Camera.h" />
-    <ClInclude Include="src\Razor\Lighting\Light.h" />
-    <ClInclude Include="src\Razor\Lighting\Directional.h" />
-    <ClInclude Include="src\Razor\Lighting\Spot.h" />
-    <ClInclude Include="src\Razor\Lighting\Point.h" />
+    <ClInclude Include="src\Razor\Scene\ScenesManager.h" />
+    <ClInclude Include="src\Razor\Scene\Scene.h" />
+    <ClInclude Include="src\Editor\Components\ProjectsManager.h" />
+    <ClInclude Include="src\Razor\Filesystem\Config.h" />
+    <ClInclude Include="src\Razor\Ecs\Component.h" />
+    <ClInclude Include="src\Razor\Ecs\System.h" />
+    <ClInclude Include="src\Razor\Ecs\Manager.h" />
+    <ClInclude Include="src\Razor\Ecs\Entity.h" />
+    <ClInclude Include="src\Razor\Ecs\Components\TransformComponent.h" />
+    <ClInclude Include="src\Razor\Ecs\Components\StaticMeshComponent.h" />
+    <ClInclude Include="src\Razor\Core\Profiler.h" />
+    <ClInclude Include="src\Razor\Core\GameLoop.h" />
+    <ClInclude Include="src\Razor\Core\Clock.h" />
+    <ClInclude Include="src\Razor\Core\Timer.h" />
+    <ClInclude Include="src\Razor\Core\Engine.h" />
+    <ClInclude Include="src\Razor\Rendering\RenderPass.h" />
+    <ClInclude Include="src\Razor\Rendering\Pipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -1608,11 +1693,107 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Application\Application.cpp">
+      <Filter>src\Razor\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Application\Layer.cpp">
+      <Filter>src\Razor\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Application\LayerStack.cpp">
+      <Filter>src\Razor\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\FrameBuffer.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\IndexBuffer.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\RenderBuffer.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\TextureAttachment.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\UniformBuffer.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\VertexArray.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\VertexBuffer.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\VertexBufferLayout.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Cameras\Camera.cpp">
+      <Filter>src\Razor\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\Log.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\Task.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\TasksManager.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\Transform.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Filesystem\DirectoryWatcher.cpp">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Filesystem\File.cpp">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Filesystem\FileWatcher.cpp">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Geometry\Geometry.cpp">
+      <Filter>src\Razor\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Geometry\Mesh.cpp">
+      <Filter>src\Razor\Geometry</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\ImGui\ImGuiBuild.cpp">
       <Filter>src\Razor\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\ImGui\ImGuiLayer.cpp">
       <Filter>src\Razor\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Lighting\Directional.cpp">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Lighting\Light.cpp">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Lighting\Point.cpp">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Lighting\Spot.cpp">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Material.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Shader.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\ShadersManager.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Texture.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Scene\Node.cpp">
+      <Filter>src\Razor\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Scene\SceneGraph.cpp">
+      <Filter>src\Razor\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Types\Array.cpp">
       <Filter>src\Razor\Types</Filter>
@@ -1623,66 +1804,23 @@
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Buffers\IndexBuffer.cpp" />
-    <ClCompile Include="src\Razor\Buffers\FrameBuffer.cpp" />
-    <ClCompile Include="src\Razor\Buffers\VertexBuffer.cpp" />
-    <ClCompile Include="src\Razor\Buffers\VertexArray.cpp" />
-    <ClCompile Include="src\Razor\Buffers\VertexBufferLayout.cpp" />
-    <ClCompile Include="src\Razor\Geometry\Geometry.cpp" />
-    <ClCompile Include="src\Razor\Geometry\Mesh.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Buffers\RenderBuffer.cpp" />
-    <ClCompile Include="src\Razor\Buffers\TextureAttachment.cpp" />
-    <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp" />
-    <ClCompile Include="src\Razor\Filesystem\FileWatcher.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Filesystem\File.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Filesystem\DirectoryWatcher.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Materials\Material.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Materials\Shader.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Materials\ShadersManager.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Materials\Texture.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Core\Task.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Core\TasksManager.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Scene\SceneGraph.cpp" />
-    <ClCompile Include="src\Razor\Scene\Node.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Application\Application.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Application\Layer.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Application\LayerStack.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Core\Log.cpp">
-      <Filter>src\Razor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Cameras\Camera.cpp" />
-    <ClCompile Include="src\Razor\Lighting\Light.cpp" />
-    <ClCompile Include="src\Razor\Lighting\Directional.cpp" />
-    <ClCompile Include="src\Razor\Lighting\Spot.cpp" />
-    <ClCompile Include="src\Razor\Lighting\Point.cpp" />
+    <ClCompile Include="src\Razor\Scene\ScenesManager.cpp" />
+    <ClCompile Include="src\Razor\Scene\Scene.cpp" />
+    <ClCompile Include="src\Editor\Components\ProjectsManager.cpp" />
+    <ClCompile Include="src\Razor\Filesystem\Config.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Component.cpp" />
+    <ClCompile Include="src\Razor\Ecs\System.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Manager.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Entity.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Components\TransformComponent.cpp" />
+    <ClCompile Include="src\Razor\Ecs\Components\StaticMeshComponent.cpp" />
+    <ClCompile Include="src\Razor\Core\GameLoop.cpp" />
+    <ClCompile Include="src\Razor\Core\Clock.cpp" />
+    <ClCompile Include="src\Razor\Core\Profiler.cpp" />
+    <ClCompile Include="src\Razor\Core\Timer.cpp" />
+    <ClCompile Include="src\Razor\Core\Engine.cpp" />
+    <ClCompile Include="src\Razor\Rendering\Pipeline.cpp" />
+    <ClCompile Include="src\Razor\Rendering\RenderPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">
@@ -1691,7 +1829,5 @@
     <None Include="vendor\assimp\include\assimp\config.h.in">
       <Filter>vendor\assimp\include\assimp</Filter>
     </None>
-    <None Include="src\Shaders\viewport.frag" />
-    <None Include="src\Shaders\viewport.vert" />
   </ItemGroup>
 </Project>

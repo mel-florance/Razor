@@ -2,6 +2,7 @@
 
 #include "Razor/Core/Core.h"
 #include "Editor/EditorComponent.h"
+#include <glm/glm.hpp>
 
 namespace Razor {
 
@@ -11,12 +12,14 @@ namespace Razor {
 		Viewport(Editor* editor);
 		~Viewport();
 
-		void render() override;
+		void render(float delta) override;
 
-		inline ImVec2& getSize() { return size; }
+		inline glm::vec2& getSize() { return size; }
+		inline bool getIsHovered() { return hovered; }
 
 	private:
-		ImVec2 size;
+		glm::vec2 size;
+		bool hovered;
 	};
 
 }

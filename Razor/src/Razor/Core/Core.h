@@ -29,3 +29,5 @@
 
 #define RZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
+typedef __int32 int32;
+typedef unsigned __int32 uint32;

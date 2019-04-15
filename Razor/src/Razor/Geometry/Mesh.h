@@ -13,6 +13,7 @@ namespace Razor {
 		~Mesh();
 
 		void draw();
+		void setupBuffers();
 
 		inline std::string& getName() { return this->name; }
 		inline void setName(const std::string& name) { this->name = name; }

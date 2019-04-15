@@ -20,13 +20,13 @@ namespace Razor {
 
 		bool importMesh(const std::string& filename);
 		void processNode(const aiScene* scene, aiNode* node, Node* parentNode, Node* newNode);
-		std::shared_ptr<Mesh> processMesh(aiMesh* object);
+		Mesh* processMesh(aiMesh* object);
 
 		bool Update(float percentage = -1.f);
 		float percent;
 
 		Node* rootNode;
-		std::vector<std::shared_ptr<Mesh>> meshes;
+		std::vector<Mesh*> meshes;
 
 	private:
 		std::vector<unsigned int> m_indices;

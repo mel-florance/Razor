@@ -11,7 +11,7 @@ namespace Razor {
 		Outliner(Editor* editor);
 		~Outliner();
 
-		void render() override;
+		void render(float delta) override;
 	};
 
 }

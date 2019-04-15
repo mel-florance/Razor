@@ -4,6 +4,12 @@ out vec4 FragColor;
 
 #define MAX_LIGHTS 1
 
+layout (std140) uniform shader_data
+{
+	vec3 cameras_positions;
+	vec3 lights_positions;
+};
+
 struct Material {
 	sampler2D diffuse;
 	sampler2D specular;
@@ -68,6 +74,8 @@ void main()
     result += CalcSpotLight(spotLight, norm, f_position, viewDir);    
     
     FragColor = vec4(result, 1.0);
+	float gamma = 2.2;
+    FragColor.rgb = pow(FragColor.rgb, vec3(1.0/ gamma));
 }
 
 vec3 CalcDirectionalLight(Directional light, vec3 normal, vec3 viewDir)

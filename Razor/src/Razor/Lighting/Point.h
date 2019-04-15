@@ -9,6 +9,12 @@ namespace Razor {
 	public:
 		Point();
 		~Point();
+
+	private:
+		glm::vec3 position;
+		float constant;
+		float linear;
+		float quadratic;
 	};
 
 }

@@ -14,8 +14,13 @@
 #include <mutex>
 #include <deque>
 #include <limits>
+#include <bitset>
 #include <typeinfo>
+#include <stdint.h>
+#include <cassert>
+#include <type_traits>
 
+#include <array>
 #include <set>
 #include <any>
 #include <iterator>

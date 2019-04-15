@@ -13,7 +13,10 @@
 
 namespace Razor {
 
+	class ScenesManager;
 	class Editor;
+	class Engine;
+	class FPSCamera;
 
 	class RAZOR_API Application
 	{
@@ -29,10 +32,12 @@ namespace Razor {
 
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
-		inline Camera* getCamera() { return camera; }
 		inline Editor* getEditor() { return m_Editor; }
+		ScenesManager* getScenesManager();
+		inline LayerStack& getLayerStack() { return m_LayerStack; }
+		inline ImGuiLayer* getImGuiLayer() { return m_ImGuiLayer; }
 
-		inline DeferredRenderer* getForwardRenderer() { return dRenderer; }
+		DeferredRenderer* getDeferredRenderer();
 
 	private:
 		
@@ -40,12 +45,10 @@ namespace Razor {
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		Editor* m_Editor;
+		Engine* m_Engine;
 		bool m_Running;
 		Log* m_log;
 		LayerStack m_LayerStack;
-		DeferredRenderer* dRenderer;
-		SceneGraph* sceneGraph;
-		Camera* camera;
 
 		static Application* s_Instance;
 		bool headless;

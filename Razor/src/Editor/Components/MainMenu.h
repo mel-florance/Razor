@@ -11,7 +11,10 @@ namespace Razor {
 		MainMenu(Editor* editor);
 		~MainMenu();
 
-		void render() override;
+		void render(float delta) override;
+		bool show_create_project;
+
+	private:
 	};
 
 }

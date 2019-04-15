@@ -6,10 +6,14 @@
 #include "Razor/Lighting/Light.h"
 #include "Razor/Materials/Texture.h"
 
+#include "Pipeline.h"
+
 namespace Razor {
 
-	class SceneGraph;
-	class Camera;
+	class ScenesManager;
+	class FPSCamera;
+	class Node;
+	class Window;
 
 	class DeferredRenderer
 	{
@@ -20,24 +24,28 @@ namespace Razor {
 			DEPTH
 		};
 
-		DeferredRenderer(Camera* camera, SceneGraph* sceneGraph);
+		DeferredRenderer(Window* window, ScenesManager* scenesManager);
 		~DeferredRenderer();
 
-		void update(double delta);
-		void render(double delta);
+		void update(float delta);
+		void render();
+		void renderNode(Node* node, glm::mat4 parent);
 		void clear(ClearType type = ClearType::ALL);
 		void enableDepthTest();
 		void disableDepthTest();
 		void setViewport(unsigned int x, unsigned int y, float w, float h);
-		inline TextureAttachment* getColorBuffer() { return colorbuffer; }
+		TextureAttachment* getColorBuffer();
 
 	private:
 		glm::vec4 color;
 		glm::vec2 framebuffer_size;
+		std::vector<Pipeline*> pipelines;
 
 		ShadersManager* shadersManager;
-		SceneGraph* sceneGraph;
-		Camera* camera;
+		ScenesManager* scenesManager;
+		FPSCamera* camera;
+		Window* window;
+
 		Light* light;
 
 		std::shared_ptr<Shader> defaultShader;
@@ -46,14 +54,14 @@ namespace Razor {
 		FrameBuffer* framebuffer;
 		TextureAttachment* colorbuffer;
 
-		Plane* quad;
+		Quad* quad;
 
 		std::vector<glm::vec3> pointLightPositions;
 		Texture* diffuseMap;
 		Texture* specularMap;
 
 		float angle;
-		double deltaTime;
+		float deltaTime;
 	};
 
 }

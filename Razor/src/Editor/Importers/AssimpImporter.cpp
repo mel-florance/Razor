@@ -1,6 +1,8 @@
 #include "rzpch.h"
 #include "AssimpImporter.h"
 #include "Razor/Geometry/Mesh.h"
+#include "Razor/Core/Transform.h"
+#include "Razor/Core/Utils.h"
 
 namespace Razor {
 
@@ -35,7 +37,7 @@ namespace Razor {
 		if (scene->HasMeshes())
 		{
 			for (unsigned i = 0; i < scene->mNumMeshes; ++i) {
-				std::shared_ptr<Mesh> mesh = processMesh(scene->mMeshes[i]);
+				Mesh* mesh = processMesh(scene->mMeshes[i]);
 				meshes.resize(i);
 				meshes.push_back(mesh);
 			}
@@ -67,14 +69,13 @@ namespace Razor {
 
 		newNode->name = name;
 		//newNode->id = QRandomGenerator::global()->generate();
-	/*	newNode->transform = new Transform();*/
-		//newNode.transform->setWorld(QMatrix4x4(node->mTransformation[0]));
+		
+		newNode->transform = Transform();
+		newNode->transform.setMatrix(glm::mat4(node->mTransformation[0][0]));
 		newNode->meshes.resize(node->mNumMeshes);
 
 		for (unsigned int i = 0; i < node->mNumMeshes; ++i)
-		{
-			newNode->meshes[i] = meshes[node->mMeshes[i]].get();
-		}	
+			newNode->meshes[i] = meshes[node->mMeshes[i]];
 
 		for (unsigned int i = 0; i < node->mNumChildren; ++i)
 		{
@@ -83,10 +84,10 @@ namespace Razor {
 		}
 	}
 
-	std::shared_ptr<Mesh> AssimpImporter::processMesh(aiMesh* object)
+	Mesh* AssimpImporter::processMesh(aiMesh* object)
 	{
 		const char* name = object->mName.length != 0 ? object->mName.C_Str() : "";
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+		Mesh* mesh = new Mesh();
 		mesh->setName(name);
 
 		if (object->HasFaces())
@@ -107,31 +108,24 @@ namespace Razor {
 				mesh->getVertices().push_back(object->mVertices[i].z);
 			}
 
-
 			if (object->HasTextureCoords(0))
 			{
-				mesh->getUvs().push_back(object->mTextureCoords[0][i].x);
-				mesh->getUvs().push_back(object->mTextureCoords[0][i].y);
+				mesh->getVertices().push_back(object->mTextureCoords[0][i].x);
+				mesh->getVertices().push_back(object->mTextureCoords[0][i].y);
 			}
 
 			if (object->HasNormals()) {
-				mesh->getNormals().push_back(object->mNormals[i].x);
-				mesh->getNormals().push_back(object->mNormals[i].y);
-				mesh->getNormals().push_back(object->mNormals[i].z);
+				mesh->getVertices().push_back(object->mNormals[i].x);
+				mesh->getVertices().push_back(object->mNormals[i].y);
+				mesh->getVertices().push_back(object->mNormals[i].z);
 			}
 
 			if (object->HasTangentsAndBitangents()) {
-				mesh->getTangents().push_back(object->mTangents[i].x);
-				mesh->getTangents().push_back(object->mTangents[i].y);
-				mesh->getTangents().push_back(object->mTangents[i].z);
+				mesh->getVertices().push_back(object->mTangents[i].x);
+				mesh->getVertices().push_back(object->mTangents[i].y);
+				mesh->getVertices().push_back(object->mTangents[i].z);
 			}
 		}
-
-		m_indices = mesh->getIndices();
-		m_vertices = mesh->getVertices();
-		m_normals = mesh->getNormals();
-		m_uvs = mesh->getUvs();
-		m_tangents = mesh->getTangents();
 
 		return mesh;
 	}

@@ -8,6 +8,26 @@ namespace Razor {
 	class Utils
 	{
 	public:
+		static inline std::string& ltrim(std::string& str)
+		{
+			size_t start = str.find_first_not_of(" \t\r\n\v\f");
+		
+			if (std::string::npos != start)
+				str = str.substr(start);
+
+			return str;
+		}
+
+		static inline std::string& rtrim(std::string& str)
+		{
+			size_t end = str.find_last_not_of(" \t\r\n\v\f");
+
+			if (std::string::npos != end)
+				str = str.substr(0, end + 1);
+
+			return str;
+		}
+
 		static inline std::vector<std::string> splitPath(const std::string& str, const std::set<char> delimiters)
 		{
 			std::vector<std::string> result;
@@ -90,6 +110,19 @@ namespace Razor {
 			case 1: str[0] = cp;
 			}
 			return str;
+		}
+
+		template <typename F, typename T>
+		static void copyMatrix(F& from, T& to)
+		{
+			to[0][0] = from.a1; to[1][0] = from.a2;
+			to[2][0] = from.a3; to[3][0] = from.a4;
+			to[0][1] = from.b1; to[1][1] = from.b2;
+			to[2][1] = from.b3; to[3][1] = from.b4;
+			to[0][2] = from.c1; to[1][2] = from.c2;
+			to[2][2] = from.c3; to[3][2] = from.c4;
+			to[0][3] = from.d1; to[1][3] = from.d2;
+			to[2][3] = from.d3; to[3][3] = from.d4;
 		}
 	};
 

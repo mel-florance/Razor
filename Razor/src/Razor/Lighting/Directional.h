@@ -9,6 +9,9 @@ namespace Razor {
 	public:
 		Directional();
 		~Directional();
+
+	private:
+		glm::vec3 direction;
 	};
 
 }

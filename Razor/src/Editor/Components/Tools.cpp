@@ -12,7 +12,7 @@ namespace Razor {
 	{
 	}
 
-	void Tools::render()
+	void Tools::render(float delta)
 	{
 		ImGui::Begin("Tools");
 		ImGui::End();

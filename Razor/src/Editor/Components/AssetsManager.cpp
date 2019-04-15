@@ -60,7 +60,7 @@ namespace Razor {
 		directoryWatcher_thread.detach();
 	}
 
-	void AssetsManager::render()
+	void AssetsManager::render(float delta)
 	{
 		ImGui::Begin("Assets Manager");
 
@@ -83,8 +83,7 @@ namespace Razor {
 			switch (type) {
 			case Type::Model:
 				if (importer->importMesh(opts.toString())) {
-					result = new Mesh();
-					static_cast<Mesh*>(result)->setName(importer->getNodeData()->name);
+					result = importer->getNodeData();
 					tf(result);
 				}
 				break;
@@ -103,13 +102,7 @@ namespace Razor {
 		}
 	}
 
-	void AssetsManager::finished(void* result)
-	{
-		Mesh* mesh = static_cast<Mesh*>(result);
 
-		if (mesh != nullptr)
-			RZ_INFO("Successfully imported mesh: {0}", mesh->getName());
-	}
 
 	AssetsManager::~AssetsManager()
 	{

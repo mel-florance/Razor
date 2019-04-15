@@ -79,7 +79,7 @@ namespace Razor {
 			}
 		}
 
-		void render() override;
+		void render(float delta) override;
 	};
 
 	

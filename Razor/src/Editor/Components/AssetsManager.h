@@ -16,9 +16,9 @@ namespace Razor {
 		~AssetsManager();
 
 		void watch();
-		void render() override;
+		void render(float delta) override;
 		static void import(void* result, TaskFinished tf, Variant opts);
-		static void finished(void* result);
+
 
 		enum Type { None, Model, Image, Audio, Video };
 		typedef std::map<Type, std::vector<const char*>> ExtsMap;
