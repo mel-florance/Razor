@@ -130,14 +130,9 @@ namespace Razor {
 	Sphere::Sphere()
 	{
 		std::vector<float> data;
-		std::vector<glm::vec3> positions;
-		std::vector<glm::vec2> uv;
-		std::vector<glm::vec3> normals;
 		std::vector<unsigned int> indices;
-
 		const unsigned int segments_x = 72;
 		const unsigned int segments_y = 24;
-		const float PI = 3.14159265359f;
 		bool odd = false;
 
 		for (unsigned int y = 0; y <= segments_y; ++y)
