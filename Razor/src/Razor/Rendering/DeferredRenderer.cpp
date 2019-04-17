@@ -56,7 +56,6 @@ namespace Razor {
 		colorbuffer = framebuffer->addTextureAttachment(framebuffer_size);
 		framebuffer->addRenderBufferAttachment(framebuffer_size);
 
-
 		camera = new FPSCamera(window);
 		camera->position = glm::vec3(3.0f, -2.0, 3.0f);
 		camera->target = glm::vec3(0.0f);
@@ -67,23 +66,28 @@ namespace Razor {
 
 		Node* node = new Node();
 		Node* nodeP = new Node();
+		Node* nodeS = new Node();
 		Cube* cube = new Cube();
 		Plane* plane = new Plane();
+		Sphere* sphere = new Sphere();
 
 		node->meshes.push_back(cube);
 		nodeP->meshes.push_back(plane);
+		nodeS->meshes.push_back(sphere);
 
 		nodeP->transform.setScale(glm::vec3(6.0f, 1.0f, 6.0f));
+		nodeS->transform.setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
 
 		scenesManager->getActiveScene()->getSceneGraph()->addNode(node);
 		scenesManager->getActiveScene()->getSceneGraph()->addNode(nodeP);
+		scenesManager->getActiveScene()->getSceneGraph()->addNode(nodeS);
 	}
 
 	DeferredRenderer::~DeferredRenderer()
 	{
-
+		
 	}
-
+	
 	void DeferredRenderer::update(float delta)
 	{
 		deltaTime = (float)delta;
@@ -135,7 +139,6 @@ namespace Razor {
 
 		defaultShader->setUniformMat4f("view", scene->getActiveCamera()->getViewMatrix());
 		defaultShader->setUniformMat4f("projection", projection);
-
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap->getId());

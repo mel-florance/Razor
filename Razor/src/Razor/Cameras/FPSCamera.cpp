@@ -11,13 +11,13 @@ namespace Razor {
 	FPSCamera::FPSCamera(Window* window) :
 		Camera(window),
 		sensitivity(150.0f),
-		speed(20.0f),
+		speed(40.0),
 		min_speed(0.0f),
 		max_speed(50.0f),
 		view_friction(0.0f),
 		move_friction(0.5f)
 	{
-		projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
+		projection = glm::perspective(glm::radians(fov), 16.0f / 9.0f, clip_near, clip_far);
 		updateVectors();
 		view = glm::lookAt(position, position + target, up);
 	}
@@ -101,8 +101,6 @@ namespace Razor {
 			position += up * velocity;
 		if (dir == Direction::DOWN)
 			position -= up * velocity;
-
-		std::cout << velocity << std::endl;
 	}
 
 	void FPSCamera::onMouseMoved(glm::vec2& pos, bool constrain)

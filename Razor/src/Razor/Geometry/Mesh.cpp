@@ -4,7 +4,7 @@
 
 namespace Razor {
 
-	Mesh::Mesh()
+	Mesh::Mesh() : drawMode(DrawMode::TRIANGLES)
 	{
 	}
 
@@ -37,10 +37,10 @@ namespace Razor {
 		size_t size = getIndices().size();
 
 		if (size > 0) {
-			glDrawElements(GL_TRIANGLES, (GLsizei)getIndices().size(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements((GLenum)drawMode, (GLsizei)getIndices().size(), GL_UNSIGNED_INT, nullptr);
 		}
 		else
-			glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
+			glDrawArrays((GLenum)drawMode, 0, getVertexCount());
 	}
 
 }

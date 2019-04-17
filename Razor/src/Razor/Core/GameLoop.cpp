@@ -57,7 +57,7 @@ namespace Razor {
 
 			if (m_frameCounter >= 0.1f)
 			{
-				m_fps = this->computeAverageFps((1.0f / (float)m_passedTime)) / 1000000.0f;
+				m_fps = 1.0f / (float)m_passedTime;
 				m_frames = 0;
 				m_frameCounter = 0;
 			}

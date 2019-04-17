@@ -73,7 +73,6 @@ namespace Razor {
 		{
 			(*--it)->OnEvent(event);
 			m_Engine->OnEvent(event);
-
 		
 			if (event.Handled)
 				break;

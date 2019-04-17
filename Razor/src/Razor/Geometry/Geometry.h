@@ -25,4 +25,11 @@ namespace Razor {
 		~Cube();
 	};
 
+	class Sphere : public Mesh
+	{
+	public:
+		Sphere();
+		~Sphere();
+	};
+
 }
