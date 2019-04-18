@@ -26,7 +26,7 @@ namespace Razor {
 			const auto& element = elements[i];
 
 			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (void*)offset);
+			glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (GLvoid*)offset);
 			offset += element.count * VertexBufferElement::getTypeSize(element.type);
 		}
 	}

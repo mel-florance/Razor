@@ -1,5 +1,8 @@
 #include "rzpch.h"
+
 #include "Variant.h"
+
+#include <glm/gtx/string_cast.hpp>
 
 namespace Razor {
 
@@ -25,6 +28,18 @@ namespace Razor {
 			_ptr = new std::string(*(reinterpret_cast<std::string*>(other._ptr)));
 		else if (_type == Type::Map)
 			_ptr = new std::map<std::string, Variant>(*(reinterpret_cast<std::map<std::string, Variant>*>(other._ptr)));
+		else if (_type == Type::Vec2)
+			_ptr = new glm::vec2(*(reinterpret_cast<glm::vec2*>(other._ptr)));
+		else if (_type == Type::Vec3)
+			_ptr = new glm::vec3(*(reinterpret_cast<glm::vec3*>(other._ptr)));
+		else if (_type == Type::Vec4)
+			_ptr = new glm::vec4(*(reinterpret_cast<glm::vec4*>(other._ptr)));
+		else if (_type == Type::Mat2)
+			_ptr = new glm::mat2(*(reinterpret_cast<glm::mat2*>(other._ptr)));
+		else if (_type == Type::Mat3)
+			_ptr = new glm::mat3(*(reinterpret_cast<glm::mat3*>(other._ptr)));
+		else if (_type == Type::Mat4)
+			_ptr = new glm::mat(*(reinterpret_cast<glm::mat4*>(other._ptr)));
 	}
 
 	Variant::Variant(int n)
@@ -69,12 +84,60 @@ namespace Razor {
 		_ptr(new std::map<std::string, Variant>(map))
 	{}
 
+	Variant::Variant(const glm::vec2& vec)
+		: _type(Type::Vec2),
+		_raw(false),
+		_ptr(new glm::vec2(vec))
+	{}
+
+	Variant::Variant(const glm::vec3& vec)
+		: _type(Type::Vec3),
+		_raw(false),
+		_ptr(new glm::vec3(vec))
+	{}
+
+	Variant::Variant(const glm::vec4& vec)
+		: _type(Type::Vec4),
+		_raw(false),
+		_ptr(new glm::vec4(vec))
+	{}
+
+	Variant::Variant(const glm::mat2& mat)
+		: _type(Type::Mat2),
+		_raw(false),
+		_ptr(new glm::mat2(mat))
+	{}
+
+	Variant::Variant(const glm::mat3& mat)
+		: _type(Type::Mat3),
+		_raw(false),
+		_ptr(new glm::mat3(mat))
+	{}
+
+	Variant::Variant(const glm::mat4& mat)
+		: _type(Type::Mat4),
+		_raw(false),
+		_ptr(new glm::mat4(mat))
+	{}
+
 	Variant::~Variant()
 	{
 		if (_type == Type::String)
 			delete reinterpret_cast<std::string*>(_ptr);
 		else if (_type == Type::Map)
 			delete reinterpret_cast<std::map<std::string, Variant>*>(_ptr);
+		else if (_type == Type::Vec2)
+			delete reinterpret_cast<glm::vec2*>(_ptr);
+		else if (_type == Type::Vec3)
+			delete reinterpret_cast<glm::vec3*>(_ptr);
+		else if (_type == Type::Vec4)
+			delete reinterpret_cast<glm::vec4*>(_ptr);
+		else if (_type == Type::Mat2)
+			delete reinterpret_cast<glm::mat2*>(_ptr);
+		else if (_type == Type::Mat3)
+			delete reinterpret_cast<glm::mat3*>(_ptr);
+		else if (_type == Type::Mat4)
+			delete reinterpret_cast<glm::mat4*>(_ptr);
 	}
 
 	std::string Variant::toString() const
@@ -87,6 +150,18 @@ namespace Razor {
 			return _bool ? "true" : "false";
 		else if (_type == Type::String)
 			return *(reinterpret_cast<std::string*>(_ptr));
+		else if (_type == Type::Vec2)
+			return glm::to_string(*(reinterpret_cast<glm::vec2*>(_ptr)));
+		else if (_type == Type::Vec3)
+			return glm::to_string(*(reinterpret_cast<glm::vec3*>(_ptr)));
+		else if (_type == Type::Vec4)
+			return glm::to_string(*(reinterpret_cast<glm::vec4*>(_ptr)));
+		else if (_type == Type::Mat2)
+			return glm::to_string(*(reinterpret_cast<glm::mat2*>(_ptr)));
+		else if (_type == Type::Mat3)
+			return glm::to_string(*(reinterpret_cast<glm::mat3*>(_ptr)));
+		else if (_type == Type::Mat4)
+			return glm::to_string(*(reinterpret_cast<glm::mat4*>(_ptr)));
 
 		return std::string();
 	}
@@ -177,8 +252,19 @@ namespace Razor {
 		else if (_type == Type::String)
 			_ptr = new std::string(*(reinterpret_cast<std::string*>(other._ptr)));
 		else if (_type == Type::Map)
-			_ptr = new std::map<std::string, Variant>(*(reinterpret_cast<std::map<std::string, Variant>*>(
-				other._ptr)));
+			_ptr = new std::map<std::string, Variant>(*(reinterpret_cast<std::map<std::string, Variant>*>(other._ptr)));
+		else if (_type == Type::Vec2)
+			_ptr = new glm::vec2(*(reinterpret_cast<glm::vec2*>(other._ptr)));
+		else if (_type == Type::Vec3)
+			_ptr = new glm::vec3(*(reinterpret_cast<glm::vec3*>(other._ptr)));
+		else if (_type == Type::Vec4)
+			_ptr = new glm::vec4(*(reinterpret_cast<glm::vec4*>(other._ptr)));
+		else if (_type == Type::Mat2)
+			_ptr = new glm::mat2(*(reinterpret_cast<glm::mat2*>(other._ptr)));
+		else if (_type == Type::Mat3)
+			_ptr = new glm::mat3(*(reinterpret_cast<glm::mat3*>(other._ptr)));
+		else if (_type == Type::Mat4)
+			_ptr = new glm::mat4(*(reinterpret_cast<glm::mat4*>(other._ptr)));
 
 		return *this;
 	}
@@ -187,7 +273,7 @@ namespace Razor {
 	{
 		_type = other._type;
 		_raw = other._raw;
-
+		 
 		if (_type == Type::Integer)
 			return _int == other._int;
 		else if (_type == Type::UInt)
@@ -199,8 +285,19 @@ namespace Razor {
 		else if (_type == Type::String)
 			return _ptr == new std::string(*(reinterpret_cast<std::string*>(other._ptr)));
 		else if (_type == Type::Map)
-			return _ptr == new std::map<std::string, Variant>(*(reinterpret_cast<std::map<std::string, Variant>*>(
-				other._ptr)));
+			return _ptr == new std::map<std::string, Variant>(*(reinterpret_cast<std::map<std::string, Variant>*>(other._ptr)));
+		else if (_type == Type::Vec2)
+			return _ptr == new glm::vec2(*(reinterpret_cast<glm::vec2*>(other._ptr)));
+		else if (_type == Type::Vec3)
+			return _ptr == new glm::vec3(*(reinterpret_cast<glm::vec3*>(other._ptr)));
+		else if (_type == Type::Vec4)
+			return _ptr == new glm::vec4(*(reinterpret_cast<glm::vec4*>(other._ptr)));
+		else if (_type == Type::Mat2)
+			return _ptr == new glm::mat2(*(reinterpret_cast<glm::mat2*>(other._ptr)));
+		else if (_type == Type::Mat3)
+			return _ptr == new glm::mat3(*(reinterpret_cast<glm::mat3*>(other._ptr)));
+		else if (_type == Type::Mat4)
+			return _ptr == new glm::mat4(*(reinterpret_cast<glm::mat4*>(other._ptr)));
 
 		return false;
 	}
@@ -228,6 +325,13 @@ namespace Razor {
 			types[static_cast<int>(Type::Bool)]    = "Bool";
 			types[static_cast<int>(Type::String)]  = "String";
 			types[static_cast<int>(Type::Map)]     = "Map";
+			types[static_cast<int>(Type::Vec2)]    = "Vec2";
+			types[static_cast<int>(Type::Vec3)]    = "Vec3";
+			types[static_cast<int>(Type::Vec4)]    = "Vec4";
+			types[static_cast<int>(Type::Mat2)]    = "Mat2";
+			types[static_cast<int>(Type::Mat3)]    = "Mat3";
+			types[static_cast<int>(Type::Mat4)]    = "Mat4";
+
 			init = true;
 		}
 

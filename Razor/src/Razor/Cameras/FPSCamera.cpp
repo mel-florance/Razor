@@ -11,7 +11,7 @@ namespace Razor {
 	FPSCamera::FPSCamera(Window* window) :
 		Camera(window),
 		sensitivity(0.03f),
-		speed(0.005f),
+		speed(0.001f),
 		min_speed(0.0f),
 		max_speed(1.0f),
 		view_friction(0.0f),

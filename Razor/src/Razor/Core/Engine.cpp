@@ -88,10 +88,10 @@ namespace Razor {
 		camera->onEvent(&self->application->GetWindow());
 
 		for (Layer* layer : self->application->getLayerStack())
-			layer->OnUpdate(delta);
+			layer->OnUpdate((float)delta);
 
 		self->deferred_renderer->setViewport(0, 0, window.GetWidth(), window.GetHeight());
-		self->deferred_renderer->update(loop->getPassedTime());
+		self->deferred_renderer->update((float)loop->getPassedTime());
 	}
 
 	void Engine::render(GameLoop* loop, Engine* self)

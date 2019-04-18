@@ -1649,6 +1649,9 @@
     <ClInclude Include="src\Razor\Core\Engine.h" />
     <ClInclude Include="src\Razor\Rendering\RenderPass.h" />
     <ClInclude Include="src\Razor\Rendering\Pipeline.h" />
+    <ClInclude Include="src\Razor\Cameras\FPSCamera.h" />
+    <ClInclude Include="src\Razor\Cameras\TPSCamera.h" />
+    <ClInclude Include="src\Razor\Types\Color.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -1821,6 +1824,8 @@
     <ClCompile Include="src\Razor\Core\Engine.cpp" />
     <ClCompile Include="src\Razor\Rendering\Pipeline.cpp" />
     <ClCompile Include="src\Razor\Rendering\RenderPass.cpp" />
+    <ClCompile Include="src\Razor\Cameras\FPSCamera.cpp" />
+    <ClCompile Include="src\Razor\Cameras\TPSCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Razor/Core/Core.h"
+#include <glm/glm.hpp>
 
 namespace Razor {
 
@@ -17,11 +18,29 @@ namespace Razor {
 		Variant(const char* str);
 		Variant(const std::string& str);
 		Variant(const std::map<std::string, Variant>& map);
+		Variant(const glm::vec2& vec);
+		Variant(const glm::vec3& vec);
+		Variant(const glm::vec4& vec);
+		Variant(const glm::mat2& mat);
+		Variant(const glm::mat3& mat);
+		Variant(const glm::mat4& mat);
 
 		~Variant();
 
 		enum class Type {
-			None, Integer, UInt, Float, Bool, String, Map
+			None,
+			Integer,
+			UInt,
+			Float,
+			Bool,
+			String, 
+			Map,
+			Vec2,
+			Vec3,
+			Vec4,
+			Mat2,
+			Mat3,
+			Mat4
 		};
 
 		void setRaw(bool raw = true);

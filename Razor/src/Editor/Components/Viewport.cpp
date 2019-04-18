@@ -28,12 +28,23 @@ namespace Razor {
 			auto buffer = renderer->getColorBuffer();
 			auto tex = buffer->getId();
 			auto win_size = ImGui::GetWindowSize();
+
 			size = glm::vec2(win_size.x, win_size.y);
 			ImGui::Image((void*)(intptr_t)tex, ImVec2(size.x, size.y - 22));
 
 			ImGui::PushStyleColor(ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f });
+
 			ImGui::SetCursorPos(ImVec2(10.0f, 35.0f));
-			ImGui::Text("FPS %f", editor->getEngine()->getFPS());
+			ImGui::Text("FPS    %f", editor->getEngine()->getFPS());
+			ImGui::SetCursorPos(ImVec2(10.0f, 55.0f));
+			ImGui::Text("Frame  %f", editor->getEngine()->getFrameTiming() / 1000.0f);
+			ImGui::SetCursorPos(ImVec2(10.0f, 75.0f));
+			ImGui::Text("Update %f", editor->getEngine()->getUpdateTiming() / 1000.0f);
+			ImGui::SetCursorPos(ImVec2(10.0f, 95.0f));
+			ImGui::Text("Render %f", editor->getEngine()->getRenderTiming() / 1000.0f);
+			ImGui::SetCursorPos(ImVec2(10.0f, 115.0f));
+			ImGui::Text("Sleep  %f", editor->getEngine()->getSleepTiming() / 1000.0f);
+
 			ImGui::PopStyleColor();
 		}
 

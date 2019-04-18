@@ -153,7 +153,6 @@ namespace Razor {
 
 	void WindowsWindow::OnUpdate()
 	{
-
 		glfwSwapBuffers(m_Window);
 	}
 
