@@ -69,10 +69,11 @@ namespace Razor {
 
 		//RZ_CORE_INFO("{0}", e);
 
+		m_Engine->OnEvent(event);
+
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
 			(*--it)->OnEvent(event);
-			m_Engine->OnEvent(event);
 		
 			if (event.Handled)
 				break;

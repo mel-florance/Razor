@@ -54,7 +54,7 @@ namespace Razor {
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		RZ_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(false);
+		SetVSync(true);
 
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
@@ -153,7 +153,7 @@ namespace Razor {
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwPollEvents();
+
 		glfwSwapBuffers(m_Window);
 	}
 

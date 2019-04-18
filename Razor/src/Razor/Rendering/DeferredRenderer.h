@@ -56,6 +56,8 @@ namespace Razor {
 
 		Quad* quad;
 
+		Node* nodeSphere;
+
 		std::vector<glm::vec3> pointLightPositions;
 		Texture* diffuseMap;
 		Texture* specularMap;

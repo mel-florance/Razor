@@ -12,7 +12,7 @@ namespace Razor {
 		m_fps(0.0f),
 		m_lastTime(0.0),
 		m_startTime(0.0),
-		m_frameTime(1.0 / 60.0),
+		m_frameTime(1.0 / 500.0f),
 		m_frameCounter(0.0),
 		m_unprocessedTime(0),
 		m_frames(0),
@@ -55,41 +55,33 @@ namespace Razor {
 			m_unprocessedTime += m_passedTime;
 			m_frameCounter += m_passedTime;
 
-			if (m_frameCounter >= 0.1f)
+			if (m_frameCounter >= 1.0f)
 			{
-				m_fps = 1.0f / (float)m_passedTime;
-				m_frames = 0;
+				m_fps = computeAverageFps(1.0f / (float)m_passedTime) * 1000.f;
 				m_frameCounter = 0;
 			}
 
 			m_profiler->startTimer("frame");
 
-			while (m_unprocessedTime > m_frameTime)
-			{
-				m_profiler->startTimer("update");
-				if (m_updateCallback != nullptr)
-					m_updateCallback(this, m_engine);
-				m_profiler->stopTimer("update");
+			m_profiler->startTimer("update");
 
-				m_render = true;
-				m_unprocessedTime -= m_frameTime;
-			}
+			if (m_updateCallback != nullptr)
+				m_updateCallback(this, m_engine);
 
-			if (m_render)
-			{
-				m_profiler->startTimer("render");
-				if (m_renderCallback != nullptr)
-					m_renderCallback(this, m_engine);
-				m_profiler->stopTimer("render");
+			m_profiler->stopTimer("update");
 
-				m_frames++;
-			}
-			else
-			{
-				m_profiler->startTimer("sleep");
+			m_profiler->startTimer("render");
+
+			if (m_renderCallback != nullptr)
+				m_renderCallback(this, m_engine);
+
+			m_profiler->stopTimer("render");
+
+			m_frames++;
+
+			m_profiler->startTimer("sleep");
 				Sleep(m_sleepTime);
-				m_profiler->stopTimer("sleep");
-			}
+			m_profiler->stopTimer("sleep");
 
 			m_profiler->stopTimer("frame");
 		}

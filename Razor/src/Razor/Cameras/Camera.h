@@ -33,9 +33,11 @@ namespace Razor {
 		inline glm::mat4 getViewMatrix() { return view; }
 		inline glm::mat4 getProjectionMatrix() { return projection; }
 		inline glm::vec3 getPosition() { return position; }
+		inline glm::vec3 getTarget() { return target; }
 		inline Window* getWindow() { return window; }
 		inline float getAspectRatio() { return aspect_ratio; }
-		inline float getFov() { return fov; }
+		
+inline float getFov() { return fov; }
 
 		virtual void onEvent(Window* window) {}
 		virtual void onKeyPressed(Direction direction) {}
@@ -46,6 +48,7 @@ namespace Razor {
 		virtual void onWindowResized(const glm::vec2& size) {}
 
 		glm::vec3 position;
+		glm::vec3 position_delta;
 		glm::vec3 target;
 
 	protected:

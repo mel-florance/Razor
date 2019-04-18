@@ -55,7 +55,7 @@ namespace Razor {
 
 		int m_fpsIndex;
 		float m_fpsSum;
-		float m_fpsList[MAX_SAMPLES];
+		std::map<int, float> m_fpsList;
 	};
 
 }

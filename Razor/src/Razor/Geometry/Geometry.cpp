@@ -26,6 +26,8 @@ namespace Razor {
 		setVao(vao);
 		setVbl(vbl);
 		setVbo(vbo);
+
+		setName("Quad");
 	}
 
 	Quad::~Quad()
@@ -56,6 +58,8 @@ namespace Razor {
 		setVao(vao);
 		setVbl(vbl);
 		setVbo(vbo);
+
+		setName("Plane");
 	}
 
 	Plane::~Plane()
@@ -121,6 +125,8 @@ namespace Razor {
 		setVao(vao);
 		setVbl(vbl);
 		setVbo(vbo);
+
+		setName("Cube");
 	}
 
 	Cube::~Cube()
@@ -141,9 +147,11 @@ namespace Razor {
 			{
 				float seg_x = (float)x / (float)segments_x;
 				float seg_y = (float)y / (float)segments_y;
-				float pos_x = std::cos(seg_x * 2.0f * PI) * std::sin(seg_y * PI);
-				float pos_y = std::cos(seg_y * PI);
-				float pos_z = std::sin(seg_x * 2.0f * PI) * std::sin(seg_y * PI);
+				float theta = seg_x * 2.0f * PI;
+				float phi = seg_y * PI;
+				float pos_x = std::cos(theta) * std::sin(phi);
+				float pos_y = std::cos(phi);
+				float pos_z = std::sin(theta) * std::sin(phi);
 
 				data.push_back(pos_x);
 				data.push_back(pos_y);
@@ -200,6 +208,8 @@ namespace Razor {
 		setVbl(vbl);
 		setVbo(vbo);
 		setIbo(ibo);
+
+		setName("Sphere");
 	}
 
 	Sphere::~Sphere()
