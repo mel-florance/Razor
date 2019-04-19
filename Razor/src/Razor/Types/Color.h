@@ -11,10 +11,10 @@ namespace Razor {
 			RGB(unsigned char r, unsigned char g, unsigned char b) :
 				r(r), g(g), b(b) {}
 
-			inline bool operator == (RGB& rhs) 
+			inline bool operator == (const RGB& rhs) const
 			{ return (r == rhs.r) && (g == rhs.g) && (b == rhs.b); }
 
-			inline CMYK toCMYK()
+			inline CMYK toCMYK() const
 			{
 				double dr = (double)r / 255;
 				double dg = (double)g / 255;
@@ -28,7 +28,7 @@ namespace Razor {
 				return CMYK(c, m, y, k);
 			}
 
-			inline HSL toHSL()
+			inline HSL toHSL() const
 			{
 				HSL hsl = HSL(0.0f, 0.0f, 0.0f);
 
@@ -68,7 +68,7 @@ namespace Razor {
 				return hsl;
 			}
 
-			inline HSV toHSV()
+			inline HSV toHSV() const
 			{
 				double dt, min;
 				double h = 0, s, v;
@@ -99,7 +99,7 @@ namespace Razor {
 				return HSV(h, s, v / 255);
 			}
 
-			inline YCBCR toYCBCR()
+			inline YCBCR toYCBCR() const
 			{
 				float dr = (float)r / 255;
 				float dg = (float)g / 255;
@@ -112,7 +112,7 @@ namespace Razor {
 				return YCBCR(y, cb, cr);
 			}
 
-			inline YUV toYUV()
+			inline YUV toYUV() const
 			{
 				return YUV(
 					r * 0.299 + g * 0.587 + b * 0.114,
@@ -121,7 +121,7 @@ namespace Razor {
 				);
 			}
 
-			inline std::string toHex()
+			inline std::string toHex() const
 			{
 				return  '#' + DECToHEX(r) + DECToHEX(g) + DECToHEX(b);
 			}
@@ -136,10 +136,10 @@ namespace Razor {
 			HSL(int h, float s, float l) :
 				h(h), s(s), l(l) {}
 
-			inline bool operator == (HSL& rhs) 
+			inline bool operator == (const HSL& rhs) const
 			{ return (h == rhs.h) && (s == rhs.s) && (l == rhs.l); }
 
-			inline RGB toRGB()
+			inline RGB toRGB() const
 			{
 				unsigned char r = 0;
 				unsigned char g = 0;
@@ -173,7 +173,7 @@ namespace Razor {
 			HSV(double h, double s, double v) :
 				h(h), s(s), v(v) {}
 
-			inline bool operator == (HSV& rhs) 
+			inline bool operator == (HSV& rhs) const
 			{ return (h == rhs.h) && (s == rhs.s) && (v == rhs.v); }
 
 			inline RGB toRGB()
@@ -252,10 +252,10 @@ namespace Razor {
 			CMYK(double c, double m, double y, double k) :
 				c(c), m(m), y(y), k(k) {}
 
-			inline bool operator == (CMYK& rhs) 
+			inline bool operator == (const CMYK& rhs) const
 			{ return (c == rhs.c) && (m == rhs.m) && (y == rhs.y) && (k == rhs.k); }
 
-			inline RGB toRGB()
+			inline RGB toRGB() const
 			{
 				return RGB(
 					(unsigned char)(255) * (1 - c) * (1 - k),
@@ -275,10 +275,10 @@ namespace Razor {
 			YCBCR(float y, float cb, float cr) :
 				y(y), cb(cb), cr(cr)  {}
 
-			inline bool operator == (YCBCR& rhs) 
+			inline bool operator == (const YCBCR& rhs) const
 			{ return (y == rhs.y) && (cb == rhs.cb) && (cr == rhs.cr); }
 
-			inline RGB toRGB()
+			inline RGB toRGB() const
 			{
 				float r = std::max(0.0f, std::min(1.0f, (float)(y * cb + 1.4022 * cr)));
 				float g = std::max(0.0f, std::min(1.0f, (float)(y - 0.3456 * cb - 0.7145 * cr)));
@@ -301,7 +301,7 @@ namespace Razor {
 			YUV(double y, double u, double v) :
 				y(y),  u(u), v(v) {}
 
-			inline bool operator == (YUV& rhs) 
+			inline bool operator == (const YUV& rhs) const
 			{ return (y == rhs.y) && (u == rhs.y) && (v == rhs.v); }
 
 			inline RGB toRGB()
