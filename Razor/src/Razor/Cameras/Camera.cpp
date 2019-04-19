@@ -13,6 +13,7 @@ namespace Razor {
 
 		window(window),
 		position(glm::vec3(0.0f, 0.0f, 0.0f)),
+		position_delta(glm::vec3(0.0f, 0.0f, 0.0f)),
 		target(glm::vec3(0.0f, 0.0f, -1.0f)),
 		up(glm::vec3(0.0f, 0.0f, 0.0)),
 		right(glm::vec3(0.0f, 0.0f, 0.0)),

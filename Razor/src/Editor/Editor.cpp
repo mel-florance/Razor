@@ -10,6 +10,7 @@
 #include "Razor/ECS/Manager.h"
 
 #include "Razor/Ecs/Components/StaticMeshComponent.h"
+#include "Razor/Types/Color.h"
 
 namespace Razor {
 
@@ -38,6 +39,13 @@ namespace Razor {
 		entity.addComponent<StaticMeshComponent>();
 		entity.destroy();
 		ecsManager->refresh();
+
+		Color::RGB color(131, 82, 31);
+		Color::HSL h = color.toHSL();
+
+		std::cout << h.h << std::endl;
+		std::cout << h.s << std::endl;
+		std::cout << h.l << std::endl;
 	}
 
 	void Editor::OnUpdate(float dt)

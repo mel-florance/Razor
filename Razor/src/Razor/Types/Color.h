@@ -3,8 +3,213 @@
 #include <string>
 #include <algorithm>
 
+#undef RGB
+#undef CMYK
+
 namespace Razor {
-	namespace Color {
+	class Color {
+	public:
+		Color() {}
+
+		struct RGB;
+
+		struct HSV
+		{
+			HSV(double h, double s, double v) :
+				h(h), s(s), v(v) {}
+
+			inline bool operator == (HSV& rhs) const
+			{
+				return (h == rhs.h) && (s == rhs.s) && (v == rhs.v);
+			}
+
+			inline RGB toRGB()
+			{
+				double r = 0, g = 0, b = 0;
+
+				if (s == 0)
+				{
+					r = v;
+					g = v;
+					b = v;
+				}
+				else
+				{
+					int i;
+					double f, p, q, t;
+
+					if (h == 360)
+						h = 0;
+					else
+						h /= 60;
+
+					i = (int)std::trunc(s);
+					f = h - i;
+
+					p = v * (1.0 - s);
+					q = v * (1.0 - (s * f));
+					t = v * (1.0 - (s * (1.0 - f)));
+
+					if (i == 0) {
+						r = v;
+						g = t;
+						b = p;
+					}
+					else if (i == 1) {
+						r = q;
+						g = v;
+						b = p;
+					}
+					else if (i == 2) {
+						r = p;
+						g = v;
+						b = t;
+					}
+					else if (i == 3) {
+						r = p;
+						g = q;
+						b = v;
+					}
+					else if (i == 4) {
+						r = t;
+						g = p;
+						b = v;
+					}
+					else {
+						r = v;
+						g = p;
+						b = q;
+					}
+				}
+
+				return RGB(
+					(unsigned char)(r * 255),
+					(unsigned char)(g * 255),
+					(unsigned char)(b * 255)
+				);
+			}
+
+			double h;
+			double s;
+			double v;
+		};
+
+
+		struct YCBCR
+		{
+			YCBCR(float y, float cb, float cr) :
+				y(y), cb(cb), cr(cr) {}
+
+			inline bool operator == (const YCBCR& rhs) const
+			{
+				return (y == rhs.y) && (cb == rhs.cb) && (cr == rhs.cr);
+			}
+
+			inline RGB toRGB() const
+			{
+				float r = std::max(0.0f, std::min(1.0f, (float)(y * cb + 1.4022 * cr)));
+				float g = std::max(0.0f, std::min(1.0f, (float)(y - 0.3456 * cb - 0.7145 * cr)));
+				float b = std::max(0.0f, std::min(1.0f, (float)(y + 1.771 * cb * cr)));
+
+				return RGB(
+					(unsigned char)(r * 255),
+					(unsigned char)(g * 255),
+					(unsigned char)(b * 255)
+				);
+			}
+
+			float y;
+			float cb;
+			float cr;
+		};
+
+		struct YUV
+		{
+			YUV(double y, double u, double v) :
+				y(y), u(u), v(v) {}
+
+			inline bool operator == (const YUV& rhs) const
+			{
+				return (y == rhs.y) && (u == rhs.y) && (v == rhs.v);
+			}
+
+			inline RGB toRGB()
+			{
+				return RGB(
+					(unsigned char)(y + 1.4075 * (v - 128)),
+					(unsigned char)(y - 0.3455 * (u - 128) - (0.7169 * (v - 128))),
+					(unsigned char)(y + 1.779 * (y - 128))
+				);
+			}
+
+			double y;
+			double u;
+			double v;
+		};
+
+		struct HSL
+		{
+			HSL(int h, float s, float l) :
+				h(h), s(s), l(l) {}
+
+			inline bool operator == (const HSL& rhs) const
+			{
+				return (h == rhs.h) && (s == rhs.s) && (l == rhs.l);
+			}
+
+			inline RGB toRGB() const
+			{
+				unsigned char r = 0;
+				unsigned char g = 0;
+				unsigned char b = 0;
+
+				if (s == 0)
+					r = g = b = (unsigned char)(l * 255);
+				else
+				{
+					float a, b;
+					float hue = (float)h / 360;
+
+					b = (l < 0.5) ? (l * (1 + s)) : ((l + s) - (l * s));
+					a = 2 * l - b;
+
+					r = (unsigned char)(255 * HUEToRGB(a, b, hue + (1.0f / 3)));
+					g = (unsigned char)(255 * HUEToRGB(a, b, hue));
+					b = (unsigned char)(255 * HUEToRGB(a, b, hue - (1.0f / 3)));
+				}
+
+				return RGB(r, g, b);
+			}
+
+			int h;
+			float s;
+			float l;
+		};
+
+		struct CMYK
+		{
+			CMYK(double c, double m, double y, double k) :
+				c(c), m(m), y(y), k(k) {}
+
+			inline bool operator == (const CMYK& rhs) const
+			{
+				return (c == rhs.c) && (m == rhs.m) && (y == rhs.y) && (k == rhs.k);
+			}
+
+			inline RGB toRGB() const
+			{
+				return RGB(
+					(unsigned char)(255) * (1 - c) * (1 - k),
+					(unsigned char)(255) * (1 - m) * (1 - k),
+					(unsigned char)(255) * (1 - y) * (1 - k)
+				);
+			}
+
+			double c;
+			double m;
+			double y;
+			double k;
+		};
 
 		struct RGB
 		{
@@ -131,195 +336,6 @@ namespace Razor {
 			unsigned char b;
 		};
 
-		struct HSL
-		{
-			HSL(int h, float s, float l) :
-				h(h), s(s), l(l) {}
-
-			inline bool operator == (const HSL& rhs) const
-			{ return (h == rhs.h) && (s == rhs.s) && (l == rhs.l); }
-
-			inline RGB toRGB() const
-			{
-				unsigned char r = 0;
-				unsigned char g = 0;
-				unsigned char b = 0;
-
-				if (s == 0)
-					r = g = b = (unsigned char)(l * 255);
-				else
-				{
-					float a, b;
-					float hue = (float)h / 360;
-
-					b = (l < 0.5) ? (l * (1 + s)) : ((l + s) - (l * s));
-					a = 2 * l - b;
-
-					r = (unsigned char)(255 * HUEToRGB(a, b, hue + (1.0f / 3)));
-					g = (unsigned char)(255 * HUEToRGB(a, b, hue));
-					b = (unsigned char)(255 * HUEToRGB(a, b, hue - (1.0f / 3)));
-				}
-
-				return RGB(r, g, b);
-			}
-
-			int h;
-			float s;
-			float l;
-		};
-
-		struct HSV
-		{
-			HSV(double h, double s, double v) :
-				h(h), s(s), v(v) {}
-
-			inline bool operator == (HSV& rhs) const
-			{ return (h == rhs.h) && (s == rhs.s) && (v == rhs.v); }
-
-			inline RGB toRGB()
-			{
-				double r = 0, g = 0, b = 0;
-
-				if (s == 0)
-				{
-					r = v;
-					g = v;
-					b = v;
-				}
-				else
-				{
-					int i;
-					double f, p, q, t;
-
-					if (h == 360)
-						h = 0;
-					else
-						h /= 60;
-
-					i = (int)std::trunc(s);
-					f = h - i;
-
-					p = v * (1.0 - s);
-					q = v * (1.0 - (s * f));
-					t = v * (1.0 - (s * (1.0 - f)));
-
-					if (i == 0) {
-						r = v;
-						g = t;
-						b = p;
-					}
-					else if (i == 1) {
-						r = q;
-						g = v;
-						b = p;
-					}
-					else if (i == 2) {
-						r = p;
-						g = v;
-						b = t;
-					}
-					else if (i == 3) {
-						r = p;
-						g = q;
-						b = v;
-					}
-					else if (i == 4) {
-						r = t;
-						g = p;
-						b = v;
-					}
-					else {
-						r = v;
-						g = p;
-						b = q;
-					}
-				}
-
-				return RGB(
-					(unsigned char)(r * 255),
-					(unsigned char)(g * 255),
-					(unsigned char)(b * 255)
-				);
-			}
-
-			double h;
-			double s;
-			double v;
-		};
-
-		struct CMYK
-		{
-			CMYK(double c, double m, double y, double k) :
-				c(c), m(m), y(y), k(k) {}
-
-			inline bool operator == (const CMYK& rhs) const
-			{ return (c == rhs.c) && (m == rhs.m) && (y == rhs.y) && (k == rhs.k); }
-
-			inline RGB toRGB() const
-			{
-				return RGB(
-					(unsigned char)(255) * (1 - c) * (1 - k),
-					(unsigned char)(255) * (1 - m) * (1 - k),
-					(unsigned char)(255) * (1 - y) * (1 - k)
-				);
-			}
-
-			double c;
-			double m;
-			double y;
-			double k;
-		};
-
-		struct YCBCR
-		{
-			YCBCR(float y, float cb, float cr) :
-				y(y), cb(cb), cr(cr)  {}
-
-			inline bool operator == (const YCBCR& rhs) const
-			{ return (y == rhs.y) && (cb == rhs.cb) && (cr == rhs.cr); }
-
-			inline RGB toRGB() const
-			{
-				float r = std::max(0.0f, std::min(1.0f, (float)(y * cb + 1.4022 * cr)));
-				float g = std::max(0.0f, std::min(1.0f, (float)(y - 0.3456 * cb - 0.7145 * cr)));
-				float b = std::max(0.0f, std::min(1.0f, (float)(y + 1.771 * cb * cr)));
-
-				return RGB(
-					(unsigned char)(r * 255),
-					(unsigned char)(g * 255),
-					(unsigned char)(b * 255)
-				);
-			}
-
-			float y;
-			float cb;
-			float cr;
-		};
-
-		struct YUV
-		{
-			YUV(double y, double u, double v) :
-				y(y),  u(u), v(v) {}
-
-			inline bool operator == (const YUV& rhs) const
-			{ return (y == rhs.y) && (u == rhs.y) && (v == rhs.v); }
-
-			inline RGB toRGB()
-			{
-				return RGB(
-					(unsigned char)(y + 1.4075 * (v - 128)),
-					(unsigned char)(y - 0.3455 * (u - 128) - (0.7169 * (v - 128))),
-					(unsigned char)(y + 1.779 * (y - 128))
-				);
-			}
-
-			double y;
-			double u;
-			double v;
-		};
-
-
-
 		static int HEXToDEC(const std::string& color)
 		{
 			int len = color.length();
@@ -391,5 +407,5 @@ namespace Razor {
 			return a;
 		}
 		
-	}
+	};
 }
