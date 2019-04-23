@@ -8,10 +8,10 @@ namespace Razor {
 		Clock();
 		~Clock();
 
-		double getTime();
+		 double getTime();
 
 	private:
-		std::chrono::steady_clock::time_point m_epoch;
+		double time;
 	};
 
 }

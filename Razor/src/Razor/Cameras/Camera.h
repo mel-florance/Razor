@@ -33,7 +33,7 @@ namespace Razor {
 		inline glm::mat4 getViewMatrix() { return view; }
 		inline glm::mat4 getProjectionMatrix() { return projection; }
 		inline glm::vec3 getPosition() { return position; }
-		inline glm::vec3 getTarget() { return target; }
+		inline glm::vec3 getTarget() { return direction; }
 		inline Window* getWindow() { return window; }
 		inline float getAspectRatio() { return aspect_ratio; }
 		
@@ -49,7 +49,7 @@ inline float getFov() { return fov; }
 
 		glm::vec3 position;
 		glm::vec3 position_delta;
-		glm::vec3 target;
+		glm::vec3 direction;
 
 	protected:
 		Window* window;

@@ -8,11 +8,11 @@ namespace Razor {
 	GameLoop::GameLoop(Engine* engine) :
 		m_running(false),
 		m_render(false),
-		m_sleepTime(1),
+		m_sleepTime(0),
 		m_fps(0.0f),
 		m_lastTime(0.0),
 		m_startTime(0.0),
-		m_frameTime(1.0 / 500.0f),
+		m_frameTime(1.0 / 60.0f),
 		m_frameCounter(0.0),
 		m_unprocessedTime(0),
 		m_frames(0),
@@ -55,21 +55,27 @@ namespace Razor {
 			m_unprocessedTime += m_passedTime;
 			m_frameCounter += m_passedTime;
 
-			if (m_frameCounter >= 1.0f)
+			if (m_frameCounter >= 0.1f)
 			{
-				m_fps = computeAverageFps(1.0f / (float)m_passedTime) * 1000.f;
+				m_fps = computeAverageFps(1.0f / (float)m_passedTime);
+				m_frames = 0;
 				m_frameCounter = 0;
 			}
 
 			m_profiler->startTimer("frame");
 
-			m_profiler->startTimer("update");
+			if (m_unprocessedTime > m_frameTime)
+			{
+				m_profiler->startTimer("update");
 
-			if (m_updateCallback != nullptr)
-				m_updateCallback(this, m_engine);
+				if (m_updateCallback != nullptr)
+					m_updateCallback(this, m_engine);
 
-			m_profiler->stopTimer("update");
+				m_profiler->stopTimer("update");
 
+				m_unprocessedTime -= m_passedTime;
+			}
+			 
 			m_profiler->startTimer("render");
 
 			if (m_renderCallback != nullptr)

@@ -14,7 +14,7 @@ namespace Razor {
 		window(window),
 		position(glm::vec3(0.0f, 0.0f, 0.0f)),
 		position_delta(glm::vec3(0.0f, 0.0f, 0.0f)),
-		target(glm::vec3(0.0f, 0.0f, -1.0f)),
+		direction(glm::vec3(0.0f, 0.0f, -1.0f)),
 		up(glm::vec3(0.0f, 0.0f, 0.0)),
 		right(glm::vec3(0.0f, 0.0f, 0.0)),
 		world_up(glm::vec3(0.0f, 1.0f, 0.0)),
@@ -29,8 +29,9 @@ namespace Razor {
 		capture(false),
 		isViewportHovered(false),
 		
-		delta(0.0f),
-		mode(Mode::PERSPECTIVE)
+		delta(1.0f / 60.0f),
+		mode(Mode::PERSPECTIVE),
+		view(glm::mat4(1.0f))
 	{
 		projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
 	}

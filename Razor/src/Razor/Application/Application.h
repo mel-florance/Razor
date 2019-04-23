@@ -52,10 +52,6 @@ namespace Razor {
 
 		static Application* s_Instance;
 		bool headless;
-
-		double currentFrame;
-		double deltaTime;
-		double lastFrame;
 	};
 
 	Application* createApplication();

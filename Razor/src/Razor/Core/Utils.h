@@ -86,6 +86,15 @@ namespace Razor {
 			str[len] = 0;
 		}
 
+		static float randomf(float a, float b)
+		{
+			float random = ((float)rand()) / (float)RAND_MAX;
+			float diff = b - a;
+			float r = random * diff;
+
+			return a + r;
+		}
+
 		static inline float mapValues(float rangeA[], float rangeB[], float value, unsigned int size = 2)
 		{
 			return (value - rangeA[0]) * (rangeB[1] - rangeB[0]) / (rangeA[1] - rangeA[0]) + rangeB[0];

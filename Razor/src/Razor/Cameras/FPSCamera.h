@@ -21,6 +21,10 @@ namespace Razor {
 		virtual void onMouseUp(int button) override;
 		virtual void onWindowResized(const glm::vec2& size) override;
 
+		inline float getSpeed() const { return speed; }
+		inline float getMinSpeed() const { return min_speed; }
+		inline float getMaxSpeed() const { return max_speed; }
+
 	private:
 		float speed;
 		float min_speed;

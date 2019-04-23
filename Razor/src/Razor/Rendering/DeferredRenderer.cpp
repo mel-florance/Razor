@@ -8,6 +8,7 @@
 
 #include "Razor/Scene/SceneGraph.h"
 #include "Razor/Cameras/FPSCamera.h"
+#include "Razor/Cameras/TPSCamera.h"
 #include "Razor/Buffers/Buffers.h"
 #include "Razor/Geometry/Geometry.h"
 #include "Razor/Core/Window.h"
@@ -22,7 +23,7 @@ namespace Razor {
 	{
 		shadersManager = new ShadersManager();
 
-		diffuseMap = new Texture("./data/container_diffuse.png");
+		diffuseMap = new Texture("./data/checker.png");
 		specularMap = new Texture("./data/container_specular.png");
 
 		light = new Light();
@@ -56,13 +57,15 @@ namespace Razor {
 		colorbuffer = framebuffer->addTextureAttachment(framebuffer_size);
 		framebuffer->addRenderBufferAttachment(framebuffer_size);
 
-		camera = new FPSCamera(window);
-		camera->position = glm::vec3(3.0f, -2.0, 3.0f);
-		camera->target = glm::vec3(0.0f);
 
-		std::shared_ptr<Scene> scene = std::make_shared<Scene>("default_scene");
-		scenesManager->setActiveScene(scene);
-		scene->setActiveCamera(camera);
+		depthbuffer = new FrameBuffer();
+		depth_attachment = depthbuffer->addTextureAttachment(glm::vec2(1024.0f, 1024.0f));
+
+		
+
+
+
+
 
 		Node* node = new Node();
 		Node* nodeP = new Node();
@@ -70,7 +73,8 @@ namespace Razor {
 		Cube* cube = new Cube();
 		Plane* plane = new Plane();
 		Sphere* sphere = new Sphere();
-
+		node->name = "Cube";
+		nodeP->name = "Plane";
 		node->meshes.push_back(cube);
 		nodeP->meshes.push_back(plane);
 		nodeSphere->meshes.push_back(sphere);
@@ -78,6 +82,14 @@ namespace Razor {
 
 		nodeP->transform.setScale(glm::vec3(6.0f, 1.0f, 6.0f));
 		nodeSphere->transform.setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+
+		camera = new TPSCamera(window, &nodeP->transform);
+		//camera->position = glm::vec3(3.0f, -2.0, 3.0f);
+		//camera->direction = glm::vec3(0.0f);
+
+		std::shared_ptr<Scene> scene = std::make_shared<Scene>("default_scene");
+		scenesManager->setActiveScene(scene);
+		scene->setActiveCamera(camera);
 
 		scenesManager->getActiveScene()->getSceneGraph()->addNode(node);
 		scenesManager->getActiveScene()->getSceneGraph()->addNode(nodeP);
@@ -96,7 +108,13 @@ namespace Razor {
 
 	void DeferredRenderer::render()
 	{
-		angle += 0.003f * deltaTime;
+		//Todo: Add all others flags at the begining of this functio and also at the end.
+
+		// Make backface culling available per mesh.
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_FRONT);
+
+		angle += deltaTime;
 
 		setViewport(0, 0, framebuffer_size.x, framebuffer_size.y);
 
@@ -112,12 +130,12 @@ namespace Razor {
 
 		defaultShader->setUniform3f("directionalLight.direction", 0.2f, 1.0f, 0.3f);
 		defaultShader->setUniform3f("directionalLight.ambient", 0.025f, 0.025f, 0.025f);
-		defaultShader->setUniform3f("directionalLight.diffuse", 0.0f, 0.0f, 3.0f);
-		defaultShader->setUniform3f("directionalLight.specular", 0.0f, 0.0f, 0.0f);
+		defaultShader->setUniform3f("directionalLight.diffuse", 0.0f, 0.0f, 0.0f);
+		defaultShader->setUniform3f("directionalLight.specular", 1.0f, 1.0f, 1.0f);
 
 		defaultShader->setUniform3f("pointLights[0].position", pointLightPositions[0]);
 		defaultShader->setUniform3f("pointLights[0].ambient", 0.025f, 0.025f, 0.025f);
-		defaultShader->setUniform3f("pointLights[0].diffuse", 3.0f, 0.0f, 0.0f);
+		defaultShader->setUniform3f("pointLights[0].diffuse", 1.0f, 1.0f, 1.0f);
 		defaultShader->setUniform3f("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
 		defaultShader->setUniform1f("pointLights[0].constant", 1.0f);
 		defaultShader->setUniform1f("pointLights[0].linear", 0.09f);
@@ -126,7 +144,7 @@ namespace Razor {
 		defaultShader->setUniform3f("spotLight.position", 1.0f, -8.0f, 2.0f);
 		defaultShader->setUniform3f("spotLight.direction", 0.0f, 1.0f, 0.0f);
 		defaultShader->setUniform3f("spotLight.ambient", 0.025f, 0.025f, 0.025f);
-		defaultShader->setUniform3f("spotLight.diffuse", 0.0f, 8.0f, 0.0f);
+		defaultShader->setUniform3f("spotLight.diffuse", 3.0f, 0.5f, 0.5f);
 		defaultShader->setUniform3f("spotLight.specular", 1.0f, 1.0f, 1.0f);
 		defaultShader->setUniform1f("spotLight.constant", 1.0f);
 		defaultShader->setUniform1f("spotLight.linear", 0.09f);
@@ -162,6 +180,11 @@ namespace Razor {
 			node->transform.setRotation(glm::vec3({0.0f, 2 * angle, 0.0f }));
 		}
 
+		if (node->name == "Cube")
+		{
+			node->transform.setRotation(glm::vec3({ 0.0f, angle, 0.0f }));
+		}
+
 		glm::mat4 local = parent * node->transform.getMatrix();
 		defaultShader->setUniformMat4f("model", local);
 
@@ -180,7 +203,7 @@ namespace Razor {
 	{
 		int flags;
 		glClearColor(color.x, color.y, color.z, color.w);
-
+		
 		switch (type) {
 			default:
 			case ClearType::ALL:

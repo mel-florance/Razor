@@ -108,18 +108,18 @@ namespace Razor {
 				mesh->getVertices().push_back(object->mVertices[i].z);
 			}
 
-			if (object->HasTextureCoords(0))
-			{
-				mesh->getVertices().push_back(object->mTextureCoords[0][i].x);
-				mesh->getVertices().push_back(object->mTextureCoords[0][i].y);
-			}
-
 			if (object->HasNormals()) {
 				mesh->getVertices().push_back(object->mNormals[i].x);
 				mesh->getVertices().push_back(object->mNormals[i].y);
 				mesh->getVertices().push_back(object->mNormals[i].z);
 			}
 
+			if (object->HasTextureCoords(0))
+			{
+				mesh->getVertices().push_back(object->mTextureCoords[0][i].x);
+				mesh->getVertices().push_back(object->mTextureCoords[0][i].y);
+			}
+			
 			if (object->HasTangentsAndBitangents()) {
 				mesh->getVertices().push_back(object->mTangents[i].x);
 				mesh->getVertices().push_back(object->mTangents[i].y);

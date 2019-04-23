@@ -76,8 +76,6 @@ namespace Razor {
 
 	void Engine::update(GameLoop* loop, Engine* self)
 	{
-		glfwPollEvents();
-
 		double delta = loop->getPassedTime();
 		Window& window = self->application->GetWindow();
 		Camera* camera = self->scenes_manager->getActiveScene()->getActiveCamera();
@@ -105,6 +103,8 @@ namespace Razor {
 
 		self->deferred_renderer->render();
 		self->application->GetWindow().OnUpdate();
+
+		glfwPollEvents();
 	}
 
 }

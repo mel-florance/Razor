@@ -72,6 +72,13 @@ namespace Razor {
 			setupMeshBuffers(node);
 
 			std::shared_ptr<Scene> scene = Application::Get().getScenesManager()->getActiveScene();
+
+			node->transform.setPosition(glm::vec3(
+				Utils::randomf(-10.0f, 10.0f),
+				Utils::randomf(-10.0f, 10.0f),
+				Utils::randomf(-10.0f, 10.0f)
+			));
+
 			scene->getSceneGraph()->addNode(node);
 
 			RZ_INFO("Successfully imported model: {0}", node->name);

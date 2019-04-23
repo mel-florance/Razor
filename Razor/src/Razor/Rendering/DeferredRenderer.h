@@ -12,6 +12,7 @@ namespace Razor {
 
 	class ScenesManager;
 	class FPSCamera;
+	class TPSCamera;
 	class Node;
 	class Window;
 
@@ -43,7 +44,7 @@ namespace Razor {
 
 		ShadersManager* shadersManager;
 		ScenesManager* scenesManager;
-		FPSCamera* camera;
+		TPSCamera* camera;
 		Window* window;
 
 		Light* light;
@@ -52,7 +53,9 @@ namespace Razor {
 		std::shared_ptr<Shader> viewportShader;
 
 		FrameBuffer* framebuffer;
+		FrameBuffer* depthbuffer;
 		TextureAttachment* colorbuffer;
+		TextureAttachment* depth_attachment;
 
 		Quad* quad;
 

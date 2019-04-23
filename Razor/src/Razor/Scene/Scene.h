@@ -20,6 +20,8 @@ namespace Razor {
 
 		inline SceneGraph* getSceneGraph() const { return graph; }
 
+		inline size_t getNodesSize() { return graph->getNodes().size(); }
+
 	private:
 		bool active;
 		std::string name;

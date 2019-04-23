@@ -5,6 +5,8 @@
 
 namespace Razor {
 
+	class ScenesManager;
+
 	class RAZOR_API Outliner : public EditorComponent
 	{
 	public:
@@ -12,6 +14,9 @@ namespace Razor {
 		~Outliner();
 
 		void render(float delta) override;
+
+	private:
+		ScenesManager* scenesManager;
 	};
 
 }
