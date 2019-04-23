@@ -12,14 +12,14 @@
 
 namespace Razor {
 
-	TPSCamera::TPSCamera(Window* window, Transform* target) :
+	TPSCamera::TPSCamera(Window* window) :
 		Camera(window),
-		target(target),
-		sensitivity(50.0f),
-		pitch(10.0f),
+		target(new Transform()),
+		sensitivity(80.0f),
+		pitch(-30.0f),
 		yaw(0.0f),
 		roll(0.0f),
-		distance(1.5f),
+		distance(5.0f),
 		distance_min(0.5f),
 		distance_max(1000.0f),
 		pitch_min(-90.0f),
@@ -27,17 +27,15 @@ namespace Razor {
 		pitch_offset(0.0f),
 		pitch_factor(0.3f),
 		zoom_factor(10.0f),
-		angle(0.0f),
-		y_offset(7.0f),
-		mouse_left(false),
-		mouse_right(false),
-		mouse_middle(false)
+		angle(45.0f),
+		y_offset(7.0f)
 	{
 		projection = glm::perspective(glm::radians(fov), 16.0f / 9.0f, clip_near, clip_far);
 	}
 
 	TPSCamera::~TPSCamera()
 	{
+		delete target;
 	}
 
 	void TPSCamera::update(double dt)
@@ -62,14 +60,6 @@ namespace Razor {
 		projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
 	}
 
-	void TPSCamera::onEvent(Window * window)
-	{
-	}
-
-	void TPSCamera::onKeyPressed(Direction dir)
-	{
-	}
-
 	void TPSCamera::onMouseMoved(glm::vec2& pos, bool constrain)
 	{
 		if (first)
@@ -80,11 +70,24 @@ namespace Razor {
 
 		mouse_position = pos - last_pos;
 		last_pos = pos;
+
+		if (capture)
+		{
+			float diff = mouse_position.y * sensitivity * delta;
+			pitch -= diff;
+
+			if (pitch < pitch_min)
+				pitch = pitch_min;
+			else if (pitch > pitch_max)
+				pitch = pitch_max;
+
+			angle -= mouse_position.x * sensitivity * delta;
+		}
 	}
 
 	void TPSCamera::onMouseScrolled(glm::vec2& offset)
 	{
-		distance -= (offset.y / 100.0f) * zoom_factor;
+		distance -= (offset.y / 10.0f) * zoom_factor;
 
 		if (distance < distance_min)
 			distance = distance_min;
@@ -92,16 +95,20 @@ namespace Razor {
 
 	void TPSCamera::onMouseDown(int button)
 	{
-		if (button == 0) mouse_left = true;
-		if (button == 1) mouse_right = true;
-		if (button == 2) mouse_middle = true;
+		if (button == 2)
+		{
+			capture = true;
+			glfwSetInputMode((GLFWwindow*)window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
 	}
 
 	void TPSCamera::onMouseUp(int button)
 	{
-		if (button == 0) mouse_left = false;
-		if (button == 1) mouse_right = false;
-		if (button == 2) mouse_middle = false;
+		if (button == 2)
+		{
+			capture = false;
+			glfwSetInputMode((GLFWwindow*)window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
 	}
 
 	void TPSCamera::computePosition(float h_distance, float v_distance)
@@ -114,7 +121,7 @@ namespace Razor {
 
 			position.x = target->getPosition().x - offset_x;
 			position.z = target->getPosition().z - offset_z;
-			position.y = target->getPosition().y + v_distance + y_offset;
+			position.y = target->getPosition().y + v_distance;
 		}
 	}
 
@@ -128,35 +135,8 @@ namespace Razor {
 		return distance * std::sin(glm::radians(pitch + pitch_offset));
 	}
 
-	void TPSCamera::computePitch()
-	{
-		if (mouse_middle)
-		{
-			float diff = mouse_position.y * sensitivity * delta;
-			pitch -= diff;
-
-			if (pitch < pitch_min)
-				pitch = pitch_min;
-			else if (pitch > pitch_max)
-				pitch = pitch_max;
-
-			glfwSetInputMode((GLFWwindow*)window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		}
-		else
-			glfwSetInputMode((GLFWwindow*)window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	}
-
-	void TPSCamera::computeAngle()
-	{
-		if (mouse_middle)
-			angle -= mouse_position.x * sensitivity * delta;
-	}
-
 	void TPSCamera::move()
 	{
-		computePitch();
-		computeAngle();
-
 		float h_dist = computeHorizontalDistance();
 		float v_dist = computeVerticalDistance();
 		

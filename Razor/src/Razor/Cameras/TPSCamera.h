@@ -10,13 +10,11 @@ namespace Razor {
 	class TPSCamera : public Camera
 	{
 	public:
-		TPSCamera(Window* window, Transform* target);
+		TPSCamera(Window* window);
 		~TPSCamera();
 
 		void update(double dt) override;
 
-		void onEvent(Window* window) override;
-		void onKeyPressed(Direction dir) override;
 		void onMouseMoved(glm::vec2& pos, bool constrain = true) override;
 		void onMouseScrolled(glm::vec2& offset) override;
 		void onMouseDown(int button) override;
@@ -25,8 +23,6 @@ namespace Razor {
 		void computePosition(float h_distance, float v_distance);
 		float computeHorizontalDistance();
 		float computeVerticalDistance();
-		void computePitch();
-		void computeAngle();
 		void move();
 
 	private:
@@ -55,9 +51,6 @@ namespace Razor {
 
 		glm::vec2 mouse_scroll;
 		glm::vec2 mouse_position;
-		bool mouse_left;
-		bool mouse_right;
-		bool mouse_middle;
 	};
 
 }

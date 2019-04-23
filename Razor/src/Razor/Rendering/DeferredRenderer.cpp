@@ -83,7 +83,7 @@ namespace Razor {
 		nodeP->transform.setScale(glm::vec3(6.0f, 1.0f, 6.0f));
 		nodeSphere->transform.setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
 
-		camera = new TPSCamera(window, &nodeP->transform);
+		camera = new TPSCamera(window);
 		//camera->position = glm::vec3(3.0f, -2.0, 3.0f);
 		//camera->direction = glm::vec3(0.0f);
 
@@ -152,11 +152,10 @@ namespace Razor {
 		defaultShader->setUniform1f("spotLight.inner_cutoff", glm::cos(glm::radians(12.5f)));
 		defaultShader->setUniform1f("spotLight.outer_cutoff", glm::cos(glm::radians(15.0f)));
 
-		defaultShader->setUniform3f("viewPosition", scene->getActiveCamera()->getPosition());
+
 		defaultShader->setUniform1f("material.shininess", 32.0f);
 
-		defaultShader->setUniformMat4f("view", scene->getActiveCamera()->getViewMatrix());
-		defaultShader->setUniformMat4f("projection", scene->getActiveCamera()->getProjectionMatrix());
+
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap->getId());
@@ -166,6 +165,10 @@ namespace Razor {
 
 		for (auto node : scene->getSceneGraph()->getNodes())
 			renderNode(&node, glm::mat4(1.0f));
+
+		defaultShader->setUniform3f("viewPosition", scene->getActiveCamera()->getPosition());
+		defaultShader->setUniformMat4f("view", scene->getActiveCamera()->getViewMatrix());
+		defaultShader->setUniformMat4f("projection", scene->getActiveCamera()->getProjectionMatrix());
 
 		defaultShader->unbind();
 		framebuffer->unbind();
