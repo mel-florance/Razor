@@ -44,7 +44,8 @@ namespace Razor {
 
 		ShadersManager* shadersManager;
 		ScenesManager* scenesManager;
-		TPSCamera* camera;
+		TPSCamera* tps_camera;
+		FPSCamera* fps_camera;
 		Window* window;
 
 		Light* light;

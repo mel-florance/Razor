@@ -1652,6 +1652,9 @@
     <ClInclude Include="src\Razor\Cameras\FPSCamera.h" />
     <ClInclude Include="src\Razor\Cameras\TPSCamera.h" />
     <ClInclude Include="src\Razor\Types\Color.h" />
+    <ClInclude Include="src\Razor\Maths\Maths.h" />
+    <ClInclude Include="src\Razor\Maths\Raycast.h" />
+    <ClInclude Include="src\Razor\Terrains\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -1826,6 +1829,8 @@
     <ClCompile Include="src\Razor\Rendering\RenderPass.cpp" />
     <ClCompile Include="src\Razor\Cameras\FPSCamera.cpp" />
     <ClCompile Include="src\Razor\Cameras\TPSCamera.cpp" />
+    <ClCompile Include="src\Razor\Maths\Raycast.cpp" />
+    <ClCompile Include="src\Razor\Terrains\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">

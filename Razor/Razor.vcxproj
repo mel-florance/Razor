@@ -162,6 +162,8 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Razor\Maths\Raycast.h" />
+    <ClInclude Include="src\Razor\Maths\Maths.h" />
     <ClInclude Include="src\Razor\Cameras\FPSCamera.h" />
     <ClInclude Include="src\Razor\Rendering\Pipeline.h" />
     <ClInclude Include="src\Razor\Rendering\RenderPass.h" />
@@ -245,6 +247,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="src\Razor\Ecs\Components\StaticMeshComponent.h" />
     <ClInclude Include="src\Razor\Core\Timer.h" />
     <ClInclude Include="src\Razor\Cameras\TPSCamera.h" />
+    <ClInclude Include="src\Razor\Terrains\Terrain.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BaseImporter.h" />
     <ClInclude Include="vendor\assimp\include\assimp\Bitmap.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BlobIOSystem.h" />
@@ -693,6 +696,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Razor\Maths\Raycast.cpp" />
     <ClCompile Include="src\Razor\Cameras\FPSCamera.cpp" />
     <ClCompile Include="src\Razor\Rendering\Pipeline.cpp" />
     <ClCompile Include="src\Razor\Rendering\RenderPass.cpp" />
@@ -765,6 +769,7 @@ IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /
     <ClCompile Include="src\Razor\Ecs\Components\StaticMeshComponent.cpp" />
     <ClCompile Include="src\Razor\Core\Timer.cpp" />
     <ClCompile Include="src\Razor\Cameras\TPSCamera.cpp" />
+    <ClCompile Include="src\Razor\Terrains\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig" />

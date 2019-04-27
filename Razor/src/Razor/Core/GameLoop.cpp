@@ -55,7 +55,7 @@ namespace Razor {
 			m_unprocessedTime += m_passedTime;
 			m_frameCounter += m_passedTime;
 
-			if (m_frameCounter >= 0.1f)
+			if (m_frameCounter >= 0.01f)
 			{
 				m_fps = computeAverageFps(1.0f / (float)m_passedTime);
 				m_frames = 0;

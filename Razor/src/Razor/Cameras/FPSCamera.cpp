@@ -54,7 +54,7 @@ namespace Razor {
 		if (vp != nullptr) 
 		{
 			isViewportHovered = vp->getIsHovered();
-			aspect_ratio = (float)vp->getSize().x / (float)vp->getSize().y;
+			aspect_ratio = vp->getSize().x / vp->getSize().y;
 		}
 
 		if (capture)

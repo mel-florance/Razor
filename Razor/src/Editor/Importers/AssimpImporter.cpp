@@ -3,6 +3,7 @@
 #include "Razor/Geometry/Mesh.h"
 #include "Razor/Core/Transform.h"
 #include "Razor/Core/Utils.h"
+#include "Razor/Maths/Maths.h"
 
 namespace Razor {
 
@@ -89,6 +90,7 @@ namespace Razor {
 		const char* name = object->mName.length != 0 ? object->mName.C_Str() : "";
 		Mesh* mesh = new Mesh();
 		mesh->setName(name);
+		BoundingBox box;
 
 		if (object->HasFaces())
 		{
@@ -125,11 +127,18 @@ namespace Razor {
 				mesh->getVertices().push_back(object->mTangents[i].y);
 				mesh->getVertices().push_back(object->mTangents[i].z);
 			}
+
+			if (object->mVertices[i].x < box.min_x) box.min_x = object->mVertices[i].x;
+			if (object->mVertices[i].x > box.max_x) box.max_x = object->mVertices[i].x;
+			if (object->mVertices[i].y < box.min_y) box.min_y = object->mVertices[i].y;
+			if (object->mVertices[i].y < box.max_y) box.max_y = object->mVertices[i].y;
+			if (object->mVertices[i].z < box.min_z) box.min_z = object->mVertices[i].z;
+			if (object->mVertices[i].z < box.max_z) box.max_z = object->mVertices[i].z;
 		}
+
+		mesh->setBoundingBox(box);
 
 		return mesh;
 	}
 
 }
-
-

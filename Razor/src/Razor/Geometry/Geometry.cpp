@@ -216,4 +216,46 @@ namespace Razor {
 	{
 
 	}
+
+	Bounding::Bounding(const BoundingBox& box)
+	{
+		this->setVertices({
+			 -0.5f, -0.5f, -0.5f, 1.0f,
+			  0.5f, -0.5f, -0.5f, 1.0f,
+			  0.5f,  0.5f, -0.5f, 1.0f,
+			 -0.5f,  0.5f, -0.5f, 1.0f,
+			 -0.5f, -0.5f,  0.5f, 1.0f,
+			  0.5f, -0.5f,  0.5f, 1.0f,
+			  0.5f,  0.5f,  0.5f, 1.0f,
+			 -0.5f,  0.5f,  0.5f, 1.0f
+		});
+
+		this->setIndices({
+			  0, 1, 2, 3,
+			  4, 5, 6, 7,
+			  0, 4, 1, 5, 2, 6, 3, 7
+		});
+
+		VertexArray* vao = new VertexArray();
+
+		VertexBufferLayout *vbl = new VertexBufferLayout();
+		VertexBuffer* vbo = new VertexBuffer(getVertices().data(), (unsigned int)getVertices().size() * sizeof(float));
+		vbl->pushFloat(4);
+		vao->addBuffer(*vbo, *vbl);
+
+		IndexBuffer* ibo = new IndexBuffer(getIndices().data(), (unsigned int)getIndices().size());
+
+		setVertexCount((unsigned int)getVertices().size());
+		setVao(vao);
+		setVbl(vbl);
+		setVbo(vbo);
+		setIbo(ibo);
+
+		setName("BoundingBox");
+	}
+
+	Bounding::~Bounding()
+	{
+
+	}
 }

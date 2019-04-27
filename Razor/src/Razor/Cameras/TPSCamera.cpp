@@ -9,13 +9,14 @@
 #include "Editor/Components/Viewport.h"
 #include "Razor/Application/Application.h"
 #include "Editor/Editor.h"
+#include "Razor/Maths/Maths.h"
 
 namespace Razor {
 
 	TPSCamera::TPSCamera(Window* window) :
 		Camera(window),
 		target(new Transform()),
-		sensitivity(80.0f),
+		sensitivity(15.0f),
 		pitch(-30.0f),
 		yaw(0.0f),
 		roll(0.0f),
@@ -30,7 +31,7 @@ namespace Razor {
 		angle(45.0f),
 		y_offset(7.0f)
 	{
-		projection = glm::perspective(glm::radians(fov), 16.0f / 9.0f, clip_near, clip_far);
+
 	}
 
 	TPSCamera::~TPSCamera()
@@ -38,26 +39,64 @@ namespace Razor {
 		delete target;
 	}
 
+	void TPSCamera::updateVectors()
+	{
+		glm::vec3 front;
+		front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		front.y = sin(glm::radians(pitch));
+		front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		direction = glm::normalize(front);
+
+		right = glm::normalize(glm::cross(direction, world_up));
+		up = glm::normalize(glm::cross(right, direction));
+	}
+
 	void TPSCamera::update(double dt)
 	{
-		delta = dt;
+		if (target != nullptr)
+		{
+			float vertical = distance * std::sin(glm::radians(pitch + pitch_offset));
+			float horizontal = distance * std::cos(glm::radians(pitch + pitch_offset));
 
-		move();
+			float theta = target->getRotation().y + angle;
+			float offset_x = horizontal * std::sin(glm::radians(theta));
+			float offset_z = horizontal * std::cos(glm::radians(theta));
+
+			position.x = target->getPosition().x - offset_x;
+			position.z = target->getPosition().z - offset_z;
+			position.y = target->getPosition().y + vertical;
+
+			yaw = 180.0f - (target->getRotation().y + angle);
+			yaw = (float)fmod(yaw, 360.0f);
+		}
+
 		glm::mat4 viewMatrix = glm::mat4(1.0f);
 
 		viewMatrix = glm::rotate(viewMatrix, glm::radians(pitch), glm::vec3(1, 0, 0));
 		viewMatrix = glm::rotate(viewMatrix, glm::radians(yaw), glm::vec3(0, 1, 0));
+		view = glm::translate(viewMatrix, glm::vec3(-position[0], -position[1], -position[2]));
 
-		glm::vec3 negativeCameraPos = glm::vec3(-position[0], -position[1], -position[2]);
-		view = glm::translate(viewMatrix, negativeCameraPos);
+		//angle -= delta;
 
-		GLFWwindow* native = (GLFWwindow*)window->GetNativeWindow();
+		setProjection();
+	}
+
+	void TPSCamera::setProjection()
+	{
 		Viewport* vp = (Viewport*)Application::Get().getEditor()->getComponents()["Viewport"];
 
-		if (vp != nullptr)
-			aspect_ratio = (float)vp->getSize().x / (float)vp->getSize().y;
+		if(vp != nullptr)
+			aspect_ratio = vp->getSize().x / vp->getSize().y;
 
-		projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
+		switch (mode) 
+		{
+			case Mode::ORTHOGRAPHIC:
+				projection = glm::ortho(-1.5f * aspect_ratio, 1.5f * aspect_ratio, -1.5f, 1.5f, -10.0f, 10.0f);
+				break;
+			case Mode::PERSPECTIVE:
+				projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
+				break;
+		}
 	}
 
 	void TPSCamera::onMouseMoved(glm::vec2& pos, bool constrain)
@@ -73,15 +112,27 @@ namespace Razor {
 
 		if (capture)
 		{
-			float diff = mouse_position.y * sensitivity * delta;
-			pitch -= diff;
+			if (glfwGetKey((GLFWwindow*)window->GetNativeWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+			{
+				/*glm::vec3 t_pos = target->getPosition();
 
-			if (pitch < pitch_min)
-				pitch = pitch_min;
-			else if (pitch > pitch_max)
-				pitch = pitch_max;
+				t_pos.z -= delta * sensitivity * mouse_position.x;
+				t_pos.y -= delta * sensitivity * mouse_position.y;
 
-			angle -= mouse_position.x * sensitivity * delta;
+				target->setPosition(t_pos);*/
+			}
+			else
+			{
+				float diff = mouse_position.y * sensitivity * delta;
+				pitch -= diff;
+
+				if (pitch < pitch_min)
+					pitch = pitch_min;
+				else if (pitch > pitch_max)
+					pitch = pitch_max;
+
+				angle -= mouse_position.x * sensitivity * delta;
+			}
 		}
 	}
 
@@ -91,6 +142,8 @@ namespace Razor {
 
 		if (distance < distance_min)
 			distance = distance_min;
+		else if (distance > distance_max)
+			distance = distance_max;
 	}
 
 	void TPSCamera::onMouseDown(int button)
@@ -111,42 +164,17 @@ namespace Razor {
 		}
 	}
 
-	void TPSCamera::computePosition(float h_distance, float v_distance)
+	void TPSCamera::onKeyDown(int keyCode)
 	{
-		if (target != nullptr)
-		{
-			float theta = target->getRotation().y + angle;
-			float offset_x = h_distance * std::sin(glm::radians(theta));
-			float offset_z = h_distance * std::cos(glm::radians(theta));
+		if (keyCode == GLFW_KEY_KP_DECIMAL)
+			target->setPosition(glm::vec3(0.0f));
 
-			position.x = target->getPosition().x - offset_x;
-			position.z = target->getPosition().z - offset_z;
-			position.y = target->getPosition().y + v_distance;
-		}
+		if (keyCode == GLFW_KEY_KP_5)
+			mode = mode == Camera::Mode::ORTHOGRAPHIC ? Camera::Mode::PERSPECTIVE : Camera::Mode::ORTHOGRAPHIC;
 	}
 
-	float TPSCamera::computeHorizontalDistance()
+	void TPSCamera::onKeyReleased(int keyCode)
 	{
-		return distance * std::cos(glm::radians(pitch + pitch_offset));
-	}
-
-	float TPSCamera::computeVerticalDistance()
-	{
-		return distance * std::sin(glm::radians(pitch + pitch_offset));
-	}
-
-	void TPSCamera::move()
-	{
-		float h_dist = computeHorizontalDistance();
-		float v_dist = computeVerticalDistance();
-		
-		computePosition(h_dist, v_dist);
-
-		if (target != nullptr)
-		{
-			yaw = 180.0f - (target->getRotation().y + angle);
-			yaw = (float)fmod(yaw, 360.0f);
-		}
 	}
 
 }

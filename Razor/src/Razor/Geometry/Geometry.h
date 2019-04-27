@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Mesh.h"
+#include "Razor/Maths/Maths.h"
 
 namespace Razor {
 
@@ -30,6 +31,13 @@ namespace Razor {
 	public:
 		Sphere();
 		~Sphere();
+	};
+
+	class Bounding : public Mesh
+	{
+	public:
+		Bounding(const BoundingBox& box);
+		~Bounding();
 	};
 
 }

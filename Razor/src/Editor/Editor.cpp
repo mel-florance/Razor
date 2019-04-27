@@ -79,6 +79,8 @@ namespace Razor {
 				Utils::randomf(-10.0f, 10.0f)
 			));
 
+			node->distance = Utils::randomf(0.02f, 0.03f);
+
 			scene->getSceneGraph()->addNode(node);
 
 			RZ_INFO("Successfully imported model: {0}", node->name);

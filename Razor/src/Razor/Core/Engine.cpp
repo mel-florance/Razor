@@ -71,6 +71,18 @@ namespace Razor {
 				camera->onWindowResized(glm::vec2(e.GetWidth(), e.GetHeight()));
 				event.Handled = true;
 			}
+
+			if (event.GetEventType() == EventType::KeyPressed) {
+				KeyPressedEvent& e = (KeyPressedEvent&)event;
+				camera->onKeyDown(e.GetKeyCode());
+				//event.Handled = true;
+			}
+
+			if (event.GetEventType() == EventType::KeyReleased) {
+				KeyReleasedEvent& e = (KeyReleasedEvent&)event;
+				camera->onKeyReleased(e.GetKeyCode());
+				//event.Handled = true;
+			}
 		}
 	}
 

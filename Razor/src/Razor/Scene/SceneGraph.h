@@ -16,6 +16,7 @@ namespace Razor {
 
 	private:
 		std::vector<Node> nodes;
+		unsigned int index;
 	};
 
 }

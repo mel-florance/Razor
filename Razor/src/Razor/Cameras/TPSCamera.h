@@ -2,7 +2,6 @@
 
 #include "Camera.h"
 
-
 namespace Razor {
 
 	class Transform;
@@ -11,25 +10,24 @@ namespace Razor {
 	{
 	public:
 		TPSCamera(Window* window);
-		~TPSCamera();
+		virtual ~TPSCamera();
 
-		void update(double dt) override;
+		virtual void updateVectors();
+		virtual void update(double dt) override;
+		virtual void setProjection();
 
-		void onMouseMoved(glm::vec2& pos, bool constrain = true) override;
-		void onMouseScrolled(glm::vec2& offset) override;
-		void onMouseDown(int button) override;
-		void onMouseUp(int button) override;
-
-		void computePosition(float h_distance, float v_distance);
-		float computeHorizontalDistance();
-		float computeVerticalDistance();
-		void move();
+		virtual void onMouseMoved(glm::vec2& pos, bool constrain = true) override;
+		virtual void onMouseScrolled(glm::vec2& offset) override;
+		virtual void onMouseDown(int button) override;
+		virtual void onMouseUp(int button) override;
+		virtual void onKeyDown(int keyCode) override;
+		virtual void onKeyReleased(int keyCode) override;
 
 	private:
 		Transform* target;
 
-		float sensitivity;
 		float distance;
+		float distance_smooth;
 		float distance_min;
 		float distance_max;
 
@@ -44,15 +42,19 @@ namespace Razor {
 		float yaw_max;
 
 		float roll;
+		float roll_min;
+		float roll_max;
 		
 		float angle;
-		float zoom_factor;
 		float y_offset;
+		float sensitivity;
+
+		float zoom;
+		float zoom_factor;
+		float zoom_lerp;
 
 		glm::vec2 mouse_scroll;
 		glm::vec2 mouse_position;
 	};
 
 }
-
-

@@ -3,7 +3,7 @@
 
 namespace Razor {
 
-	SceneGraph::SceneGraph() : nodes({})
+	SceneGraph::SceneGraph() : nodes({}), index(0)
 	{
 	}
 
@@ -13,6 +13,7 @@ namespace Razor {
 
 	void SceneGraph::addNode(Node* node)
 	{
+		node->id = ++index;
 		nodes.push_back(*node);
 	}
 

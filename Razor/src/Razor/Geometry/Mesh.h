@@ -3,6 +3,7 @@
 #include "Razor/Core/Core.h"
 #include "Razor/Materials/Material.h"
 #include "Razor/Buffers/Buffers.h"
+#include "Razor/Maths/Maths.h"
 
 namespace Razor {
 
@@ -65,6 +66,9 @@ namespace Razor {
 		inline DrawMode getDrawMode() { return drawMode; }
 		inline void setDrawMode(DrawMode mode) { drawMode = mode; }
 
+		inline BoundingBox& getBoundingBox() { return bounding_box; }
+		inline void setBoundingBox(const BoundingBox& box) { bounding_box = box; }
+
 	private:
 		DrawMode drawMode;
 		std::string name;
@@ -76,6 +80,8 @@ namespace Razor {
 		std::vector<float> uvs;
 		std::vector<float> normals;
 		std::vector<float> tangents;
+
+		BoundingBox bounding_box;
 
 		VertexArray* vao;
 		VertexBufferLayout* vbl;

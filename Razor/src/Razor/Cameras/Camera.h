@@ -36,11 +36,12 @@ namespace Razor {
 		inline glm::vec3 getTarget() { return direction; }
 		inline Window* getWindow() { return window; }
 		inline float getAspectRatio() { return aspect_ratio; }
-		
-inline float getFov() { return fov; }
+		inline float getFov() { return fov; }
 
 		virtual void onEvent(Window* window) {}
 		virtual void onKeyPressed(Direction direction) {}
+		virtual void onKeyDown(int keyCode) {}
+		virtual void onKeyReleased(int keyCode) {}
 		virtual void onMouseMoved(glm::vec2& offset, bool constrain = true) {}
 		virtual void onMouseScrolled(glm::vec2& offset) {}
 		virtual void onMouseDown(int button) {}

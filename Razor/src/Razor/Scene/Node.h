@@ -25,6 +25,7 @@ namespace Razor {
 		std::vector<Mesh*> meshes;
 		Transform transform;
 		Node* parent;
+		float distance; // for tests
 		unsigned int id;
 	};
 
