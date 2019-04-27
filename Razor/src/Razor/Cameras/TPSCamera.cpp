@@ -27,7 +27,7 @@ namespace Razor {
 		pitch_max(90.0f),
 		pitch_offset(0.0f),
 		pitch_factor(0.3f),
-		zoom_factor(10.0f),
+		zoom_factor(5.0f),
 		angle(45.0f),
 		y_offset(7.0f)
 	{
@@ -76,7 +76,7 @@ namespace Razor {
 		viewMatrix = glm::rotate(viewMatrix, glm::radians(yaw), glm::vec3(0, 1, 0));
 		view = glm::translate(viewMatrix, glm::vec3(-position[0], -position[1], -position[2]));
 
-		//angle -= delta;
+		angle -= 8.0f * dt;
 
 		setProjection();
 	}

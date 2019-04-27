@@ -47,10 +47,10 @@ namespace Razor
 		inline glm::vec3& getRotation() { return m_rotation; };
 		inline glm::vec3& getScale() { return m_scale; };
 
-		inline void setPosition(glm::vec3& position) { m_dirty = true; m_position = position; }
-		inline void setRotation(glm::vec3& rotation) { m_dirty = true; m_rotation = rotation; }
-		inline void setScale(glm::vec3& scale) { m_dirty = true; m_scale = scale; }
-		inline void setMatrix(glm::mat4& mat) { m_dirty = true; m_matrix = mat; }
+		inline void setPosition(const glm::vec3& position) { m_dirty = true; m_position = position; }
+		inline void setRotation(const glm::vec3& rotation) { m_dirty = true; m_rotation = rotation; }
+		inline void setScale(const glm::vec3& scale) { m_dirty = true; m_scale = scale; }
+		inline void setMatrix(const glm::mat4& mat) { m_dirty = true; m_matrix = mat; }
 	};
 }
 

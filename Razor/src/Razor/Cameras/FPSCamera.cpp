@@ -12,11 +12,8 @@ namespace Razor {
 	FPSCamera::FPSCamera(Window* window) :
 		Camera(window),
 		sensitivity(25.0f),
-		speed(10.0f),
-		min_speed(1.0f),
-		max_speed(20.0f),
 		view_friction(0.0f),
-		move_friction(0.980f),
+		move_friction(10.0f),
 		mouse_offset(glm::vec2()),
 		constrain_pitch(true)
 	{
@@ -85,25 +82,26 @@ namespace Razor {
 				break;
 		}
 
-		position += position_delta;
-		position_delta *= 0.0f;
+		float r = 1.0f / (1.0f + delta * move_friction);
+		velocity *= r;
+		position += velocity * delta;
 		view = glm::lookAt(position, position + direction, up);
 	}
 
 	void FPSCamera::onKeyPressed(Direction dir)
 	{
 		if (dir == Direction::FORWARD)
-			position_delta += direction * delta * speed;
+			velocity += direction * delta * speed;
 		if (dir == Direction::BACKWARD)
-			position_delta -= direction * delta * speed;
+			velocity -= direction * delta * speed;
 		if (dir == Direction::LEFT)
-			position_delta -= right * delta * speed;
+			velocity -= right * delta * speed;
 		if (dir == Direction::RIGHT)
-			position_delta += right * delta * speed;
+			velocity += right * delta * speed;
 		if (dir == Direction::UP)
-			position_delta += up * delta * speed;
+			velocity += up * delta * speed;
 		if (dir == Direction::DOWN)
-			position_delta -= up * delta * speed;
+			velocity -= up * delta * speed;
 	}
 
 	void FPSCamera::onMouseMoved(glm::vec2& pos, bool constrain)
@@ -134,7 +132,7 @@ namespace Razor {
 
 	void FPSCamera::onMouseScrolled(glm::vec2 & offset)
 	{
-		speed += offset.y / 10.0f;
+		speed += offset.y / 10.0f * speed_factor;
 
 		if (speed < min_speed)
 			speed = min_speed;

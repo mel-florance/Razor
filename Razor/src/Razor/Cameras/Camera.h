@@ -37,6 +37,9 @@ namespace Razor {
 		inline Window* getWindow() { return window; }
 		inline float getAspectRatio() { return aspect_ratio; }
 		inline float getFov() { return fov; }
+		inline float getSpeed() const { return speed; }
+		inline float getMinSpeed() const { return min_speed; }
+		inline float getMaxSpeed() const { return max_speed; }
 
 		virtual void onEvent(Window* window) {}
 		virtual void onKeyPressed(Direction direction) {}
@@ -49,7 +52,7 @@ namespace Razor {
 		virtual void onWindowResized(const glm::vec2& size) {}
 
 		glm::vec3 position;
-		glm::vec3 position_delta;
+		glm::vec3 velocity;
 		glm::vec3 direction;
 
 	protected:
@@ -76,6 +79,10 @@ namespace Razor {
 		glm::vec2 last_pos;
 		bool capture;
 		bool isViewportHovered;
+		float speed;
+		float speed_factor;
+		float min_speed;
+		float max_speed;
 	};
 
 }

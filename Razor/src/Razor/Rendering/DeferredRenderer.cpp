@@ -208,8 +208,8 @@ namespace Razor {
 		}
 		else
 		{
-			node->transform.setPosition(glm::vec3({node->id * node->distance * std::cos(angle + node->id), 0.0f, node->id * node->distance * std::sin(angle + node->id) }));
-			node->transform.setRotation(glm::vec3({ angle, angle, -angle }));
+			//node->transform.setPosition(glm::vec3({ 3 * std::cos(angle), 0.0f, 3 * std::sin(angle) }));
+			node->transform.setRotation(glm::vec3({ glm::radians(90.0f), angle, 0.0f }));
 		}
 
 		glm::mat4 local = parent * node->transform.getMatrix();

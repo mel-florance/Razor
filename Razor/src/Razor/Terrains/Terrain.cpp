@@ -9,7 +9,7 @@ namespace Razor
 		position(position),
 		mesh(nullptr),
 		size(glm::vec2(100.0f, 100.0f)),
-		subdivisions(glm::vec2(8.0f, 8.0f))
+		subdivisions(glm::vec2(32.0f, 32.0f))
 	{
 
 	}

@@ -49,7 +49,7 @@ namespace Razor {
 			ImGui::SetCursorPos(ImVec2(10.0f, 115.0f));
 			ImGui::Text("Sleep  %f", editor->getEngine()->getSleepTiming());
 
-			/*FPSCamera* cam = (FPSCamera*)editor->getEngine()->getScenesManager()->getActiveScene()->getActiveCamera();
+			auto cam = editor->getEngine()->getScenesManager()->getActiveScene()->getActiveCamera();
 
 			if (cam != nullptr)
 			{
@@ -68,7 +68,7 @@ namespace Razor {
 				});
 
 				ImGui::Text(str);
-			}*/
+			}
 
 			ImGui::PopStyleColor();
 		}
