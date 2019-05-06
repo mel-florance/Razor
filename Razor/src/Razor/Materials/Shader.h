@@ -49,9 +49,12 @@ namespace Razor {
 
 		typedef std::map<Type, int> ShadersMap;
 		typedef std::map<Type, std::string> SourcesMap;
+		typedef std::map<std::pair<Type, std::string>, int> ConstantsMap;
+
+		void defineConstant(Type type, const std::string& name, int value);
+		void replaceConstants();
 
 	private:
-
 		unsigned int getUniformLocation(const std::string& name);
 
 		int id;
@@ -59,7 +62,9 @@ namespace Razor {
 		std::string name;
 		SourcesMap sources;
 		ShadersMap shaders;
+		ConstantsMap constants;
 		char status;
+		bool dirty;
 	};
 
 }

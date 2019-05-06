@@ -3,6 +3,10 @@
 #include "Razor/Cameras/Camera.h"
 #include "Razor/Core/Window.h"
 #include <GLFW/glfw3.h>
+#include <glm/gtx/string_cast.hpp>
+#include "Razor/Application/Application.h"
+#include "Editor/Components/Tools.h"
+#include "Editor/Editor.h"
 
 namespace Razor
 {
@@ -12,6 +16,7 @@ namespace Razor
 		projection(projection),
 		view(camera->getViewMatrix())
 	{
+		viewport = glm::vec2(window->GetWidth(), window->GetHeight());
 	}
 
 	Raycast::~Raycast()
@@ -27,8 +32,8 @@ namespace Razor
 	glm::vec2 Raycast::getNormalizedCoords(const glm::vec2& position)
 	{
 		return glm::vec2(
-			(2.0f * position.x) / window->GetWidth() - 1.0f,
-			(2.0f * position.y) / window->GetHeight() - 1.0f
+			2.0f * (position.x / viewport.x) - 1.0f,
+			2.0f * (position.y / viewport.y) - 1.0f
 		);
 	}
 
@@ -72,23 +77,44 @@ namespace Razor
 
 	glm::vec3 Raycast::computeRay()
 	{
+		view = camera->getViewMatrix();
+
+		double x, y;
+		glfwGetCursorPos((GLFWwindow*)window->GetNativeWindow(), &x, &y);
+
+		mouse = glm::vec2(x, -y); // Maybe return -y ? 
+
+		Tools* tools = (Tools*)Application::Get().getEditor()->getComponents()["Tools"];
+
+		if (tools != nullptr) {
+			mouse.x -= tools->getSize().x;
+			mouse.y -= 22.0f;
+		}
+
 		glm::vec2 coords = getNormalizedCoords(mouse);
+
 		glm::vec4 clip = glm::vec4(coords.x, coords.y, -1.0f, 1.0f); 
 		glm::vec4 eye = toEyeCoords(clip);
-		glm::vec3 world = toWorldCoords(eye);
-		
-		return world;
+		ray = toWorldCoords(eye);
+
+		return ray;
 	}
 	
 	void Raycast::onMouseDown(int button)
 	{
+
 	}
 
 	void Raycast::onMouseUp(int button)
 	{
-		double x, y;
-		glfwGetCursorPos((GLFWwindow*)window->GetNativeWindow(), &x, &y);
-		mouse = glm::vec2(x, y); // Maybe return -y ? 
+		//double x, y;
+		//glfwGetCursorPos((GLFWwindow*)window->GetNativeWindow(), &x, &y);
+		//mouse = glm::vec2(x, y); 
+	}
+
+	glm::vec3 Raycast::scaleRay(float distance)
+	{
+		return camera->getPosition() + ray * distance;
 	}
 
 }

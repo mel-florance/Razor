@@ -31,6 +31,7 @@ namespace Razor {
 		inline float getFps() { return m_fps; }
 
 		float computeAverageFps(float fps);
+		inline std::map<int, float>& getFpsList() { return m_fpsList; }
 
 		~GameLoop();
 		Clock* m_clock;

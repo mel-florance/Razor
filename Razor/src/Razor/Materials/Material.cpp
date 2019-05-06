@@ -1,15 +1,121 @@
 #include "rzpch.h"
 #include "Material.h"
+#include "Razor/Lighting/Light.h"
+#include "Razor/Lighting/Directional.h"
+#include "Razor/Lighting/Spot.h"
+#include "Razor/Lighting/Point.h"
 
 namespace Razor {
 
-	Material::Material()
+	Material::Material() :
+		has_diffuse(false),
+		has_specular(false),
+		has_normal(false)
 	{
-	}
 
+	}
 
 	Material::~Material()
 	{
+	}
+
+	void Material::bindLights(Shader* shader, const std::vector<Light*>& lights)
+	{
+		if (shader != nullptr)
+		{
+			std::string paramType;
+			unsigned int sIdx = 0, dIdx = 0, pIdx = 0;
+
+			for (auto light : lights)
+			{
+				if (light->getType() == Light::Type::DIRECTIONAL)
+				{
+					Directional* directional = (Directional*)light;
+					paramType = "directionalLights";
+
+					shader->setUniform3f(formatParamName(paramType, dIdx, "direction"), directional->getDirection());
+					shader->setUniform3f(formatParamName(paramType, dIdx, "ambient"), directional->getAmbient());
+					shader->setUniform3f(formatParamName(paramType, dIdx, "diffuse"), directional->getDiffuse());
+					shader->setUniform3f(formatParamName(paramType, dIdx, "specular"), directional->getSpecular());
+
+					dIdx++;
+				}
+				else if (light->getType() == Light::Type::POINT)
+				{
+					Point* point = (Point*)light;
+					paramType = "pointLights";
+
+					shader->setUniform3f(formatParamName(paramType, pIdx, "position"), point->getPosition());
+					shader->setUniform1f(formatParamName(paramType, pIdx, "constant"), point->getLinear());
+					shader->setUniform1f(formatParamName(paramType, pIdx, "linear"), point->getConstant());
+					shader->setUniform1f(formatParamName(paramType, pIdx, "quadratic"), point->getQuadratic());
+					shader->setUniform3f(formatParamName(paramType, pIdx, "ambient"), point->getAmbient());
+					shader->setUniform3f(formatParamName(paramType, pIdx, "diffuse"), point->getDiffuse());
+					shader->setUniform3f(formatParamName(paramType, pIdx, "specular"), point->getSpecular());
+
+					pIdx++;
+				}
+				else if (light->getType() == Light::Type::SPOT)
+				{
+					Spot* spot = (Spot*)light;
+					paramType = "spotLights";
+
+					shader->setUniform3f(formatParamName(paramType, sIdx, "direction"), spot->getDirection());
+					shader->setUniform3f(formatParamName(paramType, sIdx, "position"), spot->getPosition());
+					shader->setUniform1f(formatParamName(paramType, sIdx, "constant"), spot->getConstant());
+					shader->setUniform1f(formatParamName(paramType, sIdx, "linear"), spot->getLinear());
+					shader->setUniform1f(formatParamName(paramType, sIdx, "quadratic"), spot->getQuadratic());
+					shader->setUniform1f(formatParamName(paramType, sIdx, "inner_cutoff"), spot->getInnerCutoff());
+					shader->setUniform1f(formatParamName(paramType, sIdx, "outer_cutoff"), spot->getOuterCutoff());
+					shader->setUniform3f(formatParamName(paramType, sIdx, "ambient"), spot->getAmbient());
+					shader->setUniform3f(formatParamName(paramType, sIdx, "diffuse"), spot->getDiffuse());
+					shader->setUniform3f(formatParamName(paramType, sIdx, "specular"), spot->getSpecular());
+
+					sIdx++;
+				}
+				else if (light->getType() == Light::Type::AREA)
+				{
+
+				}
+			}
+		}
+	}
+
+	void Material::setTextureMap(TextureType type, unsigned int id)
+	{
+		switch (type)
+		{
+			case TextureType::Diffuse  : has_diffuse  = true; break;
+			case TextureType::Specular : has_specular = true; break;
+			case TextureType::Normal : has_normal = true; break;
+		}
+
+		textures_maps[type] = id;
+	}
+
+	void Material::removeTextureMap(TextureType type)
+	{
+		TexturesMap::iterator it = textures_maps.find(type);
+
+		if (it != textures_maps.end()) 
+		{
+			switch (it->first)
+			{
+				case TextureType::Diffuse: has_diffuse = false; break;
+				case TextureType::Specular: has_specular = false; break;
+				case TextureType::Normal: has_normal = false; break;
+			}
+
+			textures_maps.erase(it);
+		}
+	}
+
+	std::string Material::formatParamName(const std::string& type, unsigned int index, const std::string& name)
+	{
+		std::stringstream str;
+		str << type << "[" << index << "]." << name;
+
+		return str.str();
 	}
 
 }

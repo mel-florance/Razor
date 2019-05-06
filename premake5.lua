@@ -18,6 +18,8 @@ IncludeDir["ImGui"] = "Razor/vendor/imgui"
 IncludeDir["glm"] = "Razor/vendor/glm"
 IncludeDir["stb"] = "Razor/vendor/stb"
 IncludeDir["assimp"] = "Razor/vendor/assimp/include"
+IncludeDir["lua"] = "Razor/vendor/lua/include"
+IncludeDir["bullet"] = "Razor/vendor/bullet/include"
 
 include "Razor/vendor/GLFW"
 include "Razor/vendor/Glad"
@@ -54,11 +56,17 @@ project "Razor"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
+		"%{IncludeDir.lua}",
+		"%{IncludeDir.bullet}",
 		"%{prj.name}/vendor/assimp/include",
 		"%{prj.name}/vendor/assimp/build/include"
 	}
 
-	libdirs { "%{prj.name}/vendor/assimp/build/code/Release" }
+	libdirs { 
+		"%{prj.name}/vendor/assimp/build/code/Release",
+		"%{prj.name}/vendor/lua",
+		"%{prj.name}/vendor/bullet/lib",
+	}
 
 	links
 	{
@@ -66,7 +74,12 @@ project "Razor"
 		"Glad",
 		"ImGui",
 		"opengl32.lib",
-		"assimp"
+		"assimp",
+		"lua53.lib",
+		"BulletCollision.lib",
+		"BulletDynamics.lib",
+		"BulletSoftBody.lib",
+		"LinearMath.lib"
 	}
 
 	filter "system:windows"
@@ -89,7 +102,12 @@ project "Razor"
 			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Release-windows-x86_64/Sandbox",
 			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Debug-windows-x86_64/Sandbox",
 			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Release-windows-x86_64/Server",
-			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Debug-windows-x86_64/Server"
+			"{COPY} ../Razor/vendor/assimp/build/code/Release/assimp.dll ../bin/Debug-windows-x86_64/Server",
+
+			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Release-windows-x86_64/Sandbox",
+			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Debug-windows-x86_64/Sandbox",
+			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Release-windows-x86_64/Server",
+			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Debug-windows-x86_64/Server"
 		}
 
 	filter "configurations:Debug"

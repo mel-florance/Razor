@@ -4,10 +4,12 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
-namespace Razor {
+namespace Razor 
+{
+
 	class Logger;
 
-	class RAZOR_API Log
+	class Log
 	{
 	public:
 		Log();
@@ -25,11 +27,11 @@ namespace Razor {
 		inline static std::shared_ptr<spdlog::logger>& getFileLogger() { return s_fileLogger; }
 		inline static Logger* getEditorLogger() { return s_editorLogger; }
 
+		static void trace(const char* format, ...);
+		static void info(const char* format, ...);
+		static void warn(const char* format, ...);
+		static void error(const char* format, ...);
+		static void fatal(const char* format, ...);
 	};
-}
 
-#define RZ_TRACE(...) ::Razor::Log::getCoreLogger()->trace(__VA_ARGS__); 
-#define RZ_INFO(...)  ::Razor::Log::getCoreLogger()->info(__VA_ARGS__); 
-#define RZ_WARN(...)  ::Razor::Log::getCoreLogger()->warn(__VA_ARGS__);
-#define RZ_ERROR(...) ::Razor::Log::getCoreLogger()->error(__VA_ARGS__); 
-#define RZ_FATAL(...) ::Razor::Log::getCoreLogger()->critical(__VA_ARGS__);
+}

@@ -10,6 +10,7 @@ namespace Razor {
 
 		void bind() const;
 		void unbind() const;
+		void update(unsigned int size, const void* data);
 
 	private:
 		unsigned int id;

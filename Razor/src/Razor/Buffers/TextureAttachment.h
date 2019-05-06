@@ -7,7 +7,7 @@ namespace Razor {
 	class TextureAttachment
 	{
 	public:
-		TextureAttachment(const glm::vec2& size = glm::vec2(256.0f, 256.0f));
+		TextureAttachment(const glm::vec2& size = glm::vec2(256.0f, 256.0f), bool depth = false);
 		~TextureAttachment();
 
 		inline unsigned int getId() { return id; }
@@ -19,6 +19,7 @@ namespace Razor {
 	private:
 		unsigned int id;
 		glm::vec2 size;
+		bool depth;
 	};
 
 }

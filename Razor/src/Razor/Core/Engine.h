@@ -9,6 +9,7 @@ namespace Razor {
 	class Window;
 	class Application;
 	class Event;
+	class World;
 
 	class Engine
 	{
@@ -29,12 +30,15 @@ namespace Razor {
 		inline float getUpdateTiming() { return (float)gameLoop->getProfiler()->getReport("update");  }
 		inline float getRenderTiming() { return (float)gameLoop->getProfiler()->getReport("render");  }
 		inline float getSleepTiming() { return (float)gameLoop->getProfiler()->getReport("sleep");  }
+		inline World* getPhysicsWorld() { return physics_world; }
+		inline std::map<int, float>& getFpsArray() { return gameLoop->getFpsList(); }
 
 	private:
 		Application* application;
 		GameLoop* gameLoop;
 		DeferredRenderer* deferred_renderer;
 		ScenesManager* scenes_manager;
+		World* physics_world;
 	};
 
 }

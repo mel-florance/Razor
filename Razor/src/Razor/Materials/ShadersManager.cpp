@@ -11,9 +11,9 @@ namespace Razor {
 	{
 	}
 
-	std::shared_ptr<Shader> ShadersManager::createShader(const std::string& name)
+	Shader* ShadersManager::createShader(const std::string& name)
 	{
-		std::shared_ptr<Shader> shader = std::make_shared<Shader>(name);
+		Shader* shader = new Shader(name);
 		shaders[name] = shader;
 		
 		return shader;
@@ -29,7 +29,7 @@ namespace Razor {
 		return false;
 	}
 
-	std::shared_ptr<Shader> ShadersManager::getShader(const std::string& name)
+	Shader* ShadersManager::getShader(const std::string& name)
 	{
 		auto shader = shaders.find(name);
 

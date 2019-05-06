@@ -3,17 +3,14 @@
 
 namespace Razor {
 
-	Light::Light(
-		const glm::vec3& ambient,
-		const glm::vec3& diffuse,
-		const glm::vec3& specular
-	) :
+	Light::Light(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular) :
 		ambient(ambient),
 		diffuse(diffuse),
-		specular(specular)
+		specular(specular),
+		shadow_generator(ShadowGenerator()),
+		cast_shadows(false)
 	{
 	}
-
 
 	Light::~Light()
 	{

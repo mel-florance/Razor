@@ -8,11 +8,15 @@
 
 namespace Razor {
 
+	class Editor;
+
 	class RAZOR_API ImGuiLayer : public Layer
 	{
 	public:
-		ImGuiLayer();
+		ImGuiLayer(Editor* editor);
 		~ImGuiLayer();
+
+		void setRotation(const glm::quat &q);
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
@@ -22,6 +26,7 @@ namespace Razor {
 		
 	private:
 		float m_Time = 0.0f;
+		Editor* editor;
 	};
 
 }

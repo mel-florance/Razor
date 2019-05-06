@@ -3,8 +3,10 @@
 #include "AssetsManager.h"
 #include "Logger.h"
 #include "Editor/Editor.h"
+#include "Razor/Materials/TexturesManager.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	AssetsManager::ExtsMap AssetsManager::exts = {
 		{AssetsManager::Type::Model, {"3ds",  "blend", "dae",  "fbx", "gltf", "obj", "raw",  "stl"}},
@@ -15,16 +17,19 @@ namespace Razor {
 
 	AssetsManager* FileBrowser::assetsManager = nullptr;
 	TasksManager* FileBrowser::tasksManager = nullptr;
+	TexturesManager* AssetsManager::texturesManager = nullptr;
 
 	AssetsManager::AssetsManager(Editor* editor) : EditorComponent(editor)
 	{
-		this->directoryWatcher = std::make_shared<DirectoryWatcher>("F:/Razor/Razor/Sandbox", std::chrono::milliseconds(1000));
-		this->fileWatcher = std::make_shared<FileWatcher>();
-		this->fileBrowser = std::make_shared<FileBrowser>();
+		texturesManager = new TexturesManager();
 		FileBrowser::assetsManager = this;
 		FileBrowser::tasksManager = editor->getTasksManager();
 
-		watch();
+		this->directoryWatcher = std::make_shared<DirectoryWatcher>("F:/Razor/Razor/Sandbox", std::chrono::milliseconds(1000));
+		this->fileWatcher = std::make_shared<FileWatcher>();
+		this->fileBrowser = std::make_shared<FileBrowser>();
+
+		//watch();
 	}
 
 	void AssetsManager::watch()
@@ -38,7 +43,7 @@ namespace Razor {
 
 			switch (status) {
 			case DirectoryWatcher::Status::created:
-				RZ_INFO("File created: {0}", path);
+				Log::info("File created: %s", path.c_str());
 				break;
 			case DirectoryWatcher::Status::modified:
 				/*if (path == "./Razor.log") {
@@ -64,14 +69,15 @@ namespace Razor {
 	{
 		ImGui::Begin("Assets Manager");
 
-		this->fileBrowser->render();
+		if(this->fileBrowser != nullptr)
+			this->fileBrowser->render();
 
 		ImGui::End();
 	}
 
 	void AssetsManager::import(void* result, TaskFinished tf, Variant opts)
 	{
-		RZ_TRACE("Task Arguments: {0}", opts.toString());
+		Log::trace("Task Arguments: %s", opts.toString().c_str());
 
 		if (opts.type() == Variant::Type::String)
 		{
@@ -88,16 +94,16 @@ namespace Razor {
 				}
 				break;
 			case Type::Image:
-				RZ_WARN("No image format implemented for the extension: {0}", ext);
+				Log::warn("No image format implemented for the extension: {0}", ext);
 				break;
 			case Type::Audio:
-				RZ_WARN("No Audio format implemented for the extension: {0}", ext);
+				Log::warn("No Audio format implemented for the extension: {0}", ext);
 				break;
 			case Type::Video:
-				RZ_WARN("No Video format implemented for the extension: {0}", ext);
+				Log::warn("No Video format implemented for the extension: {0}", ext);
 				break;
 			default:
-				RZ_ERROR("Unrecognized file extension: {0}", ext);
+				Log::error("Unrecognized file extension: {0}", ext);
 			}
 		}
 	}

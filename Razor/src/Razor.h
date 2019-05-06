@@ -10,6 +10,10 @@
 #include "Razor/Core/TasksManager.h"
 #include "Razor/Types/Variant.h"
 #include "Razor/Types/Array.h"
+#include "Razor/Scene/ScenesManager.h"
+#include "Razor/Materials/Presets/PhongMaterial.h"
+
+#include "Razor/Scripting/Script.h"
 
 #include "Razor/Input/MouseButtons.h"
 #include "Razor/Input/KeyCodes.h"

@@ -2,7 +2,7 @@
 
 #include "Razor/Core/Core.h"
 #include "Razor/Core/Transform.h"
-#include "Razor/Geometry/Mesh.h"
+#include "Razor/Geometry/StaticMesh.h"
 
 namespace Razor {
 
@@ -22,11 +22,11 @@ namespace Razor {
 
 		std::string name;
 		std::vector<Node*> nodes;
-		std::vector<Mesh*> meshes;
+		std::vector<StaticMesh*> meshes;
 		Transform transform;
 		Node* parent;
-		float distance; // for tests
 		unsigned int id;
 	};
+
 
 }

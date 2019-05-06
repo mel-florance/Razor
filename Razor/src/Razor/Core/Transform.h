@@ -8,10 +8,10 @@ namespace Razor
 	class Transform
 	{
 	private:
-		glm::vec3 m_position;
-		glm::vec3 m_rotation;
-		glm::vec3 m_scale;
-		glm::mat4 m_matrix;
+		glm::vec3 m_position = glm::vec3(0.0f);
+		glm::vec3 m_rotation = glm::vec3(0.0f);
+		glm::vec3 m_scale = glm::vec3(1.0f);
+		glm::mat4 m_matrix = glm::mat4(1.0f);
 		bool m_dirty;
 
 	public:
@@ -23,12 +23,11 @@ namespace Razor
 			m_position(position),
 			m_rotation(rotation),
 			m_scale(scale),
-			m_matrix(glm::mat4(1.0f)),
 			m_dirty(true) {}
 
 		virtual ~Transform() {};
 
-		inline glm::mat4 getMatrix()
+		inline glm::mat4& getMatrix()
 		{
 			glm::mat4 positionMatrix = glm::translate(m_position);
 			glm::mat4 rotationXMatrix = glm::rotate(m_rotation.x, glm::vec3(1, 0, 0));

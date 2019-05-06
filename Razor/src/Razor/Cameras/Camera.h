@@ -30,16 +30,29 @@ namespace Razor {
 
 		virtual void update(double dt) {}
 
-		inline glm::mat4 getViewMatrix() { return view; }
-		inline glm::mat4 getProjectionMatrix() { return projection; }
-		inline glm::vec3 getPosition() { return position; }
-		inline glm::vec3 getTarget() { return direction; }
 		inline Window* getWindow() { return window; }
-		inline float getAspectRatio() { return aspect_ratio; }
-		inline float getFov() { return fov; }
-		inline float getSpeed() const { return speed; }
-		inline float getMinSpeed() const { return min_speed; }
-		inline float getMaxSpeed() const { return max_speed; }
+
+		inline glm::mat4& getViewMatrix() { return view; }
+		inline glm::mat4& getProjectionMatrix() { return projection; }
+
+		inline glm::vec3& getPosition() { return position; }
+		inline float& getPositionX() { return position.x; }
+		inline float& getPositionY() { return position.y; }
+		inline float& getPositionZ() { return position.z; }
+
+		inline glm::vec3& getDirection() { return direction; }
+		inline glm::vec3& getVelocity() { return velocity; }
+
+		inline float& getSpeed() { return speed; }
+		inline float& getMinSpeed() { return min_speed; }
+		inline float& getMaxSpeed() { return max_speed; }
+
+		inline Mode& getMode() { return mode; }
+		inline void setMode(Mode mode) { this->mode = mode; }
+		inline float& getFov() { return fov; }
+		inline float& getClipNear() { return clip_near; }
+		inline float& getClipFar() { return clip_far; }
+		inline float& getAspectRatio() { return aspect_ratio; }
 
 		virtual void onEvent(Window* window) {}
 		virtual void onKeyPressed(Direction direction) {}
@@ -51,12 +64,12 @@ namespace Razor {
 		virtual void onMouseUp(int button) {}
 		virtual void onWindowResized(const glm::vec2& size) {}
 
+	protected:
+		Window* window;
+
 		glm::vec3 position;
 		glm::vec3 velocity;
 		glm::vec3 direction;
-
-	protected:
-		Window* window;
 
 		glm::mat4 projection;
 		glm::mat4 view;

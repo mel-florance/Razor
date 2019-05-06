@@ -19,4 +19,32 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgui.ini" />
+    <None Include="RCa12428" />
+    <None Include="RCa18212" />
+    <None Include="RCb12428" />
+    <None Include="RCc12428" />
+    <None Include="Sandbox.aps" />
+    <None Include="config\projects.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="layout.txt" />
+    <Text Include="Razor.log" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Sandbox.rc">
+      <Filter>Fichiers de ressources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
 </Project>

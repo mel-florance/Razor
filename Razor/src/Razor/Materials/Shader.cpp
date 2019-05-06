@@ -7,11 +7,11 @@
 
 namespace Razor {
 
-	Shader::Shader(const std::string& name) : name(name)
+	Shader::Shader(const std::string& name) : 
+		name(name),
+		dirty(true)
 	{
 		load();
-		compile();
-		link();
 	}
 
 	Shader::~Shader()
@@ -28,6 +28,44 @@ namespace Razor {
 		glUseProgram(0);
 	}
 
+	void Shader::defineConstant(Type type, const std::string& name, int value)
+	{
+		constants[std::make_pair(type, name)] = value;
+	}
+
+	void Shader::replaceConstants()
+	{
+		ConstantsMap::iterator it;
+		
+		for (it = constants.begin(); it != constants.end(); ++it)
+		{
+			switch (it->first.first)
+			{
+			case Type::FRAGMENT:
+				std::string out;
+				auto data = sources[Type::FRAGMENT];
+				auto lines = Utils::splitString(data, "\n");
+
+				for (auto& line : lines)
+				{
+					if (line.rfind("#define", 0) == 0)
+					{
+						auto parts = Utils::splitString(line, " ");
+
+						if (parts.at(1) == it->first.second)
+							line = "#define " + it->first.second + " " + std::to_string(it->second);
+					}
+
+					out += line + "\n";
+				}
+
+				sources[Type::FRAGMENT] = out;
+
+				break;
+			}
+		}
+	}
+
 	bool Shader::load()
 	{
 		status &= ~(Status::Loaded);
@@ -42,7 +80,7 @@ namespace Razor {
 		sources[Type::VERTEX] = vert_data;
 		sources[Type::FRAGMENT] = frag_data;
 
-		RZ_INFO("Loaded shader: {0}", name);
+		Log::info("Loaded shader: %s", name.c_str());
 
 		return status & Status::Loaded;
 	}
@@ -71,7 +109,7 @@ namespace Razor {
 
 				if (!status) {
 					glGetShaderInfoLog(shader, 512, NULL, error);
-					RZ_ERROR("Shader compilation failed: {0}.", error);
+					Log::error("Shader compilation failed: {0}.", error);
 				}
 				else {
 					std::string type;
@@ -79,7 +117,7 @@ namespace Razor {
 						case Type::VERTEX: type = "Vertex"; break;
 						case Type::FRAGMENT: type = "Fragment";  break;
 					}
-					RZ_INFO("Compiled {0} shader: {1}.", type, name);
+					Log::info("Compiled %s shader: %s.", type.c_str(), name.c_str());
 					status |= Status::Compiled;
 				}
 			}
@@ -106,10 +144,10 @@ namespace Razor {
 
 		if (!status) {
 			glGetProgramInfoLog(program, 512, NULL, error);
-			RZ_ERROR("Shader program linking failed: {0}.", error);
+			Log::error("Shader program linking failed: {0}.", error);
 		}
 		else {
-			RZ_INFO("Linked shader: {0}.", name);
+			Log::info("Linked shader: %s.", name.c_str());
 			status |= Status::Linked;
 		}
 
@@ -153,7 +191,7 @@ namespace Razor {
 		int location = glGetUniformLocation(program, name.c_str());
 
 		if (location == -1)
-			RZ_WARN("Invalid uniform location: {0}", name);
+			Log::warn("Invalid uniform location: {0}", name);
 
 		return location;
 	}

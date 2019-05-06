@@ -27,10 +27,13 @@ namespace Razor
 		void onMouseUp(int button);
 
 		inline glm::vec3& getRay() { return ray; }
+		glm::vec3 scaleRay(float distance);
+		inline void setViewport(const glm::vec2& size) { viewport = size; }
 
 	private:
 		glm::vec3 ray;
 		glm::vec2 mouse;
+		glm::vec2 viewport;
 		glm::mat4 projection;
 		glm::mat4 view;
 		Camera* camera;

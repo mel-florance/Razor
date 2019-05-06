@@ -3,7 +3,9 @@
 
 namespace Razor {
 
-	Logger::Logger(Editor* editor) : EditorComponent(editor)
+	Logger::Logger(Editor* editor) : 
+		EditorComponent(editor),
+		logs({})
 	{
 		autoScroll = true;
 		scrollToBottom = false;
@@ -14,17 +16,9 @@ namespace Razor {
 	{
 	}
 
-	void Logger::addLog(const char* fmt, ...)
+	void Logger::addLog(const std::string& str)
 	{
-		int old_size = buffer.size();
-		va_list args;
-		va_start(args, fmt);
-		buffer.appendfv(fmt, args);
-		va_end(args);
-
-		for (int new_size = buffer.size(); old_size < new_size; old_size++)
-			if (buffer[old_size] == '\n')
-				lineOffsets.push_back(old_size + 1);
+		logs.emplace_back(str);
 
 		if (autoScroll)
 			scrollToBottom = true;
@@ -32,9 +26,7 @@ namespace Razor {
 
 	void Logger::clear()
 	{
-		buffer.clear();
-		lineOffsets.clear();
-		lineOffsets.push_back(0);
+		//logs.clear();
 	}
 
 	void Logger::render(float delta)
@@ -44,37 +36,9 @@ namespace Razor {
 		ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-		const char* buf = buffer.begin();
-		const char* buf_end = buffer.end();
-
-		if (filter.IsActive())
-		{
-			for (int line_no = 0; line_no < lineOffsets.Size; line_no++)
-			{
-				const char* line_start = buf + lineOffsets[line_no];
-				const char* line_end = (line_no + 1 < lineOffsets.Size) ? (buf + lineOffsets[line_no + 1] - 1) : buf_end;
-
-				if (filter.PassFilter(line_start, line_end))
-					ImGui::TextUnformatted(line_start, line_end);
-			}
-		}
-		else
-		{
-			ImGuiListClipper clipper;
-			clipper.Begin(lineOffsets.Size);
-
-			while (clipper.Step())
-			{
-				for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
-				{
-					const char* line_start = buf + lineOffsets[line_no];
-					const char* line_end = (line_no + 1 < lineOffsets.Size) ? (buf + lineOffsets[line_no + 1] - 1) : buf_end;
-					ImGui::TextUnformatted(line_start, line_end);
-				}
-			}
-
-			clipper.End();
-		}
+		
+		for (auto log : logs)
+			ImGui::Text(log.c_str());
 
 		ImGui::PopStyleVar();
 

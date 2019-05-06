@@ -11,13 +11,13 @@ namespace Razor {
 
 	FPSCamera::FPSCamera(Window* window) :
 		Camera(window),
-		sensitivity(25.0f),
+		sensitivity(15.0f),
 		view_friction(0.0f),
-		move_friction(10.0f),
+		move_friction(15.0f),
 		mouse_offset(glm::vec2()),
 		constrain_pitch(true)
 	{
-		projection = glm::perspective(glm::radians(fov), 16.0f / 9.0f, clip_near, clip_far);
+		projection = glm::perspective(fov, 16.0f / 9.0f, clip_near, clip_far);
 		updateVectors();
 		view = glm::lookAt(position, position + direction, up);
 	}
@@ -72,18 +72,17 @@ namespace Razor {
 		
 		switch (mode) {
 			case Mode::ORTHOGRAPHIC:
-				projection = glm::ortho(-1.5f * aspect_ratio, 1.5f * aspect_ratio, -1.5f, 1.5f, -10.0f, 10.0f);
+				projection = glm::ortho(1.5f * aspect_ratio, -1.5f * aspect_ratio, 1.5f, -1.5f, -100.0f, 100.0f);
 				updateVectors();
 				break;
 
 			case Mode::PERSPECTIVE:
-				projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
+				projection = glm::perspective(fov, aspect_ratio, clip_near, clip_far);
 				updateVectors();
 				break;
 		}
 
-		float r = 1.0f / (1.0f + delta * move_friction);
-		velocity *= r;
+		velocity *= 1.0f / (1.0f + delta * move_friction);
 		position += velocity * delta;
 		view = glm::lookAt(position, position + direction, up);
 	}
@@ -95,12 +94,12 @@ namespace Razor {
 		if (dir == Direction::BACKWARD)
 			velocity -= direction * delta * speed;
 		if (dir == Direction::LEFT)
-			velocity -= right * delta * speed;
-		if (dir == Direction::RIGHT)
 			velocity += right * delta * speed;
-		if (dir == Direction::UP)
-			velocity += up * delta * speed;
+		if (dir == Direction::RIGHT)
+			velocity -= right * delta * speed;
 		if (dir == Direction::DOWN)
+			velocity += up * delta * speed;
+		if (dir == Direction::UP)
 			velocity -= up * delta * speed;
 	}
 
@@ -117,8 +116,8 @@ namespace Razor {
 
 		if (capture)
 		{
-			yaw += sensitivity * (1.0f / 60.0f) *  mouse_offset.x;
-			pitch += sensitivity * (1.0f / 60.0f) * mouse_offset.y;
+			yaw -= sensitivity * (1.0f / 60.0f) *  mouse_offset.x;
+			pitch -= sensitivity * (1.0f / 60.0f) * mouse_offset.y;
 
 			if (constrain)
 			{

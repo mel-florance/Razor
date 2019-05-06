@@ -13,6 +13,9 @@ namespace Razor {
 	FrameBuffer::~FrameBuffer()
 	{
 		glDeleteFramebuffers(1, &id);
+
+		for (auto texture : texturesAttachments)
+			delete texture;
 	}
 
 	void FrameBuffer::bind() const
@@ -25,12 +28,13 @@ namespace Razor {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	TextureAttachment* FrameBuffer::addTextureAttachment(const glm::vec2& size)
+	TextureAttachment* FrameBuffer::addTextureAttachment(const glm::vec2& size, bool depth)
 	{
-		TextureAttachment* texture = new TextureAttachment(size);
+		TextureAttachment* texture = new TextureAttachment(size, depth);
 		bind();
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->getId(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, depth ? GL_DEPTH_ATTACHMENT : GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->getId(), 0);
 		texturesAttachments.push_back(texture);
+
 		return texture;
 	}
 
@@ -41,7 +45,7 @@ namespace Razor {
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, buffer->getId());
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			RZ_ERROR("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+			Log::error("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 
 		rendersBuffersAttachments.push_back(buffer);
 

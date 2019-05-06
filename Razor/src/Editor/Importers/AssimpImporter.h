@@ -20,15 +20,19 @@ namespace Razor {
 
 		bool importMesh(const std::string& filename);
 		void processNode(const aiScene* scene, aiNode* node, Node* parentNode, Node* newNode);
-		Mesh* processMesh(aiMesh* object);
+		StaticMesh* processMesh(aiMesh* object);
+		aiMaterial* getMaterial(unsigned int index);
+
+		std::string extractTextureFilename(const aiString& path);
 
 		bool Update(float percentage = -1.f);
 		float percent;
 
 		Node* rootNode;
-		std::vector<Mesh*> meshes;
+		std::vector<StaticMesh*> meshes;
 
 	private:
+		const aiScene* scene;
 		std::vector<unsigned int> m_indices;
 		std::vector<float> m_vertices;
 		std::vector<float> m_uvs;

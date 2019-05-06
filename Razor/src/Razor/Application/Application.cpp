@@ -27,10 +27,9 @@ namespace Razor {
 			m_Window->SetEventCallback(RZ_BIND_EVENT_FN(Application::OnEvent));
 
 			m_Engine = new Engine(this);
-			m_log = new Log();
-			m_Editor = new Editor(m_Engine);
 
-			m_log->s_editorLogger = (Logger*)m_Editor->getComponents()["Logger"];
+			m_Editor = new Editor(m_Engine);
+			Log::s_editorLogger = (Logger*)m_Editor->getComponents()["Logger"];
 
 			m_ImGuiLayer = m_Editor->getLayer().get();
 			PushLayer(m_Editor);
@@ -40,7 +39,6 @@ namespace Razor {
 
 	Application::~Application()
 	{
-		delete m_log;
 		delete m_Editor;
 	}
 
@@ -75,8 +73,8 @@ namespace Razor {
 		{
 			(*--it)->OnEvent(event);
 		
-			if (event.Handled)
-				break;
+	/*		if (event.Handled)
+				break;*/
 		}
 	}
 

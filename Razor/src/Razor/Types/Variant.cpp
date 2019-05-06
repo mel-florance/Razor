@@ -236,6 +236,78 @@ namespace Razor {
 		return *reinterpret_cast<std::map<std::string, Variant>*>(_ptr);
 	}
 
+	glm::vec2 Variant::toVec2() const
+	{
+		if (_type == Type::Integer)
+			return glm::vec2(_int, _int);
+		else if (_type == Type::Float)
+			return glm::vec2(_float, _float);
+		else if (_type == Type::Vec2)
+			return glm::vec2(*(reinterpret_cast<glm::vec2*>(_ptr)));
+		else
+			throw "Can't convert object to vec2.";
+
+		return glm::vec2();
+	}
+
+	glm::vec3 Variant::toVec3() const
+	{
+		if (_type == Type::Integer)
+			return glm::vec3(_int, _int, _int);
+		else if (_type == Type::Float)
+			return glm::vec3(_float, _float, _float);
+		else if (_type == Type::Vec3)
+			return glm::vec3(*(reinterpret_cast<glm::vec3*>(_ptr)));
+		else
+			throw "Can't convert object to vec3.";
+
+		return glm::vec3();
+	}
+
+	glm::vec4 Variant::toVec4() const
+	{
+		if (_type == Type::Integer)
+			return glm::vec4(_int, _int, _int, _int);
+		else if (_type == Type::Float)
+			return glm::vec4(_float, _float, _float, _float);
+		else if (_type == Type::Vec4)
+			return glm::vec4(*(reinterpret_cast<glm::vec4*>(_ptr)));
+		else
+			throw "Can't convert object to vec4.";
+
+		return glm::vec4();
+	}
+
+	glm::mat2 Variant::toMat2() const
+	{
+		if (_type == Type::Mat2)
+			return glm::mat2(*(reinterpret_cast<glm::mat2*>(_ptr)));
+		else
+			throw "Can't convert object to mat2.";
+
+		return glm::mat2();
+	}
+
+	glm::mat3 Variant::toMat3() const
+	{
+		if (_type == Type::Mat3)
+			return glm::mat3(*(reinterpret_cast<glm::mat3*>(_ptr)));
+		else
+			throw "Can't convert object to mat3.";
+
+		return glm::mat3();
+	}
+
+	glm::mat4 Variant::toMat4() const
+	{
+		if (_type == Type::Mat4)
+			return glm::mat4(*(reinterpret_cast<glm::mat4*>(_ptr)));
+		else
+			throw "Can't convert object to mat4.";
+
+		return glm::mat4();
+	}
+
 	Variant& Variant::operator = (const Variant& other)
 	{
 		_type = other._type;

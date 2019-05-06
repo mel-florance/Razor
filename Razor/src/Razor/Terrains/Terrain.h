@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Razor/Geometry/Mesh.h"
+#include "Razor/Geometry/StaticMesh.h"
 #include <glm/glm.hpp>
 
 namespace Razor
@@ -14,10 +14,10 @@ namespace Razor
 
 		void generate();
 
-		inline Mesh* getMesh() const { return mesh; }
+		inline StaticMesh* getMesh() const { return mesh; }
 
 	private:
-		Mesh* mesh;
+		StaticMesh* mesh;
 		glm::vec3 position;
 		glm::vec2 size;
 		glm::vec2 subdivisions;

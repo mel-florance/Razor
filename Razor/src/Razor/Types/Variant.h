@@ -50,6 +50,12 @@ namespace Razor {
 		float toFloat() const;
 		bool toBool() const;
 		const std::map<std::string, Variant>& toMap() const;
+		glm::vec2 toVec2() const;
+		glm::vec3 toVec3() const;
+		glm::vec4 toVec4() const;
+		glm::mat2 toMat2() const;
+		glm::mat3 toMat3() const;
+		glm::mat4 toMat4() const;
 
 		Type type() const;
 		std::string typeString() const;

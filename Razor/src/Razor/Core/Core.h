@@ -1,6 +1,7 @@
 #pragma once
 
 #pragma warning (disable : 4251)
+#pragma warning (disable : 4006)
 
 #ifdef RZ_PLATFORM_WINDOWS
 #if RZ_DYNAMIC_LINK
@@ -21,7 +22,7 @@
 #endif
 
 #ifdef RZ_ENABLE_ASSERTS
-	#define RZ_ASSERT(x, ...) { if(!(x)) { RZ_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define RZ_ASSERT(x, ...) { if(!(x)) { Log::error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
 	#define RZ_ASSERT(x, ...)
 #endif
@@ -30,7 +31,9 @@
 
 #define RZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
-#define PI 3.14159265358979323846264338327950288419716939937510582f
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+#define PI 3.141592653589793f
 
 typedef __int32 int32;
 typedef unsigned __int32 uint32;

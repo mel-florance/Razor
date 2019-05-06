@@ -4,13 +4,25 @@
 
 namespace Razor {
 
-	TextureAttachment::TextureAttachment(const glm::vec2& size) : size(size)
+	TextureAttachment::TextureAttachment(const glm::vec2& size, bool depth) : size(size), depth(depth)
 	{
 		glGenTextures(1, &id);
 		bind();
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+		int type = depth ? GL_DEPTH_COMPONENT : GL_RGB;
+		glTexImage2D(GL_TEXTURE_2D, 0, type, (GLsizei)size.x, (GLsizei)size.y, 0, type, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		if (depth)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+			float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+			glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+		}
 	}
 
 	TextureAttachment::~TextureAttachment()

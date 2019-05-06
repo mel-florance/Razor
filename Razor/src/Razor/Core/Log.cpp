@@ -8,10 +8,10 @@
 
 namespace Razor {
 
-	RAZOR_API std::shared_ptr<spdlog::logger> Log::s_coreLogger;
-	RAZOR_API std::shared_ptr<spdlog::logger> Log::s_clientLogger;
-	RAZOR_API std::shared_ptr<spdlog::logger> Log::s_fileLogger;
-	RAZOR_API Logger* Log::s_editorLogger;
+	std::shared_ptr<spdlog::logger> Log::s_coreLogger;
+	std::shared_ptr<spdlog::logger> Log::s_clientLogger;
+	std::shared_ptr<spdlog::logger> Log::s_fileLogger;
+	Logger* Log::s_editorLogger;
 
 	Log::Log()
 	{
@@ -34,6 +34,76 @@ namespace Razor {
 		s_clientLogger->set_level(spdlog::level::trace);
 
 		spdlog::set_default_logger(s_fileLogger);
+	}
+
+	void Log::trace(const char* format, ...)
+	{
+		va_list args;
+		char buf[1024];
+		va_start(args, format);
+		vsnprintf(buf, IM_ARRAYSIZE(buf), format, args);
+		s_coreLogger->trace(buf);
+
+		if(s_editorLogger != nullptr)
+			s_editorLogger->addLog(std::string(buf));
+
+		va_end(args);
+	}
+
+	void Log::info(const char* format, ...)
+	{
+		va_list args;
+		char buf[1024];
+		va_start(args, format);
+		vsnprintf(buf, IM_ARRAYSIZE(buf), format, args);
+		s_coreLogger->info(buf);
+
+		if (s_editorLogger != nullptr)
+			s_editorLogger->addLog(std::string(buf));
+
+		va_end(args);
+	}
+
+	void Log::warn(const char * format, ...)
+	{
+		va_list args;
+		char buf[1024];
+		va_start(args, format);
+		vsnprintf(buf, IM_ARRAYSIZE(buf), format, args);
+		s_coreLogger->warn(buf);
+
+		if (s_editorLogger != nullptr)
+			s_editorLogger->addLog(std::string(buf));
+
+		va_end(args);
+	}
+
+	void Log::error(const char * format, ...)
+	{
+		va_list args;
+		char buf[1024];
+		va_start(args, format);
+		vsnprintf(buf, IM_ARRAYSIZE(buf), format, args);
+		s_coreLogger->error(buf);
+
+		if (s_editorLogger != nullptr)
+			s_editorLogger->addLog(std::string(buf));
+
+		va_end(args);
+	}
+
+	void Log::fatal(const char * format, ...)
+	{
+		va_list args;
+		char buf[1024];
+		va_start(args, format);
+		vsnprintf(buf, IM_ARRAYSIZE(buf), format, args);
+		s_coreLogger->critical(buf);
+
+		if (s_editorLogger != nullptr)
+			s_editorLogger->addLog(std::string(buf));
+
+		va_end(args);
 	}
 
 }

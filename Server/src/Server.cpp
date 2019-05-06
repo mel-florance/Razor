@@ -14,7 +14,7 @@ namespace Razor { namespace Network {
 		arr -= n;
 
 		for (auto& item : arr) {
-			RZ_INFO("value: {0}", item.toString());
+			Log::info("value: %s", item.toString().c_str());
 		}
 
 		system("pause");

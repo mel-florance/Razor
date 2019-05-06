@@ -14,7 +14,7 @@ namespace Razor {
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
-		RZ_ERROR("GLFW Error ({0}): {1}", error, description);
+		Log::error("GLFW Error ({0}): {1}", error, description);
 	}
 
 	Window* Window::Create(const WindowProps& props)
@@ -38,7 +38,7 @@ namespace Razor {
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		RZ_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		//Log::info("Creating window %s (%f, %f)", props.Title.c_str(), props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
 		{
@@ -50,6 +50,18 @@ namespace Razor {
 		}
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_SAMPLES, 0);
+
+		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
+		glfwWindowHint(GLFW_DEPTH_BITS, 16);
+
+		glfwMaximizeWindow(m_Window);
+
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		RZ_ASSERT(status, "Failed to initialize Glad!");

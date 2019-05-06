@@ -14,15 +14,14 @@ namespace Razor {
 		~Logger();
 
 		void clear();
-		void addLog(const char* fmt, ...) IM_FMTARGS(2);
+		void addLog(const std::string& str);
 		void render(float delta) override;
 
 	private:
-		ImGuiTextBuffer buffer;
-		ImGuiTextFilter filter;
-		ImVector<int> lineOffsets;
 		bool autoScroll;
 		bool scrollToBottom;
+
+		std::vector<std::string> logs;
 	};
 
 }

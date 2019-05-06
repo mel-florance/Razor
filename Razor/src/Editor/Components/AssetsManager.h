@@ -9,6 +9,8 @@
 #
 namespace Razor {
 
+	class TexturesManager;
+
 	class RAZOR_API AssetsManager : public EditorComponent
 	{
 	public:
@@ -18,7 +20,6 @@ namespace Razor {
 		void watch();
 		void render(float delta) override;
 		static void import(void* result, TaskFinished tf, Variant opts);
-
 
 		enum Type { None, Model, Image, Audio, Video };
 		typedef std::map<Type, std::vector<const char*>> ExtsMap;
@@ -37,6 +38,8 @@ namespace Razor {
 
 			return Type::None;
 		}
+
+		static TexturesManager* texturesManager;
 
 	private:
 		static std::map<Type, std::vector<const char*>> exts;

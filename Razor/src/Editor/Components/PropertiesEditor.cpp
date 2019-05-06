@@ -1,14 +1,23 @@
 #include "rzpch.h"
 #include "imgui.h"
 #include "PropertiesEditor.h"
+#include "Editor/Editor.h"
 
-namespace Razor {
+namespace Razor 
+{
 
-	PropertiesEditor::PropertiesEditor(Editor* editor) : EditorComponent(editor)
+	PropertiesEditor::PropertiesEditor(Editor* editor) :
+		EditorComponent(editor),
+		selection(nullptr),
+		position(glm::vec3(0.0f)),
+		rotation(glm::vec3(0.0f)),
+		scale(glm::vec3(1.0f)),
+		transform_opened(true),
+		static_mesh_opened(false),
+		material_opened(false),
+		name("test")
 	{
-		Documents.push_back(MyDocument("Properties", true, ImVec4(0.4f, 0.8f, 0.4f, 1.0f)));
-		Documents.push_back(MyDocument("World", true, ImVec4(0.4f, 0.8f, 0.4f, 1.0f)));
-		Documents.push_back(MyDocument("Levels", true, ImVec4(0.8f, 0.5f, 1.0f, 1.0f)));
+		selection = (Selection*)editor->getTools()["selection"];
 	}
 
 	PropertiesEditor::~PropertiesEditor()
@@ -19,272 +28,160 @@ namespace Razor {
 	{
 		static PropertiesEditor app(this->editor);
 
+		ImGuiIO& io = ImGui::GetIO();
+		ImFontAtlas* atlas = io.Fonts;
+		ImFont* font = atlas->Fonts[0];
+
 		ImGui::Begin("Properties Editor");
+		
+		Node* selected = nullptr;
 
-		if (ImGui::TreeNode("Groups"))
+		if (selection->getNodes().size() > 0)
+			selected = selection->getNodes().back();
+
+		if (selected != nullptr)
 		{
-			ImGui::BeginGroup();
+			ImGui::PushItemWidth(-1);
+			ImGui::InputText("##name", (char*)selected->name.c_str(), 32);
+			ImGui::PopItemWidth();
+
+			ImGui::Dummy(ImVec2(0.0f, 5.0f));
+			ImGui::SetNextTreeNodeOpen(transform_opened);
+
+			if (Utils::treeNode("Transform"))
 			{
-				ImGui::BeginGroup();
-				ImGui::Button("AAA");
-				ImGui::SameLine();
-				ImGui::Button("BBB");
-				ImGui::SameLine();
-				ImGui::BeginGroup();
-				ImGui::Button("CCC");
-				ImGui::Button("DDD");
-				ImGui::EndGroup();
-				ImGui::SameLine();
-				ImGui::Button("EEE");
-				ImGui::EndGroup();
-				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("First group hovered");
-			}
-			// Capture the group size and create widgets using the same size
-			ImVec2 size = ImGui::GetItemRectSize();
-			const float values[5] = { 0.5f, 0.20f, 0.80f, 0.60f, 0.25f };
-			ImGui::PlotHistogram("##values", values, IM_ARRAYSIZE(values), 0, NULL, 0.0f, 1.0f, size);
+				transform_opened = true;
+				ImGui::Dummy(ImVec2(0.0f, 5.0f));
+				float col_w = 0.0f, input_size = 0.0f;
+				float text_x_offset_y = 3.5f;
 
-			ImGui::Button("ACTION", ImVec2((size.x - ImGui::GetStyle().ItemSpacing.x)*0.5f, size.y));
-			ImGui::SameLine();
-			ImGui::Button("REACTION", ImVec2((size.x - ImGui::GetStyle().ItemSpacing.x)*0.5f, size.y));
-			ImGui::EndGroup();
-			ImGui::SameLine();
+				// Position
+				ImGui::Columns(2, "position_columns", true);
 
-			ImGui::Button("LEVERAGE\nBUZZWORD", size);
-			ImGui::SameLine();
-
-			if (ImGui::ListBoxHeader("List", size))
-			{
-				ImGui::Selectable("Selected", true);
-				ImGui::Selectable("Not Selected", false);
-				ImGui::ListBoxFooter();
-			}
-
-			ImGui::TreePop();
-		}
-
-		static bool opt_reorderable = true;
-		static ImGuiTabBarFlags opt_fitting_flags = ImGuiTabBarFlags_FittingPolicyDefault_;
-
-		// Menu
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				int open_count = 0;
-				for (int doc_n = 0; doc_n < app.Documents.Size; doc_n++)
-					open_count += app.Documents[doc_n].Open ? 1 : 0;
-
-				if (ImGui::BeginMenu("Open", open_count < app.Documents.Size))
+				static unsigned short initial_column_spacing = 0;
+				if (initial_column_spacing < 2)
 				{
-					for (int doc_n = 0; doc_n < app.Documents.Size; doc_n++)
-					{
-						MyDocument* doc = &app.Documents[doc_n];
-						if (!doc->Open)
-							if (ImGui::MenuItem(doc->Name))
-								doc->DoOpen();
-					}
-					ImGui::EndMenu();
-				}
-				if (ImGui::MenuItem("Close All Documents", NULL, false, open_count > 0))
-					for (int doc_n = 0; doc_n < app.Documents.Size; doc_n++)
-						app.Documents[doc_n].DoQueueClose();
-				if (ImGui::MenuItem("Exit", "Alt+F4")) {}
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-
-		// [Debug] List documents with one checkbox for each
-		//for (int doc_n = 0; doc_n < app.Documents.Size; doc_n++)
-		//{
-		//	MyDocument* doc = &app.Documents[doc_n];
-		//	if (doc_n > 0)
-		//		ImGui::SameLine();
-		//	ImGui::PushID(doc);
-		//	if (ImGui::Checkbox(doc->Name, &doc->Open))
-		//		if (!doc->Open)
-		//			doc->DoForceClose();
-		//	ImGui::PopID();
-		//}
-
-		//ImGui::Separator();
-
-		// Submit Tab Bar and Tabs
-		{
-			ImGuiTabBarFlags tab_bar_flags = (opt_fitting_flags) | (opt_reorderable ? ImGuiTabBarFlags_None : 0);
-			if (ImGui::BeginTabBar("##tabs", tab_bar_flags))
-			{
-				if (opt_reorderable)
-					NotifyOfDocumentsClosedElsewhere(app);
-
-				// [DEBUG] Stress tests
-				//if ((ImGui::GetFrameCount() % 30) == 0) docs[1].Open ^= 1;            // [DEBUG] Automatically show/hide a tab. Test various interactions e.g. dragging with this on.
-				//if (ImGui::GetIO().KeyCtrl) ImGui::SetTabItemSelected(docs[1].Name);  // [DEBUG] Test SetTabItemSelected(), probably not very useful as-is anyway..
-
-				// Submit Tabs
-				for (int doc_n = 0; doc_n < app.Documents.Size; doc_n++)
-				{
-					MyDocument* doc = &app.Documents[doc_n];
-					if (!doc->Open)
-						continue;
-
-					ImGuiTabItemFlags tab_flags = (doc->Dirty ? ImGuiTabItemFlags_UnsavedDocument | ImGuiTabItemFlags_NoCloseButton : ImGuiTabItemFlags_NoCloseButton);
-					bool visible = ImGui::BeginTabItem(doc->Name, &doc->Open, tab_flags);
-
-					// Cancel attempt to close when unsaved add to save queue so we can display a popup.
-					if (!doc->Open && doc->Dirty)
-					{
-						doc->Open = true;
-						doc->DoQueueClose();
-					}
-
-					MyDocument::DisplayContextMenu(doc);
-					if (visible)
-					{
-						MyDocument::DisplayContents(doc);
-						ImGui::EndTabItem();
-					}
+					ImGui::SetColumnWidth(0, 70.0f);
+					initial_column_spacing++;
 				}
 
-				ImGui::EndTabBar();
-			}
-		}
+				ImGui::Text("Position");
+				ImGui::NextColumn();
 
-		// Update closing queue
-		static ImVector<MyDocument*> close_queue;
-		if (close_queue.empty())
-		{
-			// Close queue is locked once we started a popup
-			for (int doc_n = 0; doc_n < app.Documents.Size; doc_n++)
-			{
-				MyDocument* doc = &app.Documents[doc_n];
-				if (doc->WantClose)
-				{
-					doc->WantClose = false;
-					close_queue.push_back(doc);
-				}
-			}
-		}
+				ImGui::PushItemWidth(-1.0f);
+				ImGui::DragFloat3("##position", &selected->transform.getPosition()[0]);
+				ImGui::PopItemWidth();
 
-		// Display closing confirmation UI
-		if (!close_queue.empty())
-		{
-			int close_queue_unsaved_documents = 0;
-			for (int n = 0; n < close_queue.Size; n++)
-				if (close_queue[n]->Dirty)
-					close_queue_unsaved_documents++;
+				// Rotation
+				ImGui::NextColumn();
+				ImGui::Text("Rotation");
+				ImGui::NextColumn();
 
-			if (close_queue_unsaved_documents == 0)
-			{
-				// Close documents when all are unsaved
-				for (int n = 0; n < close_queue.Size; n++)
-					close_queue[n]->DoForceClose();
-				close_queue.clear();
+				ImGui::PushItemWidth(-1.0f);
+				ImGui::DragFloat3("##rotation", &selected->transform.getRotation()[0]);
+				ImGui::PopItemWidth();
+
+				// Scale
+				ImGui::NextColumn();
+				ImGui::Text("Scale");
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(-1.0f);
+				ImGui::DragFloat3("##scale", &selected->transform.getScale()[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::Columns(1);
+				ImGui::Dummy(ImVec2(0.0f, 10.0f));
+				ImGui::TreePop();
 			}
 			else
-			{
-				if (!ImGui::IsPopupOpen("Save?"))
-					ImGui::OpenPopup("Save?");
-				if (ImGui::BeginPopupModal("Save?"))
-				{
-					ImGui::Text("Save change to the following items?");
-					ImGui::PushItemWidth(-1.0f);
-					ImGui::ListBoxHeader("##", close_queue_unsaved_documents, 6);
-					for (int n = 0; n < close_queue.Size; n++)
-						if (close_queue[n]->Dirty)
-							ImGui::Text("%s", close_queue[n]->Name);
-					ImGui::ListBoxFooter();
+				transform_opened = false;
 
-					if (ImGui::Button("Yes", ImVec2(80, 0)))
-					{
-						for (int n = 0; n < close_queue.Size; n++)
-						{
-							if (close_queue[n]->Dirty)
-								close_queue[n]->DoSave();
-							close_queue[n]->DoForceClose();
-						}
-						close_queue.clear();
-						ImGui::CloseCurrentPopup();
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("No", ImVec2(80, 0)))
-					{
-						for (int n = 0; n < close_queue.Size; n++)
-							close_queue[n]->DoForceClose();
-						close_queue.clear();
-						ImGui::CloseCurrentPopup();
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("Cancel", ImVec2(80, 0)))
-					{
-						close_queue.clear();
-						ImGui::CloseCurrentPopup();
-					}
-					ImGui::EndPopup();
-				}
+			ImGui::SetNextTreeNodeOpen(static_mesh_opened);
+
+			if (Utils::treeNode("Static Mesh"))
+			{
+				static_mesh_opened = true;
+				ImGui::Dummy(ImVec2(0.0f, 5.0f));
+
+				if (selected->meshes.size() > 0)
+					ImGui::Text(selected->meshes[0]->getName().c_str());
+
+				ImGui::TreePop();
+				ImGui::Dummy(ImVec2(0.0f, 5.0f));
 			}
+			else
+				static_mesh_opened = false;
+
+			ImGui::SetNextTreeNodeOpen(material_opened);
+
+			if (Utils::treeNode("Material"))
+			{
+				material_opened = true;
+	
+				if (selected->meshes.size() > 0) 
+				{
+					if (selected->meshes[0]->getMaterial() != nullptr)
+					{
+						const char* class_name = typeid(*selected->meshes[0]->getMaterial()).name();
+						std::string part = Utils::splitString(class_name, "::")[1];
+						std::string str = part.substr(1, part.size());
+
+						ImGui::Dummy(ImVec2(0.0f, 5.0f));
+						ImGui::Columns(2, "material_cols", false);
+
+						static unsigned short initial_column_spacing = 0;
+
+						if (initial_column_spacing < 2)
+						{
+							ImGui::SetColumnWidth(0, 50.0f);
+							initial_column_spacing++;
+						}
+
+						ImGui::Text("Type");
+						ImGui::NextColumn();
+						ImGui::PushItemWidth(-1);
+							
+						const char* items[] = { "ColorMaterial", "PbrMaterial", "PhongMaterial" };
+
+						if (str == "PhongMaterial")
+							current_material = "PhongMaterial";
+						else if (str == "ColorMaterial")
+							current_material = "ColorMaterial";
+						else if (str == "PbrMaterial")
+							current_material = "PbrMaterial";
+
+						static ImGuiComboFlags flags = 0;
+
+						if (ImGui::BeginCombo("combo 1", str.c_str(), flags))
+						{
+							for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+							{
+								bool is_selected = (str.c_str() == items[n]);
+
+								if (ImGui::Selectable(items[n], is_selected))
+									selected->meshes[0]->getMaterial()->setName(items[n]);
+
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();
+							}
+
+							ImGui::EndCombo();
+						}
+
+						ImGui::PopItemWidth();
+						ImGui::Columns(1);
+					}
+				}
+
+				ImGui::TreePop();
+				ImGui::Dummy(ImVec2(0.0f, 5.0f));
+			}
+			else
+				material_opened = false;
 		}
 
-		
-		ImGui::Separator();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
-		ImGui::Columns(2);
-
-		struct funcs
-		{
-			static void ShowDummyObject(const char* prefix, int uid)
-			{
-				ImGui::PushID(uid);
-				ImGui::AlignTextToFramePadding();
-				bool node_open = ImGui::TreeNode("Object", "%s_%u", prefix, uid);
-				ImGui::NextColumn();
-				ImGui::AlignTextToFramePadding();
-				ImGui::Text("my sailor is rich");
-				ImGui::NextColumn();
-				if (node_open)
-				{
-					static float dummy_members[8] = { 0.0f,0.0f,1.0f,3.1416f,100.0f,999.0f };
-
-					for (int i = 0; i < 8; i++)
-					{
-						ImGui::PushID(i);
-						if (i < 2)
-						{
-							//ShowDummyObject("Child", 424242);
-						}
-						else
-						{
-							ImGui::AlignTextToFramePadding();
-							ImGui::TreeNodeEx("Field", ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_Bullet, "Field_%d", i);
-							ImGui::NextColumn();
-							ImGui::PushItemWidth(-1);
-							if (i >= 5)
-								ImGui::InputFloat("##value", &dummy_members[i], 1.0f);
-							else
-								ImGui::DragFloat("##value", &dummy_members[i], 0.01f);
-							ImGui::PopItemWidth();
-							ImGui::NextColumn();
-						}
-						ImGui::PopID();
-					}
-					ImGui::TreePop();
-				}
-				ImGui::PopID();
-			}
-		};
-
-		for (int obj_i = 0; obj_i < 3; obj_i++)
-			funcs::ShowDummyObject("Object", obj_i);
-
-		ImGui::Columns(1);
-		ImGui::Separator();
-		ImGui::PopStyleVar();
-
 		ImGui::End();
-	
 	}
 
 }

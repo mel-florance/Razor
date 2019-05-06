@@ -14,7 +14,7 @@ namespace Razor {
 	void SceneGraph::addNode(Node* node)
 	{
 		node->id = ++index;
-		nodes.push_back(*node);
+		nodes.push_back(node);
 	}
 
 }

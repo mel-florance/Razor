@@ -7,7 +7,7 @@ namespace Razor {
 	class RAZOR_API Texture
 	{
 	public:
-		Texture(const std::string& filename, bool mimaps = false);
+		Texture(const std::string& filename, bool mimaps = false, bool flipped = true);
 		virtual ~Texture();
 
 		inline unsigned int getId() { return id; }
@@ -22,6 +22,7 @@ namespace Razor {
 		std::string filename;
 		bool mipmaps;
 		float lodBias;
+		bool flipped;
 	};
 
 }

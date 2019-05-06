@@ -199,9 +199,9 @@ namespace Razor {
 			inline RGB toRGB() const
 			{
 				return RGB(
-					(unsigned char)(255) * (1 - c) * (1 - k),
-					(unsigned char)(255) * (1 - m) * (1 - k),
-					(unsigned char)(255) * (1 - y) * (1 - k)
+					(unsigned char)(255 * (1 - c) * (1 - k)),
+					(unsigned char)(255 * (1 - m) * (1 - k)),
+					(unsigned char)(255 * (1 - y) * (1 - k))
 				);
 			}
 
@@ -235,7 +235,7 @@ namespace Razor {
 
 			inline HSL toHSL() const
 			{
-				HSL hsl = HSL(0.0f, 0.0f, 0.0f);
+				HSL hsl = HSL(0, 0.0f, 0.0f);
 
 				float dr = r / 255.0f;
 				float dg = g / 255.0f;
@@ -338,7 +338,7 @@ namespace Razor {
 
 		static int HEXToDEC(const std::string& color)
 		{
-			int len = color.length();
+			size_t len = color.length();
 			double dec = 0;
 
 			for (int i = 0; i < len; ++i)
@@ -350,7 +350,7 @@ namespace Razor {
 				else if (byte >= 65 && byte <= 70)
 					byte -= 55;
 
-				dec += byte * std::pow(16, (len - i) - 1);
+				dec += byte * std::pow(16, ((int)len - i) - 1);
 			}
 
 			return (int)dec;

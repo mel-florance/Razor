@@ -13,7 +13,7 @@ namespace Razor {
 
 		void bind() const;
 		void unbind() const;
-		TextureAttachment* addTextureAttachment(const glm::vec2& size);
+		TextureAttachment* addTextureAttachment(const glm::vec2& size, bool depth = false);
 		RenderBuffer* addRenderBufferAttachment(const glm::vec2& size);
 
 	private:

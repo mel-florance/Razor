@@ -13,6 +13,9 @@
     <Filter Include="src\Editor\Importers">
       <UniqueIdentifier>{17BAD45E-0349-5E28-AC67-722398D56ECE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Editor\Tools">
+      <UniqueIdentifier>{83BE1652-6FB7-35A4-98E9-1A29844115B0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -33,6 +36,12 @@
     </Filter>
     <Filter Include="src\Razor\Core">
       <UniqueIdentifier>{E2D082E0-CE9E-76E6-B732-E70CA39F524B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Ecs">
+      <UniqueIdentifier>{D43BFCC0-40FC-77F7-0937-C17475B6BCD3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Ecs\Components">
+      <UniqueIdentifier>{6994B7A8-55B9-0629-7E04-ECB86A880547}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Events">
       <UniqueIdentifier>{EEA29C11-DA9B-BB63-03CE-A0E8EF259B6F}</UniqueIdentifier>
@@ -55,11 +64,29 @@
     <Filter Include="src\Razor\Materials">
       <UniqueIdentifier>{9B157405-0777-5113-90E4-97C5FC4488D2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Razor\Materials\Presets">
+      <UniqueIdentifier>{7021AB75-DC2E-D95B-6515-D546D121A512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Maths">
+      <UniqueIdentifier>{363E8AF1-A2C9-F7B5-ABDA-7AAA17E553B6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Particles">
+      <UniqueIdentifier>{A0574CEB-0CB9-29F9-9526-70AB018760B8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Phyics">
+      <UniqueIdentifier>{E9EA522A-D5E3-717C-FE15-5701EA6D5188}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Razor\Rendering">
       <UniqueIdentifier>{17DCD02B-833D-AE39-0CAB-F4EB780BE5F8}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Scene">
       <UniqueIdentifier>{E7AAF7F1-5336-65B6-5C47-E8AAC851C1B6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Scripting">
+      <UniqueIdentifier>{CC872408-38E9-0116-C156-48C82DB738D5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Terrains">
+      <UniqueIdentifier>{E1711FC5-CD55-E01A-36B6-DA6D22B9CA9C}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Types">
       <UniqueIdentifier>{6E0116F2-DA8C-83B6-E39D-06AB4FA8DFB6}</UniqueIdentifier>
@@ -123,6 +150,9 @@
     <ClInclude Include="src\Editor\Components\Outliner.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\Components\ProjectsManager.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Editor\Components\PropertiesEditor.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
@@ -138,8 +168,20 @@
     <ClInclude Include="src\Editor\EditorComponent.h">
       <Filter>src\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\EditorTool.h">
+      <Filter>src\Editor</Filter>
+    </ClInclude>
     <ClInclude Include="src\Editor\Importers\AssimpImporter.h">
       <Filter>src\Editor\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Tools\Gizmo.h">
+      <Filter>src\Editor\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Tools\GridAxis.h">
+      <Filter>src\Editor\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Tools\Selection.h">
+      <Filter>src\Editor\Tools</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>src\Platform\Windows</Filter>
@@ -192,16 +234,37 @@
     <ClInclude Include="src\Razor\Cameras\Camera.h">
       <Filter>src\Razor\Cameras</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Cameras\FPSCamera.h">
+      <Filter>src\Razor\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Cameras\TPSCamera.h">
+      <Filter>src\Razor\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Clock.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Core\Core.h">
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Core\Engine.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\GameLoop.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Core\Log.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Profiler.h">
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Core\Task.h">
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Core\TasksManager.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Timer.h">
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Core\Transform.h">
@@ -212,6 +275,24 @@
     </ClInclude>
     <ClInclude Include="src\Razor\Core\Window.h">
       <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Ecs\Component.h">
+      <Filter>src\Razor\Ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Ecs\Components\StaticMeshComponent.h">
+      <Filter>src\Razor\Ecs\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Ecs\Components\TransformComponent.h">
+      <Filter>src\Razor\Ecs\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Ecs\Entity.h">
+      <Filter>src\Razor\Ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Ecs\Manager.h">
+      <Filter>src\Razor\Ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Ecs\System.h">
+      <Filter>src\Razor\Ecs</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Events\ApplicationEvent.h">
       <Filter>src\Razor\Events</Filter>
@@ -225,6 +306,9 @@
     <ClInclude Include="src\Razor\Events\MouseEvent.h">
       <Filter>src\Razor\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Filesystem\Config.h">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Filesystem\DirectoryWatcher.h">
       <Filter>src\Razor\Filesystem</Filter>
     </ClInclude>
@@ -237,10 +321,25 @@
     <ClInclude Include="src\Razor\Geometry\Geometry.h">
       <Filter>src\Razor\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Geometry\Mesh.h">
+    <ClInclude Include="src\Razor\Geometry\SkeletalMesh.h">
       <Filter>src\Razor\Geometry</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Geometry\StaticMesh.h">
+      <Filter>src\Razor\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\ImGui\ImCurveEdit.h">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\ImGui\ImGradient.h">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\ImGui\ImGuizmo.h">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\ImGui\ImSequencer.h">
       <Filter>src\Razor\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Input\Input.h">
@@ -261,11 +360,26 @@
     <ClInclude Include="src\Razor\Lighting\Point.h">
       <Filter>src\Razor\Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Lighting\ShadowGenerator.h">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Lighting\Spot.h">
       <Filter>src\Razor\Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Materials\CubemapTexture.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Materials\Material.h">
       <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Presets\ColorMaterial.h">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Presets\PbrMaterial.h">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Presets\PhongMaterial.h">
+      <Filter>src\Razor\Materials\Presets</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Materials\Shader.h">
       <Filter>src\Razor\Materials</Filter>
@@ -276,16 +390,52 @@
     <ClInclude Include="src\Razor\Materials\Texture.h">
       <Filter>src\Razor\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Materials\TexturesManager.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Maths\Maths.h">
+      <Filter>src\Razor\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Maths\Raycast.h">
+      <Filter>src\Razor\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Particles\Particle.h">
+      <Filter>src\Razor\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Particles\ParticleSystem.h">
+      <Filter>src\Razor\Particles</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Rendering\Pipeline.h">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Rendering\RenderPass.h">
       <Filter>src\Razor\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Scene\Node.h">
       <Filter>src\Razor\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Scene\Scene.h">
+      <Filter>src\Razor\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Scene\SceneGraph.h">
       <Filter>src\Razor\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Scene\ScenesManager.h">
+      <Filter>src\Razor\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Scripting\Script.h">
+      <Filter>src\Razor\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Terrains\Terrain.h">
+      <Filter>src\Razor\Terrains</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Types\Array.h">
+      <Filter>src\Razor\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Types\Color.h">
       <Filter>src\Razor\Types</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Types\Variant.h">
@@ -1632,29 +1782,13 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Scene\ScenesManager.h" />
-    <ClInclude Include="src\Razor\Scene\Scene.h" />
-    <ClInclude Include="src\Editor\Components\ProjectsManager.h" />
-    <ClInclude Include="src\Razor\Filesystem\Config.h" />
-    <ClInclude Include="src\Razor\Ecs\Component.h" />
-    <ClInclude Include="src\Razor\Ecs\System.h" />
-    <ClInclude Include="src\Razor\Ecs\Manager.h" />
-    <ClInclude Include="src\Razor\Ecs\Entity.h" />
-    <ClInclude Include="src\Razor\Ecs\Components\TransformComponent.h" />
-    <ClInclude Include="src\Razor\Ecs\Components\StaticMeshComponent.h" />
-    <ClInclude Include="src\Razor\Core\Profiler.h" />
-    <ClInclude Include="src\Razor\Core\GameLoop.h" />
-    <ClInclude Include="src\Razor\Core\Clock.h" />
-    <ClInclude Include="src\Razor\Core\Timer.h" />
-    <ClInclude Include="src\Razor\Core\Engine.h" />
-    <ClInclude Include="src\Razor\Rendering\RenderPass.h" />
-    <ClInclude Include="src\Razor\Rendering\Pipeline.h" />
-    <ClInclude Include="src\Razor\Cameras\FPSCamera.h" />
-    <ClInclude Include="src\Razor\Cameras\TPSCamera.h" />
-    <ClInclude Include="src\Razor\Types\Color.h" />
-    <ClInclude Include="src\Razor\Maths\Maths.h" />
-    <ClInclude Include="src\Razor\Maths\Raycast.h" />
-    <ClInclude Include="src\Razor\Terrains\Terrain.h" />
+    <ClInclude Include="src\Razor\Physics\World.h">
+      <Filter>src\Razor\Phyics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\PhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\SpherePhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\CubePhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\PlanePhysicsBody.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -1675,6 +1809,9 @@
     <ClCompile Include="src\Editor\Components\Outliner.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\Components\ProjectsManager.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
@@ -1690,8 +1827,20 @@
     <ClCompile Include="src\Editor\EditorComponent.cpp">
       <Filter>src\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\EditorTool.cpp">
+      <Filter>src\Editor</Filter>
+    </ClCompile>
     <ClCompile Include="src\Editor\Importers\AssimpImporter.cpp">
       <Filter>src\Editor\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Tools\Gizmo.cpp">
+      <Filter>src\Editor\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Tools\GridAxis.cpp">
+      <Filter>src\Editor\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Tools\Selection.cpp">
+      <Filter>src\Editor\Tools</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
@@ -1735,7 +1884,25 @@
     <ClCompile Include="src\Razor\Cameras\Camera.cpp">
       <Filter>src\Razor\Cameras</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Cameras\FPSCamera.cpp">
+      <Filter>src\Razor\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Cameras\TPSCamera.cpp">
+      <Filter>src\Razor\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\Clock.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\Engine.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\GameLoop.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Core\Log.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\Profiler.cpp">
       <Filter>src\Razor\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Core\Task.cpp">
@@ -1744,8 +1911,35 @@
     <ClCompile Include="src\Razor\Core\TasksManager.cpp">
       <Filter>src\Razor\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Core\Timer.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Core\Transform.cpp">
       <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\Utils.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Ecs\Component.cpp">
+      <Filter>src\Razor\Ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Ecs\Components\StaticMeshComponent.cpp">
+      <Filter>src\Razor\Ecs\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Ecs\Components\TransformComponent.cpp">
+      <Filter>src\Razor\Ecs\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Ecs\Entity.cpp">
+      <Filter>src\Razor\Ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Ecs\Manager.cpp">
+      <Filter>src\Razor\Ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Ecs\System.cpp">
+      <Filter>src\Razor\Ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Filesystem\Config.cpp">
+      <Filter>src\Razor\Filesystem</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Filesystem\DirectoryWatcher.cpp">
       <Filter>src\Razor\Filesystem</Filter>
@@ -1759,13 +1953,28 @@
     <ClCompile Include="src\Razor\Geometry\Geometry.cpp">
       <Filter>src\Razor\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Geometry\Mesh.cpp">
+    <ClCompile Include="src\Razor\Geometry\SkeletalMesh.cpp">
       <Filter>src\Razor\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Geometry\StaticMesh.cpp">
+      <Filter>src\Razor\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\ImGui\ImCurveEdit.cpp">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\ImGui\ImGradient.cpp">
+      <Filter>src\Razor\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\ImGui\ImGuiBuild.cpp">
       <Filter>src\Razor\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\ImGui\ImGuiLayer.cpp">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\ImGui\ImGuizmo.cpp">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\ImGui\ImSequencer.cpp">
       <Filter>src\Razor\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Lighting\Directional.cpp">
@@ -1777,11 +1986,26 @@
     <ClCompile Include="src\Razor\Lighting\Point.cpp">
       <Filter>src\Razor\Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Lighting\ShadowGenerator.cpp">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Lighting\Spot.cpp">
       <Filter>src\Razor\Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Materials\CubemapTexture.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Materials\Material.cpp">
       <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Presets\ColorMaterial.cpp">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Presets\PbrMaterial.cpp">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Presets\PhongMaterial.cpp">
+      <Filter>src\Razor\Materials\Presets</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Materials\Shader.cpp">
       <Filter>src\Razor\Materials</Filter>
@@ -1792,14 +2016,44 @@
     <ClCompile Include="src\Razor\Materials\Texture.cpp">
       <Filter>src\Razor\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Materials\TexturesManager.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Maths\Raycast.cpp">
+      <Filter>src\Razor\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Particles\Particle.cpp">
+      <Filter>src\Razor\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Particles\ParticleSystem.cpp">
+      <Filter>src\Razor\Particles</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Rendering\Pipeline.cpp">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Rendering\RenderPass.cpp">
       <Filter>src\Razor\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Scene\Node.cpp">
       <Filter>src\Razor\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Scene\Scene.cpp">
+      <Filter>src\Razor\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Scene\SceneGraph.cpp">
       <Filter>src\Razor\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Scene\ScenesManager.cpp">
+      <Filter>src\Razor\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Scripting\Script.cpp">
+      <Filter>src\Razor\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Terrains\Terrain.cpp">
+      <Filter>src\Razor\Terrains</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Types\Array.cpp">
       <Filter>src\Razor\Types</Filter>
@@ -1810,27 +2064,13 @@
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Scene\ScenesManager.cpp" />
-    <ClCompile Include="src\Razor\Scene\Scene.cpp" />
-    <ClCompile Include="src\Editor\Components\ProjectsManager.cpp" />
-    <ClCompile Include="src\Razor\Filesystem\Config.cpp" />
-    <ClCompile Include="src\Razor\Ecs\Component.cpp" />
-    <ClCompile Include="src\Razor\Ecs\System.cpp" />
-    <ClCompile Include="src\Razor\Ecs\Manager.cpp" />
-    <ClCompile Include="src\Razor\Ecs\Entity.cpp" />
-    <ClCompile Include="src\Razor\Ecs\Components\TransformComponent.cpp" />
-    <ClCompile Include="src\Razor\Ecs\Components\StaticMeshComponent.cpp" />
-    <ClCompile Include="src\Razor\Core\GameLoop.cpp" />
-    <ClCompile Include="src\Razor\Core\Clock.cpp" />
-    <ClCompile Include="src\Razor\Core\Profiler.cpp" />
-    <ClCompile Include="src\Razor\Core\Timer.cpp" />
-    <ClCompile Include="src\Razor\Core\Engine.cpp" />
-    <ClCompile Include="src\Razor\Rendering\Pipeline.cpp" />
-    <ClCompile Include="src\Razor\Rendering\RenderPass.cpp" />
-    <ClCompile Include="src\Razor\Cameras\FPSCamera.cpp" />
-    <ClCompile Include="src\Razor\Cameras\TPSCamera.cpp" />
-    <ClCompile Include="src\Razor\Maths\Raycast.cpp" />
-    <ClCompile Include="src\Razor\Terrains\Terrain.cpp" />
+    <ClCompile Include="src\Razor\Physics\World.cpp">
+      <Filter>src\Razor\Phyics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\PhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\CubePhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\PlanePhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\SpherePhysicsBody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">

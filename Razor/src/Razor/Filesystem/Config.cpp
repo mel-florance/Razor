@@ -46,8 +46,8 @@ namespace Razor {
 		std::ifstream file;
 		file.open(filename);
 
-		if(!file)
-			RZ_ERROR("Can't open config file: {0}", filename)
+		if (!file)
+			Log::error("Can't open config file: {0}", filename);
 	
 		for (std::string line; std::getline(file, line);)
 		{

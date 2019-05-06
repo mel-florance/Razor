@@ -6,6 +6,8 @@
 namespace Razor {
 
 	class ScenesManager;
+	class Node;
+	class Selection;
 
 	class RAZOR_API Outliner : public EditorComponent
 	{
@@ -13,9 +15,11 @@ namespace Razor {
 		Outliner(Editor* editor);
 		~Outliner();
 
+		void drawNode(Node* node);
 		void render(float delta) override;
 
 	private:
+		Selection* selection;
 		ScenesManager* scenesManager;
 	};
 

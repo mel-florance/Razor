@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Razor/Ecs/Component.h"
-#include "Razor/Geometry/Mesh.h"
+#include "Razor/Geometry/StaticMesh.h"
 
 namespace Razor {
 
@@ -11,7 +11,7 @@ namespace Razor {
 		StaticMeshComponent();
 		~StaticMeshComponent();
 
-		Mesh mesh;
+		StaticMesh mesh;
 	};
 
 }

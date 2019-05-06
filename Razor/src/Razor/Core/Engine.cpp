@@ -7,17 +7,22 @@
 #include "Razor/Application/LayerStack.h"
 #include "Razor/Events/Event.h"
 #include "GLFW/glfw3.h"
+#include "Razor/Physics/World.h"
 
-namespace Razor {
+namespace Razor
+{
 
-	Engine::Engine(Application* application) : application(application)
+	Engine::Engine(Application* application) :
+		application(application)
 	{
 		gameLoop = new GameLoop(this);
 		gameLoop->setUpdateCallback(&Engine::update);
 		gameLoop->setRenderCallback(&Engine::render);
 
+		physics_world = new World();
+
 		scenes_manager = new ScenesManager();
-		deferred_renderer = new DeferredRenderer(&application->GetWindow(), scenes_manager);
+		deferred_renderer = new DeferredRenderer(&application->GetWindow(), this, scenes_manager);
 	}
 
 	Engine::~Engine()
@@ -45,31 +50,31 @@ namespace Razor {
 			if (event.GetEventType() == EventType::MouseButtonPressed) {
 				MouseButtonEvent& e = (MouseButtonEvent&)event;
 				camera->onMouseDown(e.GetMouseButton());
-				event.Handled = true;
+				//event.Handled = true;
 			}
 
 			if (event.GetEventType() == EventType::MouseButtonReleased) {
 				MouseButtonEvent& e = (MouseButtonEvent&)event;
 				camera->onMouseUp(e.GetMouseButton());
-				event.Handled = true;
+				//event.Handled = true;
 			}
 
 			if (event.GetEventType() == EventType::MouseMoved) {
 				MouseMovedEvent& e = (MouseMovedEvent&)event;
-				event.Handled = true;
+				//event.Handled = true;
 				camera->onMouseMoved(glm::vec2(e.GetX(), e.GetY()));
 			}
 
 			if (event.GetEventType() == EventType::MouseScrolled) {
 				MouseScrolledEvent& e = (MouseScrolledEvent&)event;
 				camera->onMouseScrolled(glm::vec2(e.GetXOffset(), e.GetYOffset()));
-				event.Handled = true;
+				//event.Handled = true;
 			}
 
 			if (event.GetEventType() == EventType::WindowResize) {
 				WindowResizeEvent& e = (WindowResizeEvent&)event;
 				camera->onWindowResized(glm::vec2(e.GetWidth(), e.GetHeight()));
-				event.Handled = true;
+				//event.Handled = true;
 			}
 
 			if (event.GetEventType() == EventType::KeyPressed) {

@@ -1,4 +1,5 @@
 #include "rzpch.h"
+
 #include "imgui.h"
 #include "ImGuiLayer.h"
 
@@ -8,14 +9,23 @@
 
 #include "Razor/Application/Application.h"
 
-// TEMPORARY
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+
+#include "Razor/ImGui/ImGuizmo.h"
+#include "imgui_internal.h"
+
+#include "Editor/Editor.h"
+#include "Razor/Core/Engine.h"
+#include "Razor/Scene/ScenesManager.h"
+#include "Razor/Cameras/Camera.h"
+
 namespace Razor {
 
-	ImGuiLayer::ImGuiLayer()
-		: Layer("ImGuiLayer")
+	ImGuiLayer::ImGuiLayer(Editor* editor) :
+		Layer("ImGuiLayer"),
+		editor(editor)
 	{
 	}
 
@@ -37,7 +47,7 @@ namespace Razor {
 
 		/// 0 = FLAT APPEARENCE
 		/// 1 = MORE "3D" LOOK
-		int is3D = 0;
+		int is3D = 1;
 
 		colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
@@ -147,11 +157,16 @@ namespace Razor {
 		//ImGui::ShowDemoWindow(&show);
 	}
 
+	void ImGuiLayer::setRotation(const glm::quat & q)
+	{
+	}
+
 	void ImGuiLayer::Begin()
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		//ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()
@@ -161,6 +176,7 @@ namespace Razor {
 		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
 		ImGui::Render();
+
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		if (io.ConfigFlags && ImGuiConfigFlags_ViewportsEnable)

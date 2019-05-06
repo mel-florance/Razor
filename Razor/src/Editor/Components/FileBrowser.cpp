@@ -3,7 +3,7 @@
 #include "FileBrowser.h"
 #include "AssetsManager.h"
 #include "Razor/Core/TasksManager.h"
-#include "Razor/Geometry/Mesh.h"
+#include "Razor/Geometry/StaticMesh.h"
 #include "Editor/Editor.h"
 
 namespace Razor {
@@ -30,7 +30,7 @@ namespace Razor {
 		std::cout << "item clicked: " << path << ", isDir: " <<  isDir << std::endl;
 
 		if (!isDir) {
-			Mesh mesh;
+			StaticMesh mesh;
 			tasksManager->add({
 				&mesh, 
 				&AssetsManager::import,
@@ -49,11 +49,19 @@ namespace Razor {
 		ImGui::Columns(2, "twoColumns", true);
 		ImGui::PopStyleVar();
 
+		static unsigned short initial_column_spacing = 0;
+		if (initial_column_spacing < 2)
+		{
+			ImGui::SetColumnWidth(0, 220.0f);
+			initial_column_spacing++;
+		}
+
 		if (oldVisibility != isVisible)
 		{
 			oldVisibility = isVisible;
 
-			if (isVisible) {
+			if (isVisible) 
+			{
 				currentPath = fs::current_path();
 				currentPathIsDir = true;
 

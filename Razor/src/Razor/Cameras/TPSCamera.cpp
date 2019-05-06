@@ -17,7 +17,7 @@ namespace Razor {
 		Camera(window),
 		target(new Transform()),
 		sensitivity(15.0f),
-		pitch(-30.0f),
+		pitch(30.0f),
 		yaw(0.0f),
 		roll(0.0f),
 		distance(5.0f),
@@ -76,7 +76,7 @@ namespace Razor {
 		viewMatrix = glm::rotate(viewMatrix, glm::radians(yaw), glm::vec3(0, 1, 0));
 		view = glm::translate(viewMatrix, glm::vec3(-position[0], -position[1], -position[2]));
 
-		angle -= 8.0f * dt;
+		//angle -= 8.0f * (float)dt;
 
 		setProjection();
 	}
@@ -91,10 +91,10 @@ namespace Razor {
 		switch (mode) 
 		{
 			case Mode::ORTHOGRAPHIC:
-				projection = glm::ortho(-1.5f * aspect_ratio, 1.5f * aspect_ratio, -1.5f, 1.5f, -10.0f, 10.0f);
+				projection = glm::ortho(-1.5f * aspect_ratio, 1.5f * aspect_ratio, -1.5f, 1.5f, -100.0f, 100.0f);
 				break;
 			case Mode::PERSPECTIVE:
-				projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
+				projection = glm::perspective(fov, aspect_ratio, clip_near, clip_far);
 				break;
 		}
 	}
@@ -124,14 +124,14 @@ namespace Razor {
 			else
 			{
 				float diff = mouse_position.y * sensitivity * delta;
-				pitch -= diff;
+				pitch += diff;
 
 				if (pitch < pitch_min)
 					pitch = pitch_min;
 				else if (pitch > pitch_max)
 					pitch = pitch_max;
 
-				angle -= mouse_position.x * sensitivity * delta;
+				angle += mouse_position.x * sensitivity * delta;
 			}
 		}
 	}

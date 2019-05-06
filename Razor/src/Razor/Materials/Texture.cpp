@@ -10,10 +10,12 @@
 
 namespace Razor {
 
-	Texture::Texture(const std::string& filename, bool mipmaps) :
+	Texture::Texture(const std::string& filename, bool mipmaps, bool flipped) :
 		filename(filename),
 		mipmaps(mipmaps),
-		lodBias(0.0f)
+		lodBias(0.0f),
+		flipped(flipped),
+		id(NULL)
 	{
 		this->load();
 	}
@@ -21,10 +23,12 @@ namespace Razor {
 	Texture* Texture::Texture::load()
 	{
 		int width, height, numComponents;
+		stbi_set_flip_vertically_on_load(flipped);
+
 		unsigned char* imageData = stbi_load(filename.c_str(), &width, &height, &numComponents, 4);
 
 		if (imageData == NULL) {
-			RZ_ERROR("Texture loading failed for texture: {0}", filename);
+			Log::error("Texture loading failed for texture: {0}", filename);
 			return nullptr;
 		}
 
@@ -37,15 +41,20 @@ namespace Razor {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		if (mipmaps) {
+		if (mipmaps) 
+		{
 			glGenerateMipmap(GL_TEXTURE_2D);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-			//glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, m_lodBias);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, -1.0f);
 		}
 		else
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-		RZ_INFO("Loaded texture: {0} : {1}", filename, Utils::getFileSize(filename));
+		float anisotropy = 0.6f;
+		glGetFloatv(GL_TEXTURE_MAX_ANISOTROPY, &anisotropy);
+		glTexParameterf(GL_TEXTURE_2D, GL_MAX_TEXTURE_MAX_ANISOTROPY, anisotropy);
+
+		Log::info("Loaded texture: %s : %s", filename.c_str(), Utils::getFileSize(filename).c_str());
 
 		stbi_image_free(imageData);
 

@@ -18,11 +18,18 @@
 #include "Components/Logger.h"
 #include "Components/ProjectsManager.h"
 
+#include "Tools/Selection.h"
+#include "Tools/Gizmo.h"
+#include "Tools/GridAxis.h"
+
 namespace Razor {
 
 	class Engine;
+	class TPSCamera;
+	class FPSCamera;
 
 	typedef std::map<std::string, EditorComponent*> ComponentsMap;
+	typedef std::map<std::string, EditorTool*> ToolsMap;
 
 	class RAZOR_API Editor : public Razor::Layer
 	{
@@ -37,6 +44,7 @@ namespace Razor {
 		inline Engine* getEngine() { return m_Engine; }
 		inline std::shared_ptr<ImGuiLayer> getLayer() { return m_ImGuiLayer;  }
 		inline ComponentsMap& getComponents() { return components; }
+		inline ToolsMap& getTools() { return tools; }
 		inline TasksManager* getTasksManager() { return tasksManager; }
 
 		template<class T>
@@ -44,7 +52,19 @@ namespace Razor {
 			auto it = components.find(name);
 
 			if (it != components.end())
-				return it->second;
+				return dynamic_cast<T>(it->second);
+
+			return nullptr;
+		}
+
+		template<class T>
+		inline T getTool(const std::string& name) {
+			auto it = tools.find(name);
+
+			if (it != tools.end())
+				return dynamic_cast<T>(it->second);
+
+			return nullptr;
 		}
 
 		static void importFinished(void* result);
@@ -56,7 +76,13 @@ namespace Razor {
 		TasksManager* tasksManager;
 		std::unique_ptr<AssimpImporter> assimpImporter;
 		ComponentsMap components;
+		ToolsMap tools;
 		float delta;
+
+		TPSCamera* tps_camera;
+		FPSCamera* fps_camera;
+
+		int cam_type;
 	};
 
 }

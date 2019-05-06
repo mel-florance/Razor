@@ -4,21 +4,29 @@
 
 #include "Razor/Core/Engine.h"
 #include "Razor/Scene/ScenesManager.h"
-#include "Razor/Geometry/Mesh.h"
+#include "Razor/Geometry/StaticMesh.h"
 #include "Razor/Application/Application.h"
 #include "Razor/Materials/Texture.h"
 #include "Razor/ECS/Manager.h"
 
+#include "Razor/Cameras/FPSCamera.h"
+#include "Razor/Cameras/TPSCamera.h"
+
 #include "Razor/Ecs/Components/StaticMeshComponent.h"
 #include "Razor/Types/Color.h"
 
-namespace Razor {
+namespace Razor 
+{
 
-	Editor::Editor(Engine* engine)
+	Editor::Editor(Engine* engine) : cam_type(0)
 	{
 		m_Engine = engine;
-		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
+		m_ImGuiLayer = std::make_shared<ImGuiLayer>(this);
 		tasksManager = new TasksManager();
+
+		tools["selection"] = new Selection(this);
+		tools["gizmo"] = new Gizmo(this);
+		tools["grid_axis"] = new GridAxis(this);
 
 		components["ProjectsManager"] = new ProjectsManager(this);
 		components["AssetsManager"] = new AssetsManager(this);
@@ -33,19 +41,27 @@ namespace Razor {
 		ProjectsManager* projManager = (ProjectsManager*)components["ProjectsManager"];
 		projManager->loadProjects();
 
-		ECS::Manager* ecsManager = new ECS::Manager();;
-		auto& entity = ecsManager->createEntity();
+		//ECS::Manager* ecsManager = new ECS::Manager();;
+		//auto& entity = ecsManager->createEntity();
 
-		entity.addComponent<StaticMeshComponent>();
-		entity.destroy();
-		ecsManager->refresh();
+		//entity.addComponent<StaticMeshComponent>();
+		//entity.destroy();
+		//ecsManager->refresh();
 
-		Color::RGB color(131, 82, 31);
-		Color::HSL h = color.toHSL();
+		//Color::RGB color(131, 82, 31);
+		//Color::HSL h = color.toHSL();
 
-		std::cout << h.h << std::endl;
-		std::cout << h.s << std::endl;
-		std::cout << h.l << std::endl;
+		//std::cout << h.h << std::endl;
+		//std::cout << h.s << std::endl;
+		//std::cout << h.l << std::endl;
+
+		tps_camera = new TPSCamera(&Application::Get().GetWindow());
+		fps_camera = new FPSCamera(&Application::Get().GetWindow());
+
+		auto scene = Application::Get().getScenesManager()->getActiveScene();
+		scene->addCamera(tps_camera);
+		scene->addCamera(fps_camera);
+		scene->setActiveCamera(tps_camera);
 	}
 
 	void Editor::OnUpdate(float dt)
@@ -68,21 +84,17 @@ namespace Razor {
 	{
 		Node* node = new Node(static_cast<Node*>(result));
 
-		if (node != nullptr) {
+		if (node != nullptr) 
+		{
 			setupMeshBuffers(node);
-
 			std::shared_ptr<Scene> scene = Application::Get().getScenesManager()->getActiveScene();
 
-			node->transform.setPosition(glm::vec3(
-				Utils::randomf(-10.0f, 10.0f),
-				Utils::randomf(-10.0f, 10.0f),
-				Utils::randomf(-10.0f, 10.0f)
-			));
-			node->distance = Utils::randomf(0.02f, 0.03f);
+			node->transform.setScale(glm::vec3(0.005f, 0.005f, 0.005f));
+			//node->transform.setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+			//node->transform.setRotation(glm::vec3(glm::radians(90.0f), 0.0f, 0.0f));
 
 			scene->getSceneGraph()->addNode(node);
-
-			RZ_INFO("Successfully imported model: {0}", node->name);
+			Log::info("Successfully imported model: %s", node->name.c_str());
 		}
 	}
 
@@ -94,11 +106,8 @@ namespace Razor {
 
 			if (e.GetKeyCode() == RZ_KEY_SPACE)
 			{
-				//Texture* texture = new Texture("./icon.png");
-
-				Mesh mesh;
-
-				AssetsManager::import(&mesh, &Editor::importFinished, Variant("data/Chair.fbx"));
+				StaticMesh mesh;
+				AssetsManager::import(&mesh, &Editor::importFinished, Variant("data/sponza.obj"));
 
 				//tasksManager->add({ mesh,  &AssetsManager::import, &Editor::importFinished, Variant("data/house.fbx"), "Import task 1", 50 });
 		/*		tasksManager->add({ &mesh1, &AssetsManager::import, &AssetsManager::finished, Variant("data/Lia.fbx"), "Import task 2", 200 });
@@ -106,7 +115,34 @@ namespace Razor {
 				tasksManager->add({ &mesh3, &AssetsManager::import, &AssetsManager::finished, Variant("house_wood_4.fbx"), "Import task 4", 74 });*/
 			}
 
-			RZ_INFO("{0}", (char)e.GetKeyCode());
+			if (e.GetKeyCode() == RZ_KEY_C)
+			{
+				if (cam_type == 0) 
+				{
+					cam_type = 1;
+					Application::Get().getScenesManager()->getActiveScene()->setActiveCamera(fps_camera);
+				}
+				else 
+				{
+					cam_type = 0;
+					Application::Get().getScenesManager()->getActiveScene()->setActiveCamera(tps_camera);
+				}
+			}
+
+			if (e.GetKeyCode() == RZ_KEY_N)
+			{
+				Viewport* vp = (Viewport*)components["Viewport"];
+				vp->toggleProperties();
+			}
+
+			if (e.GetKeyCode() == RZ_KEY_T)
+			{
+				Tools* tools_panel = (Tools*)components["Tools"];
+				tools_panel->togglePanel();
+			}
+
+
+			//Log::trace("%c", (char)e.GetKeyCode());
 		}
 	}
 
@@ -134,21 +170,33 @@ namespace Razor {
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);
 		}
 
-		ComponentsMap::iterator it;
-		for (it = components.begin(); it != components.end(); ++it)
-			it->second->render(delta);
+		ComponentsMap::iterator it_c;
+		for (it_c = components.begin(); it_c != components.end(); ++it_c)
+			it_c->second->render(delta);
+
+		ToolsMap::iterator it_t;
+		for (it_t = tools.begin(); it_t != tools.end(); ++it_t)
+			it_t->second->render(delta);
 
 		if (menu != nullptr)
 		{
 			if (menu->show_create_project == true)
 			{
 				ImGui::SetNextWindowPosCenter(ImGuiCond_Always);
+				ImGui::SetNextWindowFocus();
+
 				if (ImGui::Begin("Create Project", &menu->show_create_project, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
 				{
+					ImGui::Columns(2, "twoColumns", true);
+
 					char name[32] = "";
-					ImGui::Text("Project name:");
-					ImGui::SameLine();
+					ImGui::Text("Project name ");
+
+					ImGui::NextColumn();
+
+					ImGui::PushItemWidth(-1);
 					ImGui::InputText("", name, 32, ImGuiInputTextFlags_CharsHexadecimal);
+
 					ImGui::End();
 				}
 			}

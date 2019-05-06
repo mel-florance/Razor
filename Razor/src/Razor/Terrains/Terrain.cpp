@@ -24,7 +24,8 @@ namespace Razor
 	{
 		std::vector<float> vertices;
 		std::vector<unsigned int> indices;
-		mesh = new Mesh();
+		mesh = new StaticMesh();
+		mesh->setDrawMode(StaticMesh::DrawMode::TRIANGLE_STRIP);
 		unsigned int row = 0, col = 0;
 
 		for (row = 0; row <= subdivisions.y; row++)
