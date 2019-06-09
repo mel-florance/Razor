@@ -32,7 +32,7 @@ namespace Razor
 		body = new btRigidBody(shape_data);
 
 		body->setUserPointer((void*)user_ptr);
-		body->setActivationState(DISABLE_DEACTIVATION);
+		//body->setActivationState(DISABLE_DEACTIVATION);
 		body->setMassProps(mass, inertia);
 
 		//body->setDamping(linear_damping, angular_damping);

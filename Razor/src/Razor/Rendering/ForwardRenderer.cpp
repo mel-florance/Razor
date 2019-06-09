@@ -12,9 +12,9 @@
 
 #include "Razor/Core/Engine.h"
 #include "Razor/Physics/World.h"
-#include "Razor/Physics/PlanePhysicsBody.h"
-#include "Razor/Physics/SpherePhysicsBody.h"
-#include "Razor/Physics/CubePhysicsBody.h"
+#include "Razor/Physics/Bodies/PlanePhysicsBody.h"
+#include "Razor/Physics/Bodies/SpherePhysicsBody.h"
+#include "Razor/Physics/Bodies/CubePhysicsBody.h"
 #include "Razor/Scene/SceneGraph.h"
 #include "Razor/Cameras/FPSCamera.h"
 #include "Razor/Cameras/TPSCamera.h"
@@ -315,23 +315,30 @@ namespace Razor
 			node->transform.setRotation(rot);
 
 			std::shared_ptr<StaticMesh> object;
-			if (rand() % 2)
+			PhysicsBody* body;
+
+			if (rand() % 2) 
+			{
+				body = new CubePhysicsBody(node.get(), glm::vec3(1.0f, 1.0f, 1.0f), scene->getActiveCamera()->getPosition() + scene->getActiveCamera()->getDirection(), rot);
 				object = std::make_shared<Cube>();
-			else 
+			}
+			else
+			{
+				body = new SpherePhysicsBody(node.get(), 1.0f, scene->getActiveCamera()->getPosition() + scene->getActiveCamera()->getDirection(), rot);
 				object = std::make_shared<UVSphere>();
-
+			}
+			
 			object->setPhysicsEnabled(true);
-
-			CubePhysicsBody* body = new CubePhysicsBody(node.get(), glm::vec3(1.0f, 1.0f, 1.0f), scene->getActiveCamera()->getPosition(), rot);
 			body->init();
-			glm::vec3 dir = scene->getActiveCamera()->getDirection() * 2000.0f;
-			btVector3 direction = btVector3(btScalar(dir.x), btScalar(dir.y), btScalar(dir.z));
-			body->getBody()->setLinearVelocity(direction);
 
 			object->setPhysicsBody(body);
 			node->meshes.push_back(object);
 			engine->getPhysicsWorld()->addNode(node);
 			scene->getSceneGraph()->addNode(node);
+
+			glm::vec3 dir = scene->getActiveCamera()->getDirection() * 20.0f;
+			glm::vec3 pos = scene->getActiveCamera()->getPosition();
+			body->getBody()->applyImpulse(btVector3(dir.x, dir.y, dir.z), btVector3(pos.x, pos.y, pos.z));
 		}
 	}
 

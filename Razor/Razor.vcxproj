@@ -189,6 +189,9 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Razor\Physics\Constraints\Slider.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\Hinge.h" />
+    <ClInclude Include="src\Razor\Physics\PhysicsConstraint.h" />
     <ClInclude Include="src\Razor\Rendering\Renderer.h" />
     <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h" />
     <ClInclude Include="src\Razor\Rendering\Pipelines\PbrPipeline.h" />
@@ -296,10 +299,10 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="src\Razor\Maths\Raycast.h" />
     <ClInclude Include="src\Razor\Particles\Particle.h" />
     <ClInclude Include="src\Razor\Particles\ParticleSystem.h" />
-    <ClInclude Include="src\Razor\Physics\CubePhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\Bodies\CubePhysicsBody.h" />
     <ClInclude Include="src\Razor\Physics\PhysicsBody.h" />
-    <ClInclude Include="src\Razor\Physics\PlanePhysicsBody.h" />
-    <ClInclude Include="src\Razor\Physics\SpherePhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\Bodies\PlanePhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\Bodies\SpherePhysicsBody.h" />
     <ClInclude Include="src\Razor\Physics\World.h" />
     <ClInclude Include="src\Razor\Rendering\ForwardRenderer.h" />
     <ClInclude Include="src\Razor\Rendering\Pipeline.h" />
@@ -762,6 +765,9 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Razor\Physics\Constraints\Slider.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\Hinge.cpp" />
+    <ClCompile Include="src\Razor\Physics\PhysicsConstraint.cpp" />
     <ClCompile Include="src\Razor\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp" />
     <ClCompile Include="src\Razor\Rendering\Pipelines\PbrPipeline.cpp" />
@@ -857,10 +863,10 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClCompile Include="src\Razor\Maths\Raycast.cpp" />
     <ClCompile Include="src\Razor\Particles\Particle.cpp" />
     <ClCompile Include="src\Razor\Particles\ParticleSystem.cpp" />
-    <ClCompile Include="src\Razor\Physics\CubePhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\Bodies\CubePhysicsBody.cpp" />
     <ClCompile Include="src\Razor\Physics\PhysicsBody.cpp" />
-    <ClCompile Include="src\Razor\Physics\PlanePhysicsBody.cpp" />
-    <ClCompile Include="src\Razor\Physics\SpherePhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\Bodies\PlanePhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\Bodies\SpherePhysicsBody.cpp" />
     <ClCompile Include="src\Razor\Physics\World.cpp" />
     <ClCompile Include="src\Razor\Rendering\ForwardRenderer.cpp" />
     <ClCompile Include="src\Razor\Rendering\Pipeline.cpp" />

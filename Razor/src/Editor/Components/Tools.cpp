@@ -10,9 +10,9 @@
 #include "Editor/Tools/Selection.h"
 
 #include "Razor/Physics/World.h"
-#include "Razor/Physics/CubePhysicsBody.h"
-#include "Razor/Physics/PlanePhysicsBody.h"
-#include "Razor/Physics/SpherePhysicsBody.h"
+#include "Razor/Physics/Bodies/CubePhysicsBody.h"
+#include "Razor/Physics/Bodies/PlanePhysicsBody.h"
+#include "Razor/Physics/Bodies/SpherePhysicsBody.h"
 
 #include "Editor/Components/AssetsManager.h"
 #include "Razor/Materials/TexturesManager.h"

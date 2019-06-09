@@ -438,16 +438,7 @@
     <ClInclude Include="src\Razor\Particles\ParticleSystem.h">
       <Filter>src\Razor\Particles</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Physics\CubePhysicsBody.h">
-      <Filter>src\Razor\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Razor\Physics\PhysicsBody.h">
-      <Filter>src\Razor\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Physics\PlanePhysicsBody.h">
-      <Filter>src\Razor\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Physics\SpherePhysicsBody.h">
       <Filter>src\Razor\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Physics\World.h">
@@ -1839,6 +1830,18 @@
     </ClInclude>
     <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h" />
     <ClInclude Include="src\Razor\Rendering\Renderer.h" />
+    <ClInclude Include="src\Razor\Physics\PhysicsConstraint.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\Hinge.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\Slider.h" />
+    <ClInclude Include="src\Razor\Physics\Bodies\CubePhysicsBody.h">
+      <Filter>src\Razor\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Bodies\PlanePhysicsBody.h">
+      <Filter>src\Razor\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Bodies\SpherePhysicsBody.h">
+      <Filter>src\Razor\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -2099,16 +2102,7 @@
     <ClCompile Include="src\Razor\Particles\ParticleSystem.cpp">
       <Filter>src\Razor\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Physics\CubePhysicsBody.cpp">
-      <Filter>src\Razor\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Razor\Physics\PhysicsBody.cpp">
-      <Filter>src\Razor\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Physics\PlanePhysicsBody.cpp">
-      <Filter>src\Razor\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Physics\SpherePhysicsBody.cpp">
       <Filter>src\Razor\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Physics\World.cpp">
@@ -2159,6 +2153,18 @@
     </ClCompile>
     <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp" />
     <ClCompile Include="src\Razor\Rendering\Renderer.cpp" />
+    <ClCompile Include="src\Razor\Physics\PhysicsConstraint.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\Hinge.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\Slider.cpp" />
+    <ClCompile Include="src\Razor\Physics\Bodies\CubePhysicsBody.cpp">
+      <Filter>src\Razor\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Bodies\PlanePhysicsBody.cpp">
+      <Filter>src\Razor\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Bodies\SpherePhysicsBody.cpp">
+      <Filter>src\Razor\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PhysicsBody.h"
+#include "Razor/Physics/PhysicsBody.h"
 
 namespace Razor
 {

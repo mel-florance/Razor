@@ -83,16 +83,6 @@ namespace Razor
 				Log::trace("%s", "ok");
 			}
 
-			/*glBegin(GL_LINES);
-			glColor3f(0, 0, 0);
-
-			btVector3 ptA = cp.getPositionWorldOnA();
-			btVector3 ptB = cp.getPositionWorldOnB();
-
-			glVertex3d(ptA.x(), ptA.y(), ptA.z());
-			glVertex3d(ptB.x(), ptB.y(), ptB.z());
-			glEnd();
-*/
 			return 0;
 		}
 	};
@@ -105,7 +95,6 @@ namespace Razor
 			{
 				if (mesh->getPhysicsEnabled() && mesh->getPhysicsBody() != nullptr)
 				{
-				
 					btTransform transform;
 					mesh->getPhysicsBody()->getBody()->getMotionState()->getWorldTransform(transform);
 
@@ -125,12 +114,7 @@ namespace Razor
 
 					glm::decompose(matrix, scale, orientation, translation, skew, persp);
 					node->transform.setRotation(glm::eulerAngles(orientation));
-
-				/*	btDrawingResult renderCallback;
-					world->contactTest(mesh->getPhysicsBody()->getBody(), renderCallback);*/
-
-					//node->transform.setScale(scale);
-					//mesh->getPhysicsBody()->getBody()->clearForces(); // really needed ? 
+					node->transform.setScale(scale);
 				}
 			}
 		}

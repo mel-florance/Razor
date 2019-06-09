@@ -31,8 +31,8 @@ namespace Razor
 		body->setRestitution(0.1f);
 		body->setFriction(0.5f);
 		body->setRollingFriction(0.5f);
-		body->setActivationState(DISABLE_DEACTIVATION);
-		body->setMassProps(2.0f, btVector3(0.0f, 0.0f, 0.0f));
+		//body->setActivationState(DISABLE_DEACTIVATION);
+		body->setMassProps(mass, inertia);
 
 		initialized = true;
 	}
