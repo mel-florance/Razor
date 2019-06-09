@@ -621,7 +621,7 @@ namespace ImGuizmo
       trans.x *= gContext.mWidth;
       trans.y *= gContext.mHeight;
       trans.x += gContext.mX;
-      trans.y += gContext.mY;
+      trans.y += gContext.mY - gContext.mModel.v.position.y;
       return ImVec2(trans.x, trans.y);
    }
 

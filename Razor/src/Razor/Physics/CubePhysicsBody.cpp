@@ -4,8 +4,13 @@
 namespace Razor
 {
 
-	CubePhysicsBody::CubePhysicsBody(const glm::vec3& extents) : 
-		PhysicsBody(),
+	CubePhysicsBody::CubePhysicsBody(
+		Node* node,
+		const glm::vec3& extents, 
+		const glm::vec3& position,
+		const glm::vec3& rotation
+	) : 
+		PhysicsBody(node, position, rotation),
 		extents(extents)
 	{
 		shape = new btBoxShape(btVector3(extents.x, extents.y, extents.z));
@@ -17,14 +22,24 @@ namespace Razor
 
 	void CubePhysicsBody::init()
 	{
-		btVector3 inertia(0, 0, 0);
+		btVector3 inertia;
+		btScalar linear_damping = 0.5f;
+		btScalar angular_damping = 0.5f;
 		((btBoxShape*)shape)->calculateLocalInertia(mass, inertia);
-		body = new btRigidBody({ mass, motion_state, (btBoxShape*)shape, inertia });
+		btRigidBody::btRigidBodyConstructionInfo shape_data = btRigidBody::btRigidBodyConstructionInfo(mass, motion_state, (btBoxShape*)shape, inertia);
+		shape_data.m_linearDamping = linear_damping;
+		shape_data.m_angularDamping = angular_damping;
+		body = new btRigidBody(shape_data);
 
-		body->setRestitution(1.0f);
-		body->setFriction(0.5f);
-		body->setRollingFriction(0.5f);
+		body->setUserPointer((void*)user_ptr);
 		body->setActivationState(DISABLE_DEACTIVATION);
+		body->setMassProps(mass, inertia);
+
+		//body->setDamping(linear_damping, angular_damping);
+		//body->setRestitution(1.0f);
+		//body->setFriction(0.0f);
+		//body->setRollingFriction(0.0f);
+		//body->setSpinningFriction(0.0f);
 
 		initialized = true;
 	}

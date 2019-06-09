@@ -8,7 +8,9 @@ namespace Razor {
 		diffuse(diffuse),
 		specular(specular),
 		shadow_generator(ShadowGenerator()),
-		cast_shadows(false)
+		cast_shadows(true),
+		type(Type::POINT),
+		intensity(1.0f)
 	{
 	}
 

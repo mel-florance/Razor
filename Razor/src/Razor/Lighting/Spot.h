@@ -13,22 +13,22 @@ namespace Razor {
 		inline glm::vec3& getPosition() { return position; }
 		inline void setPosition(const glm::vec3& pos) { position = pos; }
 
-		inline float getConstant() { return constant; }
+		inline float& getConstant() { return constant; }
 		inline void setConstant(float value) { constant = value; }
 
-		inline float getLinear() { return linear; }
+		inline float& getLinear() { return linear; }
 		inline void setLinear(float value) { linear = value; }
 
-		inline float getQuadratic() { return quadratic; }
+		inline float& getQuadratic() { return quadratic; }
 		inline void setQuadratic(float value) { quadratic = value; }
 
 		inline glm::vec3& getDirection() { return direction; }
 		inline void setDirection(const glm::vec3& value) { direction = value; }
 
-		inline float getInnerCutoff() { return inner_cutoff; }
+		inline float& getInnerCutoff() { return inner_cutoff; }
 		inline void setInnerCutoff(float value) { inner_cutoff = value; }
 
-		inline float getOuterCutoff() { return outer_cutoff; }
+		inline float& getOuterCutoff() { return outer_cutoff; }
 		inline void setOuterCutoff(float value) { outer_cutoff = value; }
 
 	private:

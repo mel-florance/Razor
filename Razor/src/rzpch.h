@@ -19,6 +19,8 @@
 #include <stdint.h>
 #include <cassert>
 #include <type_traits>
+#include <iomanip>
+#include <locale>
 
 #include <array>
 #include <set>

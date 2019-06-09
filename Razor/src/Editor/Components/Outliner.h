@@ -15,7 +15,7 @@ namespace Razor {
 		Outliner(Editor* editor);
 		~Outliner();
 
-		void drawNode(Node* node);
+		void drawNode(std::shared_ptr<Node> node, unsigned int index);
 		void render(float delta) override;
 
 	private:

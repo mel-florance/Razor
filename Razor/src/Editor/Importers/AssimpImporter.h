@@ -15,29 +15,35 @@ namespace Razor {
 	{
 	public:
 		AssimpImporter();
+		virtual ~AssimpImporter();
 
-		inline Node* getNodeData() { return rootNode; }
+		inline std::shared_ptr<Node> getNodeData() { return rootNode; }
 
 		bool importMesh(const std::string& filename);
-		void processNode(const aiScene* scene, aiNode* node, Node* parentNode, Node* newNode);
-		StaticMesh* processMesh(aiMesh* object);
+		void processNode(aiNode* node, std::shared_ptr<Node> parentNode, std::shared_ptr<Node> newNode);
+		std::shared_ptr<StaticMesh> processMesh(aiMesh* object);
 		aiMaterial* getMaterial(unsigned int index);
 
 		std::string extractTextureFilename(const aiString& path);
 
-		bool Update(float percentage = -1.f);
+		inline void resetRootNode() 
+		{
+			for (auto mesh : meshes)
+				mesh.reset();
+
+			meshes.clear();
+			rootNode.reset();
+		}
+
+		bool Update(float percentage = -1.f) override;
 		float percent;
 
-		Node* rootNode;
-		std::vector<StaticMesh*> meshes;
+		std::shared_ptr<Node> rootNode;
+		std::vector<std::shared_ptr<StaticMesh>> meshes;
 
 	private:
 		const aiScene* scene;
-		std::vector<unsigned int> m_indices;
-		std::vector<float> m_vertices;
-		std::vector<float> m_uvs;
-		std::vector<float> m_normals;
-		std::vector<float> m_tangents;
+		Assimp::Importer* importer;
 	};
 
 }

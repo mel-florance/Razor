@@ -7,6 +7,8 @@
 namespace Razor {
 
 	class GridAxis;
+	class Gizmo;
+	class Selection;
 
 	class RAZOR_API Viewport : public EditorComponent
 	{
@@ -17,10 +19,11 @@ namespace Razor {
 		void render(float delta) override;
 
 		inline glm::vec2& getSize() { return size; }
-		inline bool getIsHovered() { return hovered; }
-		inline bool getIsFullscreen() { return is_fullscreen; }
+		inline bool isHovered() { return hovered; }
+		inline bool isFullscreen() { return is_fullscreen; }
 		void toggleFullscreen();
 		void toggleProperties();
+		void showContextMenu();
 
 	private:
 		glm::vec2 size;
@@ -31,6 +34,8 @@ namespace Razor {
 		bool view_opened;
 		bool show_grid;
 		bool show_grid_axis;
+		bool show_context_menu;
+		glm::vec2 context_menu_position;
 		int grid_size;
 		float viewport_fov;
 		float viewport_clip_start;
@@ -38,6 +43,8 @@ namespace Razor {
 		bool is_fullscreen;
 		glm::vec3 cursor_position;
 		GridAxis* grid_axis;
+		Gizmo* gizmo;
+		Selection* selection;
 	};
 
 }

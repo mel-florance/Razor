@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include "Razor/Maths/Maths.h"
+#include "BulletCollision/CollisionDispatch/btCollisionWorld.h"
 
 namespace Razor
 {
@@ -21,6 +22,8 @@ namespace Razor
 		glm::vec4 toEyeCoords(const glm::vec4& clip);
 		glm::vec3 toWorldCoords(const glm::vec4& eye);
 		
+		void test();
+
 		bool intersects(const BoundingBox& box);
 
 		void onMouseDown(int button);
@@ -38,6 +41,7 @@ namespace Razor
 		glm::mat4 view;
 		Camera* camera;
 		Window* window;
+
 	};
 
 }

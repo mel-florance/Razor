@@ -1,7 +1,6 @@
 #pragma once
 
 #pragma warning (disable : 4251)
-#pragma warning (disable : 4006)
 
 #ifdef RZ_PLATFORM_WINDOWS
 #if RZ_DYNAMIC_LINK
@@ -34,6 +33,8 @@
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 #define PI 3.141592653589793f
+#define TAU 2.0f * PI
+#define EPSILON 0.001f
 
 typedef __int32 int32;
 typedef unsigned __int32 uint32;

@@ -4,7 +4,8 @@
 namespace Razor
 {
 
-	TexturesManager::TexturesManager()
+	TexturesManager::TexturesManager() : 
+		textures({})
 	{
 	}
 

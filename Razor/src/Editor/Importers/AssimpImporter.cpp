@@ -18,6 +18,11 @@ namespace Razor {
 	{
 	}
 
+	AssimpImporter::~AssimpImporter()
+	{
+		delete importer;
+	}
+
 	bool AssimpImporter::Update(float percentage)
 	{
 		percent = percentage;
@@ -26,10 +31,10 @@ namespace Razor {
 	
 	bool AssimpImporter::importMesh(const std::string& filename)
 	{
-		Assimp::Importer importer;
-		importer.SetProgressHandler((Assimp::ProgressHandler*)this);
+		importer = new Assimp::Importer();
+		importer->SetProgressHandler((Assimp::ProgressHandler*)this);
 
-		scene = importer.ReadFile(filename,
+		scene = importer->ReadFile(filename,
 			aiProcess_CalcTangentSpace |
 			//aiProcess_GenSmoothNormals |
 			aiProcess_Triangulate |
@@ -41,16 +46,16 @@ namespace Razor {
 			aiProcess_ImproveCacheLocality
 		);
 
-		if (!scene)
-		{
-			Log::warn(importer.GetErrorString());
+		if (!scene) {
+			Log::warn("Can't load mesh file: %s", filename.c_str());
+			Log::warn(importer->GetErrorString());
 			return false;
-		}	
+		}
 	
 		if (scene->HasMeshes())
 		{
 			for (unsigned i = 0; i < scene->mNumMeshes; ++i) {
-				StaticMesh* mesh = processMesh(scene->mMeshes[i]);
+				std::shared_ptr<StaticMesh> mesh = processMesh(scene->mMeshes[i]);
 				meshes.resize(i);
 				meshes.push_back(mesh);
 			}
@@ -63,9 +68,13 @@ namespace Razor {
 
 		if (scene->mRootNode != NULL)
 		{
-			rootNode = new Node();
-			processNode(scene, scene->mRootNode, 0, rootNode);
-			//this->rootNode.reset(rootNode);
+			rootNode = std::make_shared<Node>();
+			auto parts = Utils::splitString(filename, ".");
+			auto pathname = parts[0];
+			auto str = pathname.substr(pathname.find_last_of("/") + 1);
+			rootNode->name = str;
+			processNode(scene->mRootNode, nullptr, rootNode);
+			//resetRootNode();
 		}
 		else
 		{
@@ -73,10 +82,12 @@ namespace Razor {
 			return false;
 		}
 
+		importer->FreeScene();
+
 		return true;
 	}
 
-	void AssimpImporter::processNode(const aiScene* scene, aiNode* node, Node* parentNode, Node* newNode)
+	void AssimpImporter::processNode(aiNode* node, std::shared_ptr<Node> parentNode, std::shared_ptr<Node> newNode)
 	{
 		const char* name = node->mName.length != 0 ? node->mName.C_Str() : "child_node";
 
@@ -89,19 +100,28 @@ namespace Razor {
 			newNode->meshes[i] = meshes[node->mMeshes[i]];
 
 		for (unsigned int i = 0; i < node->mNumChildren; ++i)
-		{
-			newNode->nodes.push_back(new Node());
-			this->processNode(scene, node->mChildren[i], parentNode, newNode->nodes[i]);
+		{ 
+			std::shared_ptr<Node> n = std::make_shared<Node>();
+			n->name = std::string(node->mName.C_Str());
+			newNode->nodes.push_back(n);
+			this->processNode(node->mChildren[i], parentNode, newNode->nodes[i]);
 		}
+
+		/*std::sort(newNode->nodes.begin(), newNode->nodes.end(),
+		[](const Node& a, const Node& b) -> bool
+		{
+			return a.name > b.name;
+		});*/
 	}
 
-	StaticMesh* AssimpImporter::processMesh(aiMesh* object)
+	std::shared_ptr<StaticMesh> AssimpImporter::processMesh(aiMesh* object)
 	{
-		const char* name = object->mName.length != 0 ? object->mName.C_Str() : "";
-		StaticMesh* mesh = new StaticMesh();
+		std::string name = object->mName.length != 0 ? std::string(object->mName.C_Str()) : "child_node";
+		std::shared_ptr<StaticMesh> mesh = std::make_shared<StaticMesh>();
 		mesh->setName(name);
+		mesh->setVertexCount(object->mNumVertices);
 		BoundingBox box;
-		PhongMaterial* material = new PhongMaterial();
+		std::shared_ptr<PhongMaterial> material = std::make_shared<PhongMaterial>();
 		std::string textures_path = "./data/";
 
 		if (object->mMaterialIndex >= 0)
@@ -182,17 +202,17 @@ namespace Razor {
 			if(AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS_STRENGTH, shininess_strength))
 				material->setShininessStrength(shininess_strength);
 
-			aiColor3D diffuse;
-			if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse))
-				material->setDiffuseColor(glm::vec3(diffuse.r, diffuse.g, diffuse.b));
+			//aiColor3D diffuse;
+			//if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse))
+			//	material->setDiffuseColor(glm::vec3(diffuse.r, diffuse.g, diffuse.b));
 
 			aiColor3D specular;
 			if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_SPECULAR, specular))
 				material->setSpecularColor(glm::vec3(specular.r, specular.g, specular.b));
 
-			aiColor3D ambient;
-			if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient))
-				material->setAmbientColor(glm::vec3(ambient.r, ambient.g, ambient.b));
+			//aiColor3D ambient;
+			//if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient))
+			//	material->setAmbientColor(glm::vec3(ambient.r, ambient.g, ambient.b));
 
 			aiColor3D emissive;
 			if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive))
@@ -212,6 +232,8 @@ namespace Razor {
 				mesh->getIndices().push_back(object->mFaces[i].mIndices[0]);
 				mesh->getIndices().push_back(object->mFaces[i].mIndices[1]);
 				mesh->getIndices().push_back(object->mFaces[i].mIndices[2]);
+
+				//std::cout << "ind: " << object->mFaces[i].mIndices[0] << ", " << object->mFaces[i].mIndices[1] << ", " << object->mFaces[i].mIndices[2] << std::endl;
 			}
 		}
 
@@ -222,26 +244,34 @@ namespace Razor {
 				mesh->getVertices().push_back(object->mVertices[i].x);
 				mesh->getVertices().push_back(object->mVertices[i].y);
 				mesh->getVertices().push_back(object->mVertices[i].z);
+
+				//std::cout << "vert: " << object->mVertices[i].x << ", " << object->mVertices[i].y << ", " << object->mVertices[i].z << std::endl;
 			}
 
 			if (object->HasNormals()) 
 			{
-				mesh->getVertices().push_back(object->mNormals[i].x);
-				mesh->getVertices().push_back(object->mNormals[i].y);
-				mesh->getVertices().push_back(object->mNormals[i].z);
+				mesh->getNormals().push_back(object->mNormals[i].x);
+				mesh->getNormals().push_back(object->mNormals[i].y);
+				mesh->getNormals().push_back(object->mNormals[i].z);
+
+				//std::cout << "norm: " << object->mNormals[i].x << ", " << object->mNormals[i].y << ", " << object->mNormals[i].z << std::endl;
 			}
 
 			if (object->HasTextureCoords(0))
 			{
-				mesh->getVertices().push_back(object->mTextureCoords[0][i].x);
-				mesh->getVertices().push_back(object->mTextureCoords[0][i].y);
+				mesh->getUvs().push_back(object->mTextureCoords[0][i].x);
+				mesh->getUvs().push_back(object->mTextureCoords[0][i].y);
+
+				//std::cout << "uvs: " << object->mTextureCoords[0][i].x << ", " << object->mTextureCoords[0][i].y << std::endl;
 			}
 			
 			if (object->HasTangentsAndBitangents()) 
 			{
-				mesh->getVertices().push_back(object->mTangents[i].x);
-				mesh->getVertices().push_back(object->mTangents[i].y);
-				mesh->getVertices().push_back(object->mTangents[i].z);
+				mesh->getTangents().push_back(object->mTangents[i].x);
+				mesh->getTangents().push_back(object->mTangents[i].y);
+				mesh->getTangents().push_back(object->mTangents[i].z);
+
+				//std::cout << "tan: " << object->mTangents[i].x << ", " << object->mTangents[i].y << ", " << object->mTangents[i].z << std::endl;
 			}
 
 			if (object->mVertices[i].x < box.min_x) box.min_x = object->mVertices[i].x;

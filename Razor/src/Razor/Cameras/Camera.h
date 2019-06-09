@@ -36,12 +36,20 @@ namespace Razor {
 		inline glm::mat4& getProjectionMatrix() { return projection; }
 
 		inline glm::vec3& getPosition() { return position; }
+
 		inline float& getPositionX() { return position.x; }
 		inline float& getPositionY() { return position.y; }
 		inline float& getPositionZ() { return position.z; }
 
 		inline glm::vec3& getDirection() { return direction; }
+		inline void setDirection(const glm::vec3& dir) { direction = dir; }
 		inline glm::vec3& getVelocity() { return velocity; }
+
+		inline glm::vec3& getTarget() { return target; }
+		inline void setTarget(const glm::vec3& target) { this->target = target; }
+
+		inline bool isHavingTarget() { return has_target; }
+		inline void setHasTarget(bool value) { has_target = value; }
 
 		inline float& getSpeed() { return speed; }
 		inline float& getMinSpeed() { return min_speed; }
@@ -70,6 +78,7 @@ namespace Razor {
 		glm::vec3 position;
 		glm::vec3 velocity;
 		glm::vec3 direction;
+		glm::vec3 target;
 
 		glm::mat4 projection;
 		glm::mat4 view;
@@ -89,9 +98,9 @@ namespace Razor {
 
 		float delta;
 		bool first;
+		bool has_target;
 		glm::vec2 last_pos;
 		bool capture;
-		bool isViewportHovered;
 		float speed;
 		float speed_factor;
 		float min_speed;

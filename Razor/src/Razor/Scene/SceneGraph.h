@@ -2,7 +2,8 @@
 
 #include "Node.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	class SceneGraph
 	{
@@ -10,12 +11,20 @@ namespace Razor {
 		SceneGraph();
 		~SceneGraph();
 
-		inline std::vector<Node*>& getNodes() { return nodes; }
+		inline std::vector<std::shared_ptr<Node>>& getNodes() { return nodes; }
+		void addNode(std::shared_ptr<Node> node);
 
-		void addNode(Node* node);
+		bool removeNode(unsigned int id);
+
+		inline std::shared_ptr<Node> createInstance(std::shared_ptr<StaticMesh> mesh)
+		{
+			std::shared_ptr<Node> node = std::make_shared<Node>();
+			instances[mesh].push_back(node);
+		}
 
 	private:
-		std::vector<Node*> nodes;
+		std::vector<std::shared_ptr<Node>> nodes;
+		std::map<std::shared_ptr<StaticMesh>, std::vector<std::shared_ptr<Node>>> instances;
 		unsigned int index;
 	};
 

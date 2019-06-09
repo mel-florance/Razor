@@ -7,7 +7,10 @@
 
 namespace Razor {
 
-	MainMenu::MainMenu(Editor* editor) : EditorComponent(editor), show_create_project(false)
+	MainMenu::MainMenu(Editor* editor) : 
+		EditorComponent(editor),
+		show_create_project(false),
+		show_preferences(false)
 	{
 	}
 
@@ -23,10 +26,7 @@ namespace Razor {
 			{
 				ImGui::MenuItem("New", "Ctrl + N");
 
-				if (ImGui::IsItemClicked())
-					show_create_project = true;
-				else
-					show_create_project = false;
+				show_create_project = ImGui::IsItemClicked();
 			
 				ImGui::MenuItem("Open", "Ctrl + O");
 
@@ -45,13 +45,20 @@ namespace Razor {
 				}
 			
 				ImGui::Separator();
+
 				ImGui::MenuItem("Save", "Ctrl + S");
 				ImGui::MenuItem("Save As...", "Ctrl + Shift + S");
+
 				ImGui::Separator();
+
 				ImGui::MenuItem("Preferences");
+				show_preferences = ImGui::IsItemClicked();
+
 				ImGui::Separator();
+
 				ImGui::MenuItem("Import...");
 				ImGui::MenuItem("Export...");
+
 				ImGui::Separator();
 
 				ImGui::MenuItem("Quit", "Ctrl + Q");

@@ -4,8 +4,8 @@
 namespace Razor
 {
 
-	SpherePhysicsBody::SpherePhysicsBody(float radius, const glm::vec3& position) :
-		PhysicsBody(position),
+	SpherePhysicsBody::SpherePhysicsBody(Node* node, float radius, const glm::vec3& position, const glm::vec3& rotation) :
+		PhysicsBody(node, position, rotation),
 		radius(radius)
 	{
 		shape = new btSphereShape(radius);
@@ -18,13 +18,21 @@ namespace Razor
 	void SpherePhysicsBody::init()
 	{
 		btVector3 inertia(0, 0, 0);
-		((btCollisionShape*)shape)->calculateLocalInertia(mass, inertia);
-		body = new btRigidBody({ mass, motion_state, (btSphereShape*)shape, inertia });
+		btScalar linear_damping = 0.5f;
+		btScalar angular_damping = 0.5f;
+		((btSphereShape*)shape)->calculateLocalInertia(mass, inertia);
+		btRigidBody::btRigidBodyConstructionInfo shape_data = btRigidBody::btRigidBodyConstructionInfo(mass, motion_state, (btSphereShape*)shape, inertia);
+		shape_data.m_linearDamping = linear_damping;
+		shape_data.m_angularDamping = angular_damping;
+		body = new btRigidBody(shape_data);
 
-		body->setRestitution(0.5f);
+		body->setUserPointer((void*)user_ptr);
+		body->setDamping(linear_damping, angular_damping);
+		body->setRestitution(0.1f);
 		body->setFriction(0.5f);
 		body->setRollingFriction(0.5f);
 		body->setActivationState(DISABLE_DEACTIVATION);
+		body->setMassProps(2.0f, btVector3(0.0f, 0.0f, 0.0f));
 
 		initialized = true;
 	}

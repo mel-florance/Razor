@@ -55,7 +55,7 @@ namespace Razor {
 			m_unprocessedTime += m_passedTime;
 			m_frameCounter += m_passedTime;
 
-			if (m_frameCounter >= 0.01f)
+			if (m_frameCounter >= 0.05f)
 			{
 				m_fps = computeAverageFps(1.0f / (float)m_passedTime);
 				m_frames = 0;
@@ -73,6 +73,7 @@ namespace Razor {
 
 				m_profiler->stopTimer("update");
 
+				m_render = true;
 				m_unprocessedTime -= m_passedTime;
 			}
 			 

@@ -10,6 +10,7 @@
 namespace Razor {
 
 	class TexturesManager;
+	class AssimpImporter;
 
 	class RAZOR_API AssetsManager : public EditorComponent
 	{
@@ -19,7 +20,7 @@ namespace Razor {
 
 		void watch();
 		void render(float delta) override;
-		static void import(void* result, TaskFinished tf, Variant opts);
+		static void import(std::shared_ptr<Node> result, TaskFinished tf, Variant opts);
 
 		enum Type { None, Model, Image, Audio, Video };
 		typedef std::map<Type, std::vector<const char*>> ExtsMap;
@@ -40,6 +41,7 @@ namespace Razor {
 		}
 
 		static TexturesManager* texturesManager;
+		static std::unique_ptr<AssimpImporter> importer;
 
 	private:
 		static std::map<Type, std::vector<const char*>> exts;

@@ -9,27 +9,32 @@
 #include "Editor/Components/Viewport.h"
 #include "Razor/Application/Application.h"
 #include "Editor/Editor.h"
+#include "Editor/Components/Viewport.h"
 #include "Razor/Maths/Maths.h"
 
 namespace Razor {
 
 	TPSCamera::TPSCamera(Window* window) :
 		Camera(window),
+		viewport(nullptr),
 		target(new Transform()),
-		sensitivity(15.0f),
-		pitch(30.0f),
+		sensitivity(0.3f),
+		pan_sensitivity(0.3f),
+		pitch(45.0f),
 		yaw(0.0f),
 		roll(0.0f),
-		distance(5.0f),
-		distance_min(0.5f),
+		distance(10.0f),
+		distance_min(0.1f),
 		distance_max(1000.0f),
 		pitch_min(-90.0f),
 		pitch_max(90.0f),
-		pitch_offset(0.0f),
+		pitch_offset(glm::vec2(0.0f)),
 		pitch_factor(0.3f),
-		zoom_factor(5.0f),
+		zoom_factor(3.0f),
 		angle(45.0f),
-		y_offset(7.0f)
+		alpha(0.0f),
+		y_offset(0.0f),
+		delta_offset(glm::vec3(0.0f))
 	{
 
 	}
@@ -39,59 +44,58 @@ namespace Razor {
 		delete target;
 	}
 
-	void TPSCamera::updateVectors()
-	{
-		glm::vec3 front;
-		front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-		front.y = sin(glm::radians(pitch));
-		front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-		direction = glm::normalize(front);
-
-		right = glm::normalize(glm::cross(direction, world_up));
-		up = glm::normalize(glm::cross(right, direction));
-	}
-
 	void TPSCamera::update(double dt)
 	{
+		if(viewport == nullptr)
+			viewport = (Viewport*)Application::Get().getEditor()->getComponents()["Viewport"];
+
+		//alpha += 0.5f * dt;
+		//y_offset = sin(alpha - dt) - 3.0f;
+		//roll += 0.5f * dt;
+		//angle += 8.0f * dt;
+
 		if (target != nullptr)
 		{
-			float vertical = distance * std::sin(glm::radians(pitch + pitch_offset));
-			float horizontal = distance * std::cos(glm::radians(pitch + pitch_offset));
+			float vertical = distance * std::sin(glm::radians(pitch + pitch_offset.y));
+			float horizontal = distance * std::cos(glm::radians(pitch + pitch_offset.x));
 
-			float theta = target->getRotation().y + angle;
+			float theta = angle;
 			float offset_x = horizontal * std::sin(glm::radians(theta));
 			float offset_z = horizontal * std::cos(glm::radians(theta));
 
 			position.x = target->getPosition().x - offset_x;
 			position.z = target->getPosition().z - offset_z;
-			position.y = target->getPosition().y + vertical;
+			position.y = target->getPosition().y + vertical + y_offset;
 
-			yaw = 180.0f - (target->getRotation().y + angle);
+			yaw = 180.0f - (angle + y_offset);
 			yaw = (float)fmod(yaw, 360.0f);
 		}
 
-		glm::mat4 viewMatrix = glm::mat4(1.0f);
+		direction = glm::normalize(target->getPosition() - position);
+		right = glm::normalize(glm::cross(direction, world_up));
+		up = glm::normalize(glm::cross(right, direction));
 
-		viewMatrix = glm::rotate(viewMatrix, glm::radians(pitch), glm::vec3(1, 0, 0));
-		viewMatrix = glm::rotate(viewMatrix, glm::radians(yaw), glm::vec3(0, 1, 0));
-		view = glm::translate(viewMatrix, glm::vec3(-position[0], -position[1], -position[2]));
-
-		//angle -= 8.0f * (float)dt;
+		view = glm::lookAt(position, target->getPosition(), up);
 
 		setProjection();
 	}
 
 	void TPSCamera::setProjection()
 	{
-		Viewport* vp = (Viewport*)Application::Get().getEditor()->getComponents()["Viewport"];
-
-		if(vp != nullptr)
-			aspect_ratio = vp->getSize().x / vp->getSize().y;
+		if(viewport != nullptr)
+			aspect_ratio = viewport->getSize().x / viewport->getSize().y;
 
 		switch (mode) 
 		{
 			case Mode::ORTHOGRAPHIC:
-				projection = glm::ortho(-1.5f * aspect_ratio, 1.5f * aspect_ratio, -1.5f, 1.5f, -100.0f, 100.0f);
+				projection = glm::ortho(
+					(1.0f + distance) * aspect_ratio,
+					(-1.0f - distance) * aspect_ratio,
+					1.0f + distance,
+					-1.0f - distance,
+					-1000.0f, 
+					1000.0f
+				);
 				break;
 			case Mode::PERSPECTIVE:
 				projection = glm::perspective(fov, aspect_ratio, clip_near, clip_far);
@@ -114,16 +118,30 @@ namespace Razor {
 		{
 			if (glfwGetKey((GLFWwindow*)window->GetNativeWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 			{
-				/*glm::vec3 t_pos = target->getPosition();
+				direction = glm::normalize(target->getPosition() - position);
 
-				t_pos.z -= delta * sensitivity * mouse_position.x;
-				t_pos.y -= delta * sensitivity * mouse_position.y;
+				right = glm::normalize(glm::cross(direction, world_up));
+				up = glm::normalize(glm::cross(right, direction));
 
-				target->setPosition(t_pos);*/
+				if (pitch == 90.0f && yaw == 90.0f)
+					mouse_position *= -1.0f;
+
+				if (mouse_position.x > 0)
+					velocity += right * delta * pan_sensitivity * distance;
+				if (mouse_position.x < 0)
+					velocity -= right * delta * pan_sensitivity * distance;
+				if (mouse_position.y > 0)
+					velocity += up * delta * pan_sensitivity * distance;
+				if (mouse_position.y < 0)
+					velocity -= up * delta * pan_sensitivity * distance;
+
+				glm::vec3 pos = target->getPosition();
+				target->setPosition(pos + velocity);
+				velocity = glm::vec3(0.0f);
 			}
 			else
 			{
-				float diff = mouse_position.y * sensitivity * delta;
+				float diff = mouse_position.y * sensitivity;
 				pitch += diff;
 
 				if (pitch < pitch_min)
@@ -131,24 +149,27 @@ namespace Razor {
 				else if (pitch > pitch_max)
 					pitch = pitch_max;
 
-				angle += mouse_position.x * sensitivity * delta;
+				angle += mouse_position.x * sensitivity;
 			}
 		}
 	}
 
 	void TPSCamera::onMouseScrolled(glm::vec2& offset)
 	{
-		distance -= (offset.y / 10.0f) * zoom_factor;
+		if (viewport->isHovered())
+		{
+			distance -= (offset.y / 10.0f) * zoom_factor;
 
-		if (distance < distance_min)
-			distance = distance_min;
-		else if (distance > distance_max)
-			distance = distance_max;
+			if (distance < distance_min)
+				distance = distance_min;
+			else if (distance > distance_max)
+				distance = distance_max;
+		}
 	}
 
 	void TPSCamera::onMouseDown(int button)
 	{
-		if (button == 2)
+		if (button == 2 && viewport->isHovered())
 		{
 			capture = true;
 			glfwSetInputMode((GLFWwindow*)window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -166,15 +187,20 @@ namespace Razor {
 
 	void TPSCamera::onKeyDown(int keyCode)
 	{
-		if (keyCode == GLFW_KEY_KP_DECIMAL)
-			target->setPosition(glm::vec3(0.0f));
-
-		if (keyCode == GLFW_KEY_KP_5)
+		if (keyCode == GLFW_KEY_KP_5 && viewport->isHovered()) 
+		{
 			mode = mode == Camera::Mode::ORTHOGRAPHIC ? Camera::Mode::PERSPECTIVE : Camera::Mode::ORTHOGRAPHIC;
+			ImGuizmo::SetOrthographic(mode == Camera::Mode::ORTHOGRAPHIC);
+		}
 	}
 
 	void TPSCamera::onKeyReleased(int keyCode)
 	{
+	}
+
+	void TPSCamera::setTarget(Transform* transform)
+	{
+		target->setPosition(glm::vec3(transform->getPosition()));
 	}
 
 }

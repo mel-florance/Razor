@@ -4,6 +4,9 @@
 #include "Razor/Events/ApplicationEvent.h"
 #include "Razor/Events/MouseEvent.h"
 #include "Razor/Events/KeyEvent.h"
+#include "Razor/Materials/Texture.h"
+#include "Razor/Scene/Node.h"
+#include "Editor/Editor.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,7 +17,7 @@ namespace Razor {
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
-		Log::error("GLFW Error ({0}): {1}", error, description);
+		Log::error("GLFW Error (%d): %s", error, description);
 	}
 
 	Window* Window::Create(const WindowProps& props)
@@ -55,10 +58,10 @@ namespace Razor {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_SAMPLES, 0);
+		glfwWindowHint(GLFW_SAMPLES, 4);
 
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-		glfwWindowHint(GLFW_DEPTH_BITS, 16);
+		glfwWindowHint(GLFW_DEPTH_BITS, 32);
 
 		glfwMaximizeWindow(m_Window);
 
@@ -67,6 +70,11 @@ namespace Razor {
 		RZ_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		//SetVSync(false);
+
+		//Texture* icon = new Texture("./data/logo.png", false, false);
+		//GLFWimage* img = new GLFWimage{ 16, 16, icon->getData() };
+		//glfwSetWindowIcon(m_Window, 1, img);
+
 
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
@@ -156,8 +164,18 @@ namespace Razor {
 			MouseMovedEvent event((float)xPos, (float)yPos);
 			data.EventCallback(event);
 		});
+
+		glfwSetDropCallback(m_Window, [](GLFWwindow* window, int count, const char** paths)
+		{
+			for (int i = 0; i < count; i++)
+			{
+				std::shared_ptr<Node> node = nullptr;
+				AssetsManager::import(node, &Editor::importFinished, Variant(paths[i]));
+			}
+		});
 	}
 
+	
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);

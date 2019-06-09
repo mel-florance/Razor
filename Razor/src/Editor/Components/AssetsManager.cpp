@@ -4,26 +4,25 @@
 #include "Logger.h"
 #include "Editor/Editor.h"
 #include "Razor/Materials/TexturesManager.h"
+#include "Razor/Materials/Texture.h"
 
 namespace Razor 
 {
 
 	AssetsManager::ExtsMap AssetsManager::exts = {
-		{AssetsManager::Type::Model, {"3ds",  "blend", "dae",  "fbx", "gltf", "obj", "raw",  "stl"}},
-		{AssetsManager::Type::Image, {"jpg",  "png",   "dds",  "png", "psd",  "gif", "exif", "tiff", "hdr", "svg", "tga"}},
-		{AssetsManager::Type::Audio, {"aac",  "aiff",  "flac", "mp3", "ogg",  "wav"}},
-		{AssetsManager::Type::Video, {"webm", "flv",   "ogv",  "mov", "mp4",  "3gp"}}
+		{AssetsManager::Type::Model, { "3ds",  "blend", "dae",  "fbx",  "gltf", "obj", "raw",  "stl"}},
+		{AssetsManager::Type::Image, { "jpg",  "png",   "dds",  "png",  "psd",  "gif", "exif", "tiff", "hdr", "svg", "tga"}},
+		{AssetsManager::Type::Audio, { "wav"/*,"ogg", "aac",   "aiff", "flac", "mp3" */}},
+		{AssetsManager::Type::Video, { "webm", "flv",   "ogv",  "mov",  "mp4",  "3gp"}}
 	};
 
-	AssetsManager* FileBrowser::assetsManager = nullptr;
-	TasksManager* FileBrowser::tasksManager = nullptr;
 	TexturesManager* AssetsManager::texturesManager = nullptr;
+	std::unique_ptr<AssimpImporter> AssetsManager::importer = nullptr;
 
 	AssetsManager::AssetsManager(Editor* editor) : EditorComponent(editor)
 	{
 		texturesManager = new TexturesManager();
-		FileBrowser::assetsManager = this;
-		FileBrowser::tasksManager = editor->getTasksManager();
+		importer = std::make_unique<AssimpImporter>();
 
 		this->directoryWatcher = std::make_shared<DirectoryWatcher>("F:/Razor/Razor/Sandbox", std::chrono::milliseconds(1000));
 		this->fileWatcher = std::make_shared<FileWatcher>();
@@ -75,7 +74,7 @@ namespace Razor
 		ImGui::End();
 	}
 
-	void AssetsManager::import(void* result, TaskFinished tf, Variant opts)
+	void AssetsManager::import(std::shared_ptr<Node> result, TaskFinished tf, Variant opts)
 	{
 		Log::trace("Task Arguments: %s", opts.toString().c_str());
 
@@ -84,26 +83,28 @@ namespace Razor
 			std::string str = opts.toString();
 			auto ext = str.substr(str.find_last_of(".") + 1);
 			auto type = AssetsManager::getExt(ext);
-			AssimpImporter* importer = new AssimpImporter();
-
-			switch (type) {
+			
+			switch (type) 
+			{
 			case Type::Model:
-				if (importer->importMesh(opts.toString())) {
+				if (importer->importMesh(opts.toString())) 
+				{
 					result = importer->getNodeData();
 					tf(result);
+					importer->resetRootNode();
 				}
 				break;
 			case Type::Image:
-				Log::warn("No image format implemented for the extension: {0}", ext);
+				Log::warn("No image format implemented for the extension: %s", ext.c_str());
 				break;
 			case Type::Audio:
-				Log::warn("No Audio format implemented for the extension: {0}", ext);
+				Log::warn("No Audio format implemented for the extension: %s", ext.c_str());
 				break;
 			case Type::Video:
-				Log::warn("No Video format implemented for the extension: {0}", ext);
+				Log::warn("No Video format implemented for the extension: %s", ext.c_str());
 				break;
 			default:
-				Log::error("Unrecognized file extension: {0}", ext);
+				Log::error("Unrecognized file extension: %s", ext.c_str());
 			}
 		}
 	}

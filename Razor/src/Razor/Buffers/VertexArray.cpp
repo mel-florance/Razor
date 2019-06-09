@@ -14,21 +14,20 @@ namespace Razor {
 		glDeleteVertexArrays(1, &id);
 	}
 
-	void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
+	void VertexArray::addBuffer(
+		const VertexBuffer& vb,
+		unsigned int attr_num, 
+		unsigned int el_count, 
+		BufferType buffer_type, 
+		bool normalized, 
+		unsigned int stride,
+		void* offset)
 	{
 		bind();
 		vb.bind();
-		const auto& elements = layout.getElements();
-		unsigned int offset = 0;
-
-		for (unsigned int i = 0; i < elements.size(); i++) 
-		{
-			const auto& element = elements[i];
-
-			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), BUFFER_OFFSET(offset));
-			offset += element.count * VertexBufferElement::getTypeSize(element.type);
-		}
+		glEnableVertexAttribArray(attr_num);
+		glVertexAttribPointer(attr_num, el_count, buffer_type, normalized ? GL_TRUE : GL_FALSE, stride, offset);
+		vb.unbind();
 	}
 
 	void VertexArray::bind() const

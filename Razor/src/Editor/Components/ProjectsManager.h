@@ -24,6 +24,7 @@ namespace Razor {
 		inline std::vector<Project>& getProjects() { return projects; }
 
 	private:
+		std::string projects_path;
 		std::vector<Project> projects;
 	};
 

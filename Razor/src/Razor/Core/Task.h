@@ -2,13 +2,15 @@
 
 #include "Core.h"
 #include "Razor/Types/Variant.h"
+#include "Razor/Scene/Node.h"
 
 namespace Razor {
 
-	typedef std::function<void(void*)> TaskFinished;
-	typedef std::function<void(void*, TaskFinished, Variant)> TaskCallback;
+	typedef std::function<void(std::shared_ptr<Node>)> TaskFinished;
+	typedef std::function<void(std::shared_ptr<Node>, TaskFinished, Variant)> TaskCallback;
+
 	typedef struct {
-		void* result;
+		std::shared_ptr<Node> result;
 		TaskCallback fn;
 		TaskFinished tf;
 		Variant opts;
@@ -41,7 +43,7 @@ namespace Razor {
 		inline unsigned int getPriority() { return priority; }
 		inline void setPriority(unsigned int priority) { this->priority = priority; }
  
-		void run(void* result, TaskCallback fn, Variant opts, TaskFinished tf) {
+		void run(std::shared_ptr<Node> result, TaskCallback fn, Variant opts, TaskFinished tf) {
 			fn(result, tf, opts);
 		}
 
@@ -49,10 +51,10 @@ namespace Razor {
 			return task.priority > priority;
 		}
 
-		void* result;
+		std::shared_ptr<Node> result;
 		Variant opts;
 		TaskCallback fn;
-		std::function<void(void*)> tf;
+		std::function<void(std::shared_ptr<Node>)> tf;
 
 	private:
 		std::string name;

@@ -2,8 +2,10 @@
 
 #include "Camera.h"
 
-namespace Razor {
+namespace Razor
+{
 
+	class Viewport;
 	class Transform;
 
 	class TPSCamera : public Camera
@@ -12,9 +14,21 @@ namespace Razor {
 		TPSCamera(Window* window);
 		virtual ~TPSCamera();
 
-		virtual void updateVectors();
 		virtual void update(double dt) override;
 		virtual void setProjection();
+		void setTarget(Transform* transform);
+		inline Transform* getTarget() { return target; }
+
+		inline void setPitch(float value) { pitch = value; }
+		inline void setYaw(float value) { yaw = value; }
+		inline void setRoll(float value) { roll = value; }
+		inline void setAngle(float value) { angle = value; }
+		inline void setDistance(float value) { distance = value; }
+
+		inline float getPitch() { return pitch; }
+		inline float getYaw() { return yaw; }
+		inline float getRoll() { return roll; }
+		inline float getDistance() { return distance; }
 
 		virtual void onMouseMoved(glm::vec2& pos, bool constrain = true) override;
 		virtual void onMouseScrolled(glm::vec2& offset) override;
@@ -24,6 +38,7 @@ namespace Razor {
 		virtual void onKeyReleased(int keyCode) override;
 
 	private:
+		Viewport* viewport;
 		Transform* target;
 
 		float distance;
@@ -34,7 +49,6 @@ namespace Razor {
 		float pitch;
 		float pitch_min;
 		float pitch_max;
-		float pitch_offset;
 		float pitch_factor;
 
 		float yaw;
@@ -45,13 +59,18 @@ namespace Razor {
 		float roll_min;
 		float roll_max;
 		
+		float alpha;
 		float angle;
 		float y_offset;
 		float sensitivity;
+		float pan_sensitivity;
 
 		float zoom;
 		float zoom_factor;
 		float zoom_lerp;
+
+		glm::vec3 delta_offset;
+		glm::vec2 pitch_offset;
 
 		glm::vec2 mouse_scroll;
 		glm::vec2 mouse_position;

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Razor/Application.h"
+#include "Razor/Application/Application.h"
+
 #include "Client.h"
 
 namespace Razor { namespace Network {

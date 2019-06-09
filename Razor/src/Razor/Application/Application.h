@@ -9,7 +9,7 @@
 #include "Razor/Events/ApplicationEvent.h"
 #include "Razor/ImGui/ImGuiLayer.h"
 #include "Platform/Windows/WindowsWindow.h"
-#include "Razor/Rendering/DeferredRenderer.h"
+#include "Razor/Rendering/ForwardRenderer.h"
 
 namespace Razor {
 
@@ -37,14 +37,15 @@ namespace Razor {
 		inline LayerStack& getLayerStack() { return m_LayerStack; }
 		inline ImGuiLayer* getImGuiLayer() { return m_ImGuiLayer; }
 
-		DeferredRenderer* getDeferredRenderer();
+		ForwardRenderer* getForwardRenderer();
+		static Editor* m_Editor;
 
 	private:
 		
 		bool OnWindowClose(WindowCloseEvent& e);
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
-		Editor* m_Editor;
+	
 		Engine* m_Engine;
 		bool m_Running;
 		Log* m_log;

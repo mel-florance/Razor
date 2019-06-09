@@ -12,11 +12,17 @@ namespace Razor
 		Selection(Editor* editor);
 		~Selection();
 
-		inline void addNode(Node* node) { nodes.emplace_back(node); }
-		inline std::vector<Node*>& getNodes() { return nodes; }
+		inline void addNode(std::shared_ptr<Node> node) { clear();  nodes.push_back(node); }
+		inline std::vector<std::shared_ptr<Node>>& getNodes() { return nodes; }
+		bool removeNode(unsigned int id);
+		bool isSelected(std::shared_ptr<Node> node);
+
+		inline void clear() {
+			nodes.clear();
+		}
 
 	private:
-		std::vector<Node*> nodes;
+		std::vector<std::shared_ptr<Node>> nodes;
 	};
 
 }

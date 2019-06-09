@@ -1,27 +1,52 @@
 #include "rzpch.h"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "Tools.h"
 #include "Razor/Geometry/Geometry.h"
 #include "Editor/Editor.h"
 #include "Razor/Core/Engine.h"
 #include "Razor/Scene/ScenesManager.h"
 #include "Razor/Materials/Presets/PhongMaterial.h"
+#include "Editor/Tools/Selection.h"
+
+#include "Razor/Physics/World.h"
+#include "Razor/Physics/CubePhysicsBody.h"
+#include "Razor/Physics/PlanePhysicsBody.h"
+#include "Razor/Physics/SpherePhysicsBody.h"
+
+#include "Editor/Components/AssetsManager.h"
+#include "Razor/Materials/TexturesManager.h"
+#include "Razor/Materials/Texture.h"
+#include "Razor/Lighting/Directional.h"
+#include "Razor/Lighting/Point.h"
+#include "Razor/Lighting/Spot.h"
 
 namespace Razor {
 
-	Tools::Tools(Editor* editor) : 
+	Tools::Tools(Editor* editor) :
 		EditorComponent(editor),
 		primitives_opened(true),
 		lights_opened(true),
 		cameras_opened(true),
+		physics_opened(true),
+		landscape_opened(true),
 		show_cube_props(false),
 		show_uvsphere_props(false),
 		show_plane_props(false),
+		show_directional_props(false),
+		show_point_props(false),
+		show_spot_props(false),
+		show_landscape_props(false),
 		panel_visible(true),
 		cube_parameters(CubeParameters()),
 		UVsphere_parameters(UVSphereParameters()),
-		plane_parameters(PlaneParameters())
+		plane_parameters(PlaneParameters()),
+		directional_parameters(DirectionalParameters()),
+		point_parameters(PointParameters()),
+		spot_parameters(SpotParameters())
 	{
+		selection = editor->getTool<Selection*>("selection");
+		checkerMap = new Texture("./data/checker.png", true);
 	}
 
 	Tools::~Tools()
@@ -38,8 +63,9 @@ namespace Razor {
 			size = glm::vec2(win_size.x, win_size.y);
 
 			ImGui::SetNextTreeNodeOpen(primitives_opened);
-			ImGui::Dummy(ImVec2(0, 5.0f));
-			auto btn_size = ImVec2(size.x - 30.0f, 25.0f);
+			auto btn_size = ImVec2(size.x - 57.0f, 25.0f);
+
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
 			if (Utils::treeNode("Primitives"))
 			{
@@ -47,261 +73,43 @@ namespace Razor {
 				ImGui::Dummy(ImVec2(0, 5.0f));
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
+
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("cube", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
 				ImGui::Button("Cube", btn_size);
+				ImGui::Indent(-17.0f);
 
 				if (ImGui::IsItemClicked())
 					show_cube_props = true;
 
-				if (show_cube_props)
-				{
-					ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
-					ImGui::SetNextWindowFocus();
-
-					if (ImGui::Begin("Add cube", &show_cube_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
-					{
-						ImGui::Dummy(ImVec2(0, 5.0f));
-						ImGui::Columns(2, "twoColumns", true);
-
-						static unsigned short initial_column_spacing = 0;
-						if (initial_column_spacing < 2)
-						{
-							ImGui::SetColumnWidth(0, 100.0f);
-							initial_column_spacing++;
-						}
-
-						ImGui::Indent(10.0f);
-						ImGui::Text("Radius");
-						ImGui::NextColumn();
-
-						float margin_right = 18.0f;
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat("##Radius", &cube_parameters.radius);
-						ImGui::PopItemWidth();
-
-						ImGui::NextColumn();
-						ImGui::Text("Position");
-						ImGui::NextColumn();
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat3("##Position", &cube_parameters.position[0]);
-						ImGui::PopItemWidth();
-
-						ImGui::NextColumn();
-						ImGui::Text("Rotation");
-						ImGui::NextColumn();
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat3("##Rotation", &cube_parameters.rotation[0]);
-						ImGui::PopItemWidth();
-
-						ImGui::Columns(1);
-						ImGui::Dummy(ImVec2(0, 50.0f));
-
-						float width = ImGui::GetWindowWidth();
-						float pos_y = ImGui::GetWindowHeight();
-
-						ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
-						ImGui::PushItemWidth(-1);
-						ImGui::Button("Create cube", ImVec2(width - 25.0f, 30.0f));
-						ImGui::PopItemWidth();
-
-						if (ImGui::IsItemClicked())
-						{
-							Node* node = new Node();
-							node->name = "Cube_x";
-							Cube* cube = new Cube(cube_parameters.radius);
-							cube->setMaterial(new PhongMaterial());
-
-							node->transform.setRotation(glm::vec3(
-								glm::radians(cube_parameters.rotation.x),
-								glm::radians(cube_parameters.rotation.y),
-								glm::radians(cube_parameters.rotation.z)
-							));
-							
-							node->transform.setPosition(cube_parameters.position);
-							node->meshes.push_back(cube);
-							editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
-							show_cube_props = false;
-						}
-
-						ImGui::End();
-					}
-				}
-
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
-				ImGui::Button("Sphere", btn_size);
+			
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("sphere", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
+				ImGui::Button("UV Sphere", btn_size); 
+				ImGui::Indent(-17.0f);
 
 				if (ImGui::IsItemClicked())
 					show_uvsphere_props = true;
 
-				if (show_uvsphere_props)
-				{
-					ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
-					ImGui::SetNextWindowFocus();
-
-					if (ImGui::Begin("Add UVSphere", &show_uvsphere_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
-					{
-						ImGui::Dummy(ImVec2(0, 5.0f));
-						ImGui::Columns(2, "twoColumns", true);
-
-						static unsigned short initial_column_spacing = 0;
-						if (initial_column_spacing < 2)
-						{
-							ImGui::SetColumnWidth(0, 100.0f);
-							initial_column_spacing++;
-						}
-
-						ImGui::Indent(10.0f);
-						ImGui::Text("Radius");
-						ImGui::NextColumn();
-
-						float margin_right = 18.0f;
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat("##Radius", &UVsphere_parameters.radius);
-						ImGui::PopItemWidth();
-
-						ImGui::NextColumn();
-						ImGui::Text("Position");
-						ImGui::NextColumn();
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat3("##Position", &UVsphere_parameters.position[0]);
-						ImGui::PopItemWidth();
-
-						ImGui::NextColumn();
-						ImGui::Text("Rotation");
-						ImGui::NextColumn();
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat3("##Rotation", &UVsphere_parameters.rotation[0]);
-						ImGui::PopItemWidth();
-
-						ImGui::NextColumn();
-						ImGui::Text("Segments");
-						ImGui::NextColumn();
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragInt2("##Segments", &UVsphere_parameters.segments[0]);
-						ImGui::PopItemWidth();
-
-						ImGui::Columns(1);
-						ImGui::Dummy(ImVec2(0, 50.0f));
-
-						float width = ImGui::GetWindowWidth();
-						float pos_y = ImGui::GetWindowHeight();
-
-						ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
-						ImGui::PushItemWidth(-1);
-						ImGui::Button("Create UVSphere", ImVec2(width - 25.0f, 30.0f));
-						ImGui::PopItemWidth();
-
-						if (ImGui::IsItemClicked())
-						{
-							Node* node = new Node();
-							node->name = "UVSphere";
-							UVSphere* uvsphere = new UVSphere(UVsphere_parameters.radius, UVsphere_parameters.segments);
-							uvsphere->setMaterial(new PhongMaterial());
-
-							node->transform.setRotation(glm::vec3(
-								glm::radians(UVsphere_parameters.rotation.x),
-								glm::radians(UVsphere_parameters.rotation.y),
-								glm::radians(UVsphere_parameters.rotation.z)
-							));
-
-							node->transform.setPosition(UVsphere_parameters.position);
-							node->meshes.push_back(uvsphere);
-							editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
-							show_uvsphere_props = false;
-						}
-
-						ImGui::End();
-					}
-				}
-
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
+
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("plane", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
 				ImGui::Button("Plane", btn_size);
+				ImGui::Indent(-17.0f);;
 
 				if (ImGui::IsItemClicked())
 					show_plane_props = true;
-
-				if (show_plane_props)
-				{
-					ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
-					ImGui::SetNextWindowFocus();
-
-					if (ImGui::Begin("Add Plane", &show_plane_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse))
-					{
-						ImGui::Dummy(ImVec2(0, 5.0f));
-						ImGui::Columns(2, "twoColumns", true);
-
-						static unsigned short initial_column_spacing = 0;
-						if (initial_column_spacing < 2)
-						{
-							ImGui::SetColumnWidth(0, 100.0f);
-							initial_column_spacing++;
-						}
-
-						ImGui::Indent(10.0f);
-						ImGui::Text("Radius");
-						ImGui::NextColumn();
-
-						float margin_right = 18.0f;
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat("##Radius", &plane_parameters.radius);
-						ImGui::PopItemWidth();
-
-						ImGui::NextColumn();
-						ImGui::Text("Position");
-						ImGui::NextColumn();
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat3("##Position", &plane_parameters.position[0]);
-						ImGui::PopItemWidth();
-
-						ImGui::NextColumn();
-						ImGui::Text("Rotation");
-						ImGui::NextColumn();
-
-						ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
-						ImGui::DragFloat3("##Rotation", &plane_parameters.rotation[0]);
-						ImGui::PopItemWidth();
-
-						ImGui::Columns(1);
-						ImGui::Dummy(ImVec2(0, 50.0f));
-
-						float width = ImGui::GetWindowWidth();
-						float pos_y = ImGui::GetWindowHeight();
-
-						ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
-						ImGui::PushItemWidth(-1);
-						ImGui::Button("Create Plane", ImVec2(width - 25.0f, 30.0f));
-						ImGui::PopItemWidth();
-
-						if (ImGui::IsItemClicked())
-						{
-							Node* node = new Node();
-							node->name = "Plane";
-							Plane* plane = new Plane(plane_parameters.radius);
-							plane->setMaterial(new PhongMaterial());
-
-							node->transform.setRotation(glm::vec3(
-								glm::radians(plane_parameters.rotation.x),
-								glm::radians(plane_parameters.rotation.y),
-								glm::radians(plane_parameters.rotation.z)
-							));
-
-							node->transform.setPosition(plane_parameters.position);
-							node->meshes.push_back(plane);
-							editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
-							show_plane_props = false;
-						}
-
-						ImGui::End();
-					}
-				}
 
 				ImGui::Dummy(ImVec2(0, 5.0f));
 				ImGui::TreePop();
@@ -309,19 +117,51 @@ namespace Razor {
 			else
 				primitives_opened = false;
 
+			ImGui::PopStyleVar();
+
 			if (Utils::treeNode("Lights"))
 			{
 				lights_opened = true;
 				ImGui::Dummy(ImVec2(0, 5.0f));
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("directional_light", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
 				ImGui::Button("Directional", btn_size);
 
-				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
-				ImGui::Button("Point", btn_size);
+				if (ImGui::IsItemClicked())
+					show_directional_props = true;
+
+				ImGui::Indent(-17.0f);
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("point_light", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
+				ImGui::Button("Point", btn_size);
+
+				if (ImGui::IsItemClicked())
+					show_point_props = true;
+
+				ImGui::Indent(-17.0f);
+
+				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("spot_light", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
 				ImGui::Button("Spot", btn_size);
+
+				if (ImGui::IsItemClicked())
+					show_spot_props = true;
+
+				ImGui::Indent(-17.0f);
 
 				ImGui::Dummy(ImVec2(0, 5.0f));
 				ImGui::TreePop();
@@ -335,10 +175,22 @@ namespace Razor {
 				ImGui::Dummy(ImVec2(0, 5.0f));
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
-				ImGui::Button("First Person", btn_size);
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("camera", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
+				ImGui::Button("Free camera", btn_size);
+				ImGui::Indent(-17.0f);
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
-				ImGui::Button("Third Person", btn_size);
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("camera", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
+				ImGui::Button("Orbital camera", btn_size);
+				ImGui::Indent(-17.0f);
 
 				ImGui::Dummy(ImVec2(0, 5.0f));
 				ImGui::TreePop();
@@ -346,7 +198,424 @@ namespace Razor {
 			else
 				cameras_opened = false;
 
+			if (Utils::treeNode("Physics"))
+			{
+				physics_opened = true;
+				ImGui::Dummy(ImVec2(0, 5.0f));
+
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::TreePop();
+			}
+			else
+				physics_opened = false;
+
+			if (Utils::treeNode("Landscape"))
+			{
+				landscape_opened = true;
+				ImGui::Dummy(ImVec2(0, 5.0f));
+
+				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
+
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				editor->drawButtonIcon("noisy_curve", glm::vec2(17.0f));
+				ImGui::PopItemFlag();
+				ImGui::SameLine();
+				ImGui::Indent(17.0f);
+				ImGui::Button("Landscape", btn_size);
+				ImGui::Indent(-17.0f);
+
+				if (ImGui::IsItemClicked())
+					show_landscape_props = true;
+
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::TreePop();
+			}
+			else
+				landscape_opened = false;
+			
 			ImGui::End();
+		}
+
+		if (show_landscape_props)
+		{
+			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
+			ImGui::SetNextWindowFocus();
+
+			if (ImGui::Begin("Add landscape", &show_landscape_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+			{
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::Columns(2, "twoColumns", true);
+
+				static unsigned short initial_column_spacing = 0;
+				if (initial_column_spacing < 2)
+				{
+					ImGui::SetColumnWidth(0, 100.0f);
+					initial_column_spacing++;
+				}
+
+				// PROPS HERE
+
+				ImGui::Columns(1);
+				ImGui::Dummy(ImVec2(0, 50.0f));
+
+				float width = ImGui::GetWindowWidth();
+				float pos_y = ImGui::GetWindowHeight();
+
+				ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
+				ImGui::PushItemWidth(-1);
+				ImGui::Button("Create landscape", ImVec2(width - 25.0f, 30.0f));
+				ImGui::PopItemWidth();
+
+				if (ImGui::IsItemClicked())
+				{
+					std::shared_ptr<Node> node = std::make_shared<Node>();
+					node->name = "Cube_x";
+					std::shared_ptr<Cube> cube = std::make_shared<Cube>(cube_parameters.radius);
+					std::shared_ptr<PhongMaterial> mat = std::make_shared<PhongMaterial>();
+					mat->setTextureMap(Material::TextureType::Diffuse, checkerMap->getId());
+					cube->setPhysicsBody(new CubePhysicsBody(node.get(), glm::vec3(1.0f), cube_parameters.position));
+
+					cube->setMaterial(mat);
+
+					node->transform.setRotation(glm::vec3(
+						glm::radians(cube_parameters.rotation.x),
+						glm::radians(cube_parameters.rotation.y),
+						glm::radians(cube_parameters.rotation.z)
+					));
+
+					node->transform.setPosition(cube_parameters.position);
+					node->meshes.push_back(cube);
+					selection->clear();
+					selection->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
+					editor->getEngine()->getPhysicsWorld()->addNode(node);
+					show_landscape_props = false;
+				}
+
+				ImGui::End();
+			}
+		}
+
+		if (show_cube_props)
+		{
+			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
+			ImGui::SetNextWindowFocus();
+
+			if (ImGui::Begin("Add cube", &show_cube_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+			{
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::Columns(2, "twoColumns", true);
+
+				static unsigned short initial_column_spacing = 0;
+				if (initial_column_spacing < 2)
+				{
+					ImGui::SetColumnWidth(0, 100.0f);
+					initial_column_spacing++;
+				}
+
+				ImGui::Indent(10.0f);
+				ImGui::Text("Radius");
+				ImGui::NextColumn();
+
+				float margin_right = 18.0f;
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat("##Radius", &cube_parameters.radius);
+				ImGui::PopItemWidth();
+
+				ImGui::NextColumn();
+				ImGui::Text("Position");
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Position", &cube_parameters.position[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::NextColumn();
+				ImGui::Text("Rotation");
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Rotation", &cube_parameters.rotation[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::Columns(1);
+				ImGui::Dummy(ImVec2(0, 50.0f));
+
+				float width = ImGui::GetWindowWidth();
+				float pos_y = ImGui::GetWindowHeight();
+
+				ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
+				ImGui::PushItemWidth(-1);
+				ImGui::Button("Create cube", ImVec2(width - 25.0f, 30.0f));
+				ImGui::PopItemWidth();
+
+				if (ImGui::IsItemClicked())
+				{
+					std::shared_ptr<Node> node = std::make_shared<Node>();
+					node->name = "Cube_x";
+					std::shared_ptr<Cube> cube = std::make_shared<Cube>(cube_parameters.radius);
+					std::shared_ptr<PhongMaterial> mat = std::make_shared<PhongMaterial>();
+					mat->setTextureMap(Material::TextureType::Diffuse, checkerMap->getId());
+					cube->setPhysicsBody(new CubePhysicsBody(node.get(), glm::vec3(1.0f), cube_parameters.position));
+
+					cube->setMaterial(mat);
+
+					node->transform.setRotation(glm::vec3(
+						glm::radians(cube_parameters.rotation.x),
+						glm::radians(cube_parameters.rotation.y),
+						glm::radians(cube_parameters.rotation.z)
+					));
+
+					node->transform.setPosition(cube_parameters.position);
+					node->meshes.push_back(cube);
+					selection->clear();
+					selection->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
+					editor->getEngine()->getPhysicsWorld()->addNode(node);
+					show_cube_props = false;
+				}
+
+				ImGui::End();
+			}
+		}
+
+		if (show_uvsphere_props)
+		{
+			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
+			ImGui::SetNextWindowFocus();
+
+			if (ImGui::Begin("Add UVSphere", &show_uvsphere_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+			{
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::Columns(2, "twoColumns", true);
+
+				static unsigned short initial_column_spacing = 0;
+				if (initial_column_spacing < 2)
+				{
+					ImGui::SetColumnWidth(0, 100.0f);
+					initial_column_spacing++;
+				}
+
+				ImGui::Indent(10.0f);
+				ImGui::Text("Radius");
+				ImGui::NextColumn();
+
+				float margin_right = 18.0f;
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat("##Radius", &UVsphere_parameters.radius);
+				ImGui::PopItemWidth();
+
+				ImGui::NextColumn();
+				ImGui::Text("Position");
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Position", &UVsphere_parameters.position[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::NextColumn();
+				ImGui::Text("Rotation");
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Rotation", &UVsphere_parameters.rotation[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::NextColumn();
+				ImGui::Text("Segments");
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragInt2("##Segments", &UVsphere_parameters.segments[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::Columns(1);
+				ImGui::Dummy(ImVec2(0, 50.0f));
+
+				float width = ImGui::GetWindowWidth();
+				float pos_y = ImGui::GetWindowHeight();
+
+				ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
+				ImGui::PushItemWidth(-1);
+				ImGui::Button("Create UVSphere", ImVec2(width - 25.0f, 30.0f));
+				ImGui::PopItemWidth();
+
+				if (ImGui::IsItemClicked())
+				{
+					std::shared_ptr<Node> node = std::make_shared<Node>();
+					node->name = "UVSphere";
+					std::shared_ptr<UVSphere> uvsphere = std::make_shared<UVSphere>(UVsphere_parameters.radius, UVsphere_parameters.segments);
+
+					std::shared_ptr<PhongMaterial> mat = std::make_shared<PhongMaterial>();
+					mat->setTextureMap(Material::TextureType::Diffuse, checkerMap->getId());
+					uvsphere->setMaterial(mat);
+
+					node->transform.setPosition(UVsphere_parameters.position);
+					uvsphere->setPhysicsBody(new SpherePhysicsBody(node.get(), UVsphere_parameters.radius, UVsphere_parameters.position));
+
+					node->transform.setRotation(glm::vec3(
+						glm::radians(UVsphere_parameters.rotation.x),
+						glm::radians(UVsphere_parameters.rotation.y),
+						glm::radians(UVsphere_parameters.rotation.z)
+					));
+
+					node->meshes.push_back(uvsphere);
+					selection->clear();
+					selection->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
+					editor->getEngine()->getPhysicsWorld()->addNode(node);
+					show_uvsphere_props = false;
+				}
+
+				ImGui::End();
+			}
+		}
+
+		if (show_plane_props)
+		{
+			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
+			ImGui::SetNextWindowFocus();
+
+			if (ImGui::Begin("Add Plane", &show_plane_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse))
+			{
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::Columns(2, "twoColumns", true);
+
+				static unsigned short initial_column_spacing = 0;
+				if (initial_column_spacing < 2)
+				{
+					ImGui::SetColumnWidth(0, 100.0f);
+					initial_column_spacing++;
+				}
+
+				ImGui::Indent(10.0f);
+				ImGui::Text("Radius");
+				ImGui::NextColumn();
+
+				float margin_right = 18.0f;
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat("##Radius", &plane_parameters.radius);
+				ImGui::PopItemWidth();
+
+				ImGui::NextColumn();
+				ImGui::Text("Position");
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Position", &plane_parameters.position[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::NextColumn();
+				ImGui::Text("Rotation");
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Rotation", &plane_parameters.rotation[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::Columns(1);
+				ImGui::Dummy(ImVec2(0, 50.0f));
+
+				float width = ImGui::GetWindowWidth();
+				float pos_y = ImGui::GetWindowHeight();
+
+				ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
+				ImGui::PushItemWidth(-1);
+				ImGui::Button("Create Plane", ImVec2(width - 25.0f, 30.0f));
+				ImGui::PopItemWidth();
+
+				if (ImGui::IsItemClicked())
+				{
+					std::shared_ptr<Node> node = std::make_shared<Node>();
+					node->name = "Plane";
+					std::shared_ptr<Plane> plane = std::make_shared<Plane>(plane_parameters.radius);
+
+					std::shared_ptr<PhongMaterial> mat = std::make_shared<PhongMaterial>();
+					mat->setTextureMap(Material::TextureType::Diffuse, checkerMap->getId());
+					plane->setMaterial(mat);
+					plane->setPhysicsBody(new PlanePhysicsBody(node.get(), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, plane_parameters.position));
+
+					node->transform.setRotation(glm::vec3(
+						glm::radians(plane_parameters.rotation.x),
+						glm::radians(plane_parameters.rotation.y),
+						glm::radians(plane_parameters.rotation.z)
+					));
+
+					node->transform.setPosition(plane_parameters.position);
+					node->meshes.push_back(plane);
+					selection->clear();
+					selection->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
+					editor->getEngine()->getPhysicsWorld()->addNode(node);
+					show_plane_props = false;
+				}
+
+				ImGui::End();
+			}
+		}
+
+		if (show_directional_props)
+		{
+			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
+			ImGui::SetNextWindowFocus();
+
+			if (ImGui::Begin("Add directional light", &show_directional_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse))
+			{
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::Columns(2, "twoColumns", true);
+
+				static unsigned short initial_column_spacing = 0;
+				if (initial_column_spacing < 2)
+				{
+					ImGui::SetColumnWidth(0, 100.0f);
+					initial_column_spacing++;
+				}
+
+				ImGui::Indent(10.0f);
+				ImGui::Text("Direction");
+				ImGui::NextColumn();
+
+				float margin_right = 18.0f;
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Direction", &directional_parameters.direction[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::Columns(1);
+				ImGui::Dummy(ImVec2(0, 50.0f));
+
+				float width = ImGui::GetWindowWidth();
+				float pos_y = ImGui::GetWindowHeight();
+
+				ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
+				ImGui::PushItemWidth(-1);
+				ImGui::Button("Create directional light", ImVec2(width - 25.0f, 30.0f));
+				ImGui::PopItemWidth();
+
+				if (ImGui::IsItemClicked())
+				{
+					std::shared_ptr<Node> node = std::make_shared<Node>();
+					node->name = "Directional light";
+					std::shared_ptr<Directional> directional = std::make_shared<Directional>();
+
+					directional->setDirection(glm::vec3(
+						glm::radians(plane_parameters.rotation.x),
+						glm::radians(plane_parameters.rotation.y),
+						glm::radians(plane_parameters.rotation.z)
+					));
+
+					node->lights.push_back(directional);
+					selection->clear();
+					selection->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
+					show_directional_props = false;
+				}
+
+				ImGui::End();
+			}
 		}
 	}
 

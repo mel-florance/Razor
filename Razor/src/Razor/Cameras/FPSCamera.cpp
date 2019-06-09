@@ -5,15 +5,18 @@
 #include "Editor/Components/Viewport.h"
 #include "Razor/Application/Application.h"
 #include "Editor/Editor.h"
+#include "Editor/Components/Viewport.h"
 #include "glm/gtx/string_cast.hpp"
 
 namespace Razor {
 
 	FPSCamera::FPSCamera(Window* window) :
 		Camera(window),
-		sensitivity(15.0f),
+		viewport(nullptr),
+		sensitivity(0.3f),
 		view_friction(0.0f),
-		move_friction(15.0f),
+		move_friction(10.0f),
+		mouse(glm::vec2()),
 		mouse_offset(glm::vec2()),
 		constrain_pitch(true)
 	{
@@ -38,21 +41,27 @@ namespace Razor {
 		up = glm::normalize(glm::cross(right, direction));
 	}
 
+	// #.0 "%"; [YELLOW] [>= 50] #.0 "%";
+
 	void FPSCamera::update(double dt)
 	{
 		delta = (float)dt;
+
+		if (viewport == nullptr)
+			viewport = (Viewport*)Application::Get().getEditor()->getComponents()["Viewport"];
 	}
 
 	void FPSCamera::onEvent(Window * window)
 	{
 		GLFWwindow* native = (GLFWwindow*)window->GetNativeWindow();
-		Viewport* vp = (Viewport*)Application::Get().getEditor()->getComponents()["Viewport"];
 
-		if (vp != nullptr) 
-		{
-			isViewportHovered = vp->getIsHovered();
-			aspect_ratio = vp->getSize().x / vp->getSize().y;
-		}
+		if (viewport != nullptr) 
+			aspect_ratio = viewport->getSize().x / viewport->getSize().y;
+
+		updateVectors();
+
+		if (glfwGetKey(native, GLFW_KEY_KP_5) == GLFW_PRESS && viewport->isHovered())
+			mode = mode == Camera::Mode::ORTHOGRAPHIC ? Camera::Mode::PERSPECTIVE : Camera::Mode::ORTHOGRAPHIC;
 
 		if (capture)
 		{
@@ -73,17 +82,16 @@ namespace Razor {
 		switch (mode) {
 			case Mode::ORTHOGRAPHIC:
 				projection = glm::ortho(1.5f * aspect_ratio, -1.5f * aspect_ratio, 1.5f, -1.5f, -100.0f, 100.0f);
-				updateVectors();
 				break;
 
 			case Mode::PERSPECTIVE:
-				projection = glm::perspective(fov, aspect_ratio, clip_near, clip_far);
-				updateVectors();
+				projection = glm::perspectiveFov(fov, viewport->getSize().x, viewport->getSize().y, clip_near, clip_far);
 				break;
 		}
 
 		velocity *= 1.0f / (1.0f + delta * move_friction);
 		position += velocity * delta;
+		
 		view = glm::lookAt(position, position + direction, up);
 	}
 
@@ -116,8 +124,8 @@ namespace Razor {
 
 		if (capture)
 		{
-			yaw -= sensitivity * (1.0f / 60.0f) *  mouse_offset.x;
-			pitch -= sensitivity * (1.0f / 60.0f) * mouse_offset.y;
+			yaw -= mouse_offset.x * sensitivity;
+			pitch -= mouse_offset.y * sensitivity;
 
 			if (constrain)
 			{
@@ -129,20 +137,23 @@ namespace Razor {
 		}
 	}
 
-	void FPSCamera::onMouseScrolled(glm::vec2 & offset)
+	void FPSCamera::onMouseScrolled(glm::vec2& offset)
 	{
-		speed += offset.y / 10.0f * speed_factor;
+		if (capture)
+		{
+			speed += offset.y / 10.0f * speed_factor;
 
-		if (speed < min_speed)
-			speed = min_speed;
+			if (speed < min_speed)
+				speed = min_speed;
 
-		if (speed > max_speed)
-			speed = max_speed;
+			if (speed > max_speed)
+				speed = max_speed;
+		}
 	}
 
 	void FPSCamera::onMouseDown(int button)
 	{
-		if (button == 1)
+		if (button == 1 && viewport->isHovered())
 		{
 			capture = true;
 			glfwSetInputMode((GLFWwindow*)window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);

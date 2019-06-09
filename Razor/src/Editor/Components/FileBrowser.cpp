@@ -6,45 +6,31 @@
 #include "Razor/Geometry/StaticMesh.h"
 #include "Editor/Editor.h"
 
-namespace Razor {
+namespace fs = std::filesystem;
 
-	std::vector<FileBrowser::File> FileBrowser::filesInScope = {};
+namespace Razor 
+{
 
-	FileBrowser::FileBrowser()
+	FileBrowser::FileBrowser() :
+		index(0),
+		filter(""),
+		selected(nullptr)
 	{
-		selection = 1;
-		currentPath = fs::current_path();
-		filepath = currentPath.string();
-		oldVisibility = false;
-		currentPathIsDir = true;
+		std::string path = "F:/Razor/Razor";
+		root = new TreeItem("Razor", path);
+		root->opened = false;
+		root->id = index;
+		loadTreeItem(root, path);
 	}
 
 	FileBrowser::~FileBrowser()
 	{
 	}
 
-	void FileBrowser::itemClicked(int id)
-	{
-		std::string path = filesInScope[id].path.string();
-		bool isDir = (fs::is_directory(path));
-		std::cout << "item clicked: " << path << ", isDir: " <<  isDir << std::endl;
-
-		if (!isDir) {
-			StaticMesh mesh;
-			tasksManager->add({
-				&mesh, 
-				&AssetsManager::import,
-				&Editor::importFinished, 
-				Variant(path),
-				"Import task"
-			});
-		}
-	}
-
 	void FileBrowser::render()
 	{
 		bool result = false;
-		ImGui::PushID("Columns");
+
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 		ImGui::Columns(2, "twoColumns", true);
 		ImGui::PopStyleVar();
@@ -56,76 +42,104 @@ namespace Razor {
 			initial_column_spacing++;
 		}
 
-		if (oldVisibility != isVisible)
-		{
-			oldVisibility = isVisible;
-
-			if (isVisible) 
-			{
-				currentPath = fs::current_path();
-				currentPathIsDir = true;
-
-				ImGui::PushItemWidth(-1);
-				ImGui::TextWrapped(currentPath.string().data());
-				ImGui::PopItemWidth();
-
-				getFiles(currentPath, filesInScope);
-			}
-		}
-
 		ImGui::PushItemWidth(-1);
-
-		if (ImGui::ListBox("##", &selection, getFromVector, &filesInScope, (int)filesInScope.size(), 10, &FileBrowser::itemClicked)) {
-
-			currentPath = filesInScope[selection].path;
-			currentPathIsDir = fs::is_directory(currentPath);
-
-			if (currentPathIsDir)
-				getFiles(currentPath, filesInScope);
-		}
-
+		ImGui::InputText("Search", filter, 32);
 		ImGui::PopItemWidth();
+
+		ImGui::BeginChild("Directories");
+		drawTreeItem(root);
+		ImGui::EndChild();
+
 		ImGui::NextColumn();
 
-		ImGui::Text(currentPath.string().data());
+		ImGui::BeginChild("Files");
 
-		ImGui::PopID();
-	
+		if (selected != nullptr) 
+		{
+			ImGui::Columns(8, "filesColumns", false);
+
+			for (const auto& entry : fs::directory_iterator(selected->path))
+			{
+				if (!entry.is_directory()) 
+				{
+					ImGui::Button("##zer", ImVec2(ImGui::GetColumnWidth() / 1.333f, ImGui::GetColumnWidth() / 1.333f));
+
+					if (ImGui::Selectable(entry.path().filename().string().c_str())) {
+						Log::trace(entry.path().string().c_str());
+					}
+
+					ImGui::Dummy(ImVec2(0, 20));
+					ImGui::NextColumn();
+				}
+			}
+
+			ImGui::Columns(1);
+		}
+
+		ImGui::EndChild();
+
+		ImGui::Columns(1);
 	}
 
-	void FileBrowser::getFiles(const fs::path& path, std::vector<File>& files)
+	void FileBrowser::loadTreeItem(TreeItem* item, const std::string& path)
 	{
-		files.clear();
-
-		if (path.has_parent_path())
-			files.push_back({"..", path.parent_path()});
-
-		for (const fs::directory_entry& dirEntry : fs::directory_iterator(path)) {
-			const fs::path& dirPath = dirEntry.path();
-
-			if(fs::is_directory(dirPath.string().data()))
-				files.push_back({dirPath.filename().string(), dirPath });
+		for (const auto& entry : fs::directory_iterator(path)) 
+		{
+			if (entry.is_directory())
+			{
+				std::string dir_name = entry.path().filename().string();
+				TreeItem* child = new TreeItem(dir_name, path + "/" + dir_name);
+				child->id = ++index;
+				item->addChild(child);
+			}
 		}
 	}
 
-	const int FileBrowser::clampToInt(const size_t data)
+	void FileBrowser::unloadTreeItem(TreeItem* item)
 	{
-		static const int max_int = std::numeric_limits<int>::max();
-		return static_cast<int>(data > max_int ? max_int : data);
+		std::vector<TreeItem*>::iterator it = item->childs.begin();
+
+		for(; it != item->childs.end(); ++it)
+			delete *it;
+
+		item->childs.clear();
 	}
 
-	bool FileBrowser::getFromVector(void* data, int idx, const char** out_text)
+	void FileBrowser::drawTreeItem(TreeItem* item)
 	{
-		const std::vector<File>* v = reinterpret_cast<std::vector<File>*>(data);
-		const int elementCount = clampToInt(v->size());
+		if (item != nullptr)
+		{
+			ImGui::SetNextTreeNodeOpen(item->opened, ImGuiCond_Once);
+			
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2, 2));
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(4, 4));
 
-		if (idx < 0 || idx >= elementCount)
-			return false;
+			bool node_opened = ImGui::TreeNode(item, item->name.c_str());
 
-		*out_text = v->at(idx).name.data();
+			if(node_opened)
+			{
+				item->opened = true;
+				std::vector<TreeItem*>::iterator it = item->childs.begin();
 
-		return true;
+				for (; it != item->childs.end(); ++it)
+					drawTreeItem(*it);
+
+				ImGui::TreePop();
+			}
+			else
+				item->opened = false;
+
+			ImGui::PopStyleVar();
+			ImGui::PopStyleVar();
+
+			if (ImGui::IsItemClicked() && node_opened)
+				unloadTreeItem(item);
+			else if(ImGui::IsItemClicked() && !node_opened)
+				loadTreeItem(item, item->path);
+
+			if (ImGui::IsItemClicked())
+				selected = item;
+		}
 	}
 
 }
-

@@ -7,6 +7,7 @@ namespace Razor
 	class Node;
 	class Ray;
 	class Grid;
+	class ColorMaterial;
 
 	class GridAxis : public EditorTool
 	{
@@ -14,26 +15,34 @@ namespace Razor
 		GridAxis(Editor* editor);
 		~GridAxis();
 
+		inline std::shared_ptr<Node> getGridNode() { return grid_node; }
+		inline std::shared_ptr<Node> getAxisNode() { return axis_node; }
+
 		struct Axis
 		{
-			Ray* x;
-			Ray* y;
-			Ray* z;
-		};
+			Axis(int size = 8);
+			~Axis();
 
-		inline Node* getGridNode() { return grid_node; }
-		inline Node* getAxisNode() { return axis_node; }
+			std::shared_ptr<Ray> x_ray;
+			std::shared_ptr<Ray> y_ray;
+			std::shared_ptr<Ray> z_ray;
+			std::shared_ptr<ColorMaterial> x_material;
+			std::shared_ptr<ColorMaterial> y_material;
+			std::shared_ptr<ColorMaterial> z_material;
+		};
 
 	private:
 		bool show_grid;
 		bool show_axis;
 		int grid_size;
+		int axis_size;
 
-		Node* grid_node;
-		Node* axis_node;
+		std::shared_ptr<Node> grid_node;
+		std::shared_ptr<Node> axis_node;
 
-		Grid* grid;
-		Axis axis;
+		std::shared_ptr<Grid> grid;
+		Axis* axis;
+		std::shared_ptr<ColorMaterial> grid_mat;
 	};
 
 }

@@ -10,7 +10,10 @@ namespace Razor {
 	Material::Material() :
 		has_diffuse(false),
 		has_specular(false),
-		has_normal(false)
+		has_normal(false),
+		diffuse_path("Not set"),
+		specular_path("Not set"),
+		normal_path("Not set")
 	{
 
 	}
@@ -19,7 +22,7 @@ namespace Razor {
 	{
 	}
 
-	void Material::bindLights(Shader* shader, const std::vector<Light*>& lights)
+	void Material::bindLights(Shader* shader, const std::vector<std::shared_ptr<Light>>& lights)
 	{
 		if (shader != nullptr)
 		{
@@ -30,19 +33,20 @@ namespace Razor {
 			{
 				if (light->getType() == Light::Type::DIRECTIONAL)
 				{
-					Directional* directional = (Directional*)light;
+					std::shared_ptr<Directional> directional = std::dynamic_pointer_cast<Directional>(light);
 					paramType = "directionalLights";
 
 					shader->setUniform3f(formatParamName(paramType, dIdx, "direction"), directional->getDirection());
 					shader->setUniform3f(formatParamName(paramType, dIdx, "ambient"), directional->getAmbient());
 					shader->setUniform3f(formatParamName(paramType, dIdx, "diffuse"), directional->getDiffuse());
 					shader->setUniform3f(formatParamName(paramType, dIdx, "specular"), directional->getSpecular());
+					shader->setUniform1f(formatParamName(paramType, dIdx, "intensity"), directional->getIntensity());
 
 					dIdx++;
 				}
 				else if (light->getType() == Light::Type::POINT)
 				{
-					Point* point = (Point*)light;
+					std::shared_ptr<Point> point = std::dynamic_pointer_cast<Point>(light);
 					paramType = "pointLights";
 
 					shader->setUniform3f(formatParamName(paramType, pIdx, "position"), point->getPosition());
@@ -52,16 +56,18 @@ namespace Razor {
 					shader->setUniform3f(formatParamName(paramType, pIdx, "ambient"), point->getAmbient());
 					shader->setUniform3f(formatParamName(paramType, pIdx, "diffuse"), point->getDiffuse());
 					shader->setUniform3f(formatParamName(paramType, pIdx, "specular"), point->getSpecular());
+					shader->setUniform1f(formatParamName(paramType, pIdx, "intensity"), point->getIntensity());
 
 					pIdx++;
 				}
 				else if (light->getType() == Light::Type::SPOT)
 				{
-					Spot* spot = (Spot*)light;
+					std::shared_ptr<Spot> spot = std::dynamic_pointer_cast<Spot>(light);
 					paramType = "spotLights";
 
 					shader->setUniform3f(formatParamName(paramType, sIdx, "direction"), spot->getDirection());
 					shader->setUniform3f(formatParamName(paramType, sIdx, "position"), spot->getPosition());
+					shader->setUniform1f(formatParamName(paramType, sIdx, "intensity"), spot->getIntensity());
 					shader->setUniform1f(formatParamName(paramType, sIdx, "constant"), spot->getConstant());
 					shader->setUniform1f(formatParamName(paramType, sIdx, "linear"), spot->getLinear());
 					shader->setUniform1f(formatParamName(paramType, sIdx, "quadratic"), spot->getQuadratic());

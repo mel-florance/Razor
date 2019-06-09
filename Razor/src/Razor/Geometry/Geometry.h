@@ -3,7 +3,8 @@
 #include "StaticMesh.h"
 #include "Razor/Maths/Maths.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	class Quad : public StaticMesh
 	{
@@ -50,15 +51,15 @@ namespace Razor {
 	class Grid : public StaticMesh
 	{
 	public:
-		Grid(float divisions = 15.0f);
+		Grid(int divisions = 15);
 		~Grid();
 
-		inline void setDivisions(float divisions) { this->divisions = divisions; }
-		inline float& getDivisions() { return this->divisions; }
+		inline void setDivisions(int divisions) { this->divisions = divisions; }
+		inline int& getDivisions() { return this->divisions; }
 		void generate();
 
 	private:
-		float divisions;
+		int divisions;
 	};
 
 	class Ray : public StaticMesh

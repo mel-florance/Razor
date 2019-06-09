@@ -6,6 +6,7 @@ namespace Razor {
 
 	class Camera;
 	class ParticleSystem;
+	class ForwardRenderer;
 
 	class Scene
 	{
@@ -22,8 +23,10 @@ namespace Razor {
 		inline SceneGraph* getSceneGraph() const { return graph; }
 		inline size_t getNodesSize() { return graph->getNodes().size(); }
 
-		inline void addLight(Light* light) { lights.push_back(light); }
-		inline std::vector<Light*>& getLights() { return lights; }
+		inline std::vector<std::shared_ptr<Light>>& getLights() { return lights; }
+
+		void addLight(std::shared_ptr<Light> light, Light::Type light_type);
+		void removeLight(std::shared_ptr<Light> light);
 
 		inline void addCamera(Camera* camera) { cameras.push_back(camera); }
 		inline std::vector<Camera*>& getCameras() { return cameras; }
@@ -36,7 +39,7 @@ namespace Razor {
 		std::string name;
 		Camera* active_camera;
 		SceneGraph* graph;
-		std::vector<Light*> lights;
+		std::vector<std::shared_ptr<Light>> lights;
 		std::vector<Camera*> cameras;
 		std::vector<ParticleSystem*> particle_systems;
 	};

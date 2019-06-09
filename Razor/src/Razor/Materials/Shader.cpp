@@ -11,6 +11,7 @@ namespace Razor {
 		name(name),
 		dirty(true)
 	{
+		shadersDir = "F:/Razor/Razor/Razor/src/Shaders/";
 		load();
 	}
 
@@ -26,6 +27,30 @@ namespace Razor {
 	void Shader::unbind()
 	{
 		glUseProgram(0);
+	}
+
+	bool Shader::load()
+	{
+		status &= ~(Status::Loaded);
+
+		auto frag_data = File::read(shadersDir + name + ".frag");
+		auto vert_data = File::read(shadersDir + name + ".vert");
+
+		if (frag_data.empty() || vert_data.empty())
+			return false;
+
+		sources[Type::VERTEX] = vert_data;
+		sources[Type::FRAGMENT] = frag_data;
+
+		int size = 0;
+		size += Utils::getFileSize(shadersDir + name + ".frag");
+		size += Utils::getFileSize(shadersDir + name + ".vert");
+
+		Log::info("Loaded shader: %s %s", name.c_str(), Utils::bytesToSize(size).c_str());
+
+		parseIncludes();
+
+		return status & Status::Loaded;
 	}
 
 	void Shader::defineConstant(Type type, const std::string& name, int value)
@@ -66,23 +91,38 @@ namespace Razor {
 		}
 	}
 
-	bool Shader::load()
+	void Shader::parseIncludes()
 	{
-		status &= ~(Status::Loaded);
-		std::string shadersDir = "F:/Razor/Razor/Razor/src/Shaders/";
+		std::string out;
+		auto data = sources[Type::FRAGMENT];
+		auto lines = Utils::splitString(data, "\n");
 
-		auto frag_data = File::read(shadersDir + name + ".frag");
-		auto vert_data = File::read(shadersDir + name + ".vert");
+		for (auto& line : lines)
+		{
+			if (line.rfind("#include", 0) == 0)
+			{
+				auto parts = Utils::splitString(line, " ");
 
-		if (frag_data.empty() || vert_data.empty())
-			return false;
+				std::string ln;
+				std::string str;
+				std::ifstream stream;
+				stream.open(shadersDir + parts[1]);
 
-		sources[Type::VERTEX] = vert_data;
-		sources[Type::FRAGMENT] = frag_data;
+				if (stream.is_open())
+				{
+					while (getline(stream, ln))
+						str += ln + "\n";
 
-		Log::info("Loaded shader: %s", name.c_str());
+					stream.close();
+				}
 
-		return status & Status::Loaded;
+				line = str;
+			}
+
+			out += line + "\n";
+		}
+
+		sources[Type::FRAGMENT] = out;
 	}
 
 	bool Shader::compile()
@@ -109,7 +149,7 @@ namespace Razor {
 
 				if (!status) {
 					glGetShaderInfoLog(shader, 512, NULL, error);
-					Log::error("Shader compilation failed: {0}.", error);
+					Log::error("Shader compilation failed: %s.", error);
 				}
 				else {
 					std::string type;
@@ -144,7 +184,7 @@ namespace Razor {
 
 		if (!status) {
 			glGetProgramInfoLog(program, 512, NULL, error);
-			Log::error("Shader program linking failed: {0}.", error);
+			Log::error("Shader program linking failed: %s.", error);
 		}
 		else {
 			Log::info("Linked shader: %s.", name.c_str());
@@ -157,15 +197,8 @@ namespace Razor {
 		return status & Status::Linked;
 	}
 
-	void Shader::setUniform4f(const std::string& name, const glm::vec4& value) {
-		glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
-	}
-	void Shader::setUniform4f(const std::string& name, float x, float y, float z, float w) {
-		glUniform4f(getUniformLocation(name), x, y, z, w);
-	}
-	void Shader::setUniformMat4f(const std::string& name, const glm::mat4& matrix) {
-		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
-	}
+
+
 	void Shader::setUniform1i(const std::string & name, int value){
 		glUniform1i(getUniformLocation(name), value);
 	}
@@ -184,14 +217,23 @@ namespace Razor {
 	void Shader::setUniform3f(const std::string& name, float x, float y, float z) {
 		glUniform3f(getUniformLocation(name), x, y, z);
 	}
+	void Shader::setUniform4f(const std::string& name, const glm::vec4& value) {
+		glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
+	}
+	void Shader::setUniform4f(const std::string& name, float x, float y, float z, float w) {
+		glUniform4f(getUniformLocation(name), x, y, z, w);
+	}
+	void Shader::setUniformMat4f(const std::string& name, const glm::mat4& matrix) {
+		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
+	}
 
-	unsigned int Shader::getUniformLocation(const std::string& name)
+	unsigned int Shader::getUniformLocation(const std::string& uniform_name)
 	{
 
-		int location = glGetUniformLocation(program, name.c_str());
+		int location = glGetUniformLocation(program, uniform_name.c_str());
 
 		if (location == -1)
-			Log::warn("Invalid uniform location: {0}", name);
+			Log::warn("Shader \"%s\" Invalid uniform location: %s", name.c_str(), uniform_name.c_str());
 
 		return location;
 	}

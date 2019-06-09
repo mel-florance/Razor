@@ -41,7 +41,8 @@ namespace Razor {
 
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-	
+		io.IniFilename = "./config/ui.ini";
+
 		ImGuiStyle & style = ImGui::GetStyle();
 		ImVec4 * colors = style.Colors;
 
@@ -141,6 +142,8 @@ namespace Razor {
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true),
 		ImGui_ImplOpenGL3_Init("#version 410");
+
+
 
 	}
 

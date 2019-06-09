@@ -2,6 +2,7 @@
 
 #include "rzpch.h"
 #include "Core.h"
+#include <commdlg.h>
 
 namespace Razor 
 {
@@ -10,7 +11,46 @@ namespace Razor
 	{
 	public:
 
-		static bool treeNode(const char* label);
+		static bool treeNode(
+			const char* label,
+			bool has_icon = true,
+			bool stripe = true,
+			const std::string& icon_name = "arrow_button",
+			const std::string& icon_hover = std::string(),
+			bool selected = false
+		);
+
+		static inline glm::vec4 lerp(const glm::vec4& a, const glm::vec4& b, float time)
+		{
+			return glm::vec4(
+				a.x + (b.x - a.x) * time,
+				a.y + (b.y - a.y) * time,
+				a.z + (b.z - a.z) * time,
+				a.w + (b.w - a.w) * time
+			);
+		}
+
+		static inline glm::vec3 lerp(const glm::vec3& a, const glm::vec3& b, float time)
+		{
+			return glm::vec3(
+				a.x + (b.x - a.x) * time,
+				a.y + (b.y - a.y) * time,
+				a.z + (b.z - a.z) * time
+			);
+		}
+
+		static inline glm::vec2 lerp(const glm::vec2& a, const glm::vec2& b, float time)
+		{
+			return glm::vec2(
+				a.x + (b.x - a.x) * time,
+				a.y + (b.y - a.y) * time
+			);
+		}
+
+		static inline float lerp(float a, float b, float time)
+		{
+			return a + (b - a) * time;
+		}
 
 		static inline std::string& ltrim(std::string& str)
 		{
@@ -74,14 +114,16 @@ namespace Razor
 			return strings;
 		}
 
-		static inline std::string getFileSize(const std::string& filename) 
+		static inline int getFileSize(const std::string& filename) 
 		{
-			FILE *p_file = NULL;
-			p_file = fopen(filename.c_str(), "rb");
-			int size = ftell(p_file);
-			fseek(p_file, 0, SEEK_END);
-			fclose(p_file);
+			std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+			int size = (int)in.tellg();
+			in.close();
+			return size;
+		};
 
+		static inline std::string bytesToSize(int size) 
+		{
 			const char *sizes[5] = { "bytes", "Kb", "Mb", "Gb", "Tb" };
 
 			int i;
@@ -91,7 +133,7 @@ namespace Razor
 				dblByte = size / 1024.0;
 
 			return std::to_string(dblByte) + " " + std::string(sizes[i]);
-		};
+		}
 
 		static inline std::string remove_extension(const std::string& filename)
 		{
@@ -120,6 +162,17 @@ namespace Razor
 			float r = random * diff;
 
 			return a + r;
+		}
+
+		static glm::vec2 randomPointInCircle(const glm::vec2& center, float radius)
+		{
+			float r = radius * sqrt(rand() / (float)(RAND_MAX));
+			float theta = rand() / (float)(RAND_MAX) * 2 * PI;
+
+			return glm::vec2(
+				center.x + r * cos(theta),
+				center.y + r * sin(theta)
+			);
 		}
 
 		static inline float mapValues(float rangeA[], float rangeB[], float value, unsigned int size = 2)
@@ -165,7 +218,45 @@ namespace Razor
 			to[2][3] = from.d3; to[3][3] = from.d4;
 		}
 
-		
+		static std::string fileDialog()
+		{
+			OPENFILENAMEA ofn;
+			ZeroMemory(&ofn, sizeof(ofn));
+			wchar_t buffer[MAX_PATH] = L"";
+
+			ofn.lStructSize = sizeof(ofn);
+			ofn.hwndOwner = NULL;
+			ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
+			ofn.lpstrFile = (LPSTR)buffer;
+			ofn.nFilterIndex = 1;
+			ofn.nMaxFile = MAX_PATH;
+			ofn.lpstrFileTitle = NULL;
+			ofn.nMaxFileTitle = 0;
+			ofn.lpstrInitialDir = NULL;
+			ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+
+			return GetOpenFileNameA(&ofn) ? std::string(ofn.lpstrFile) : "";
+		}
+
+		template<class T>
+		static std::string numberFormatLocale(T value, char sep = ' ')
+		{
+			struct Numpunct : public std::numpunct<char> 
+			{
+				Numpunct(char separator) : separator(separator) {}
+
+			protected:
+				char separator;
+				virtual char do_thousands_sep() const { return separator; }
+				virtual std::string do_grouping() const { return "\03"; }
+			};
+
+			std::stringstream ss;
+			ss.imbue({ std::locale(), new Numpunct(sep) });
+			ss << std::setprecision(2) << std::fixed << value;
+
+			return ss.str();
+		}
 	};
 
 }

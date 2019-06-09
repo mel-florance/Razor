@@ -16,7 +16,7 @@ namespace Razor {
 		Shader* getShader(const std::string& name);
 
 	private:
-		std::map<std::string, Shader*> shaders;
+		std::unordered_map<std::string, Shader*> shaders;
 	};
 
 }

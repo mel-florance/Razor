@@ -12,7 +12,9 @@ namespace Razor {
 		~MainMenu();
 
 		void render(float delta) override;
+
 		bool show_create_project;
+		bool show_preferences;
 
 	private:
 	};

@@ -1,12 +1,12 @@
 #include "rzpch.h"
 #include "Pipeline.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	Pipeline::Pipeline()
 	{
 	}
-
 
 	Pipeline::~Pipeline()
 	{

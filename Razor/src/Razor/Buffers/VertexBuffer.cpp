@@ -4,7 +4,9 @@
 
 namespace Razor {
 
-	VertexBuffer::VertexBuffer(const void* data, unsigned int size) : size(size)
+	VertexBuffer::VertexBuffer(const void* data, unsigned int size) :
+		size(size),
+		usage(BufferUsage::STATIC_DRAW)
 	{
 		glGenBuffers(1, &id);
 		update(size, data);
@@ -28,8 +30,7 @@ namespace Razor {
 	void VertexBuffer::update(unsigned int size, const void* data)
 	{
 		bind();
-		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-		unbind();
+		glBufferData(GL_ARRAY_BUFFER, size, data, (GLenum)usage);
 	}
 
 }

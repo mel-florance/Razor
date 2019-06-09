@@ -10,32 +10,34 @@
 
 namespace Razor {
 
-	Texture::Texture(const std::string& filename, bool mipmaps, bool flipped) :
+	Texture::Texture(const std::string& filename, bool mipmaps, bool flipped, ChannelType type, bool free_after_load) :
 		filename(filename),
 		mipmaps(mipmaps),
 		lodBias(0.0f),
 		flipped(flipped),
-		id(NULL)
+		id(NULL),
+		data(NULL),
+		channel_type(type),
+		free_after_load(free_after_load)
 	{
+		glGenTextures(1, &id);
 		this->load();
 	}
 
 	Texture* Texture::Texture::load()
 	{
-		int width, height, numComponents;
 		stbi_set_flip_vertically_on_load(flipped);
+		data = stbi_load(filename.c_str(), &width, &height, &components_count, channel_type);
 
-		unsigned char* imageData = stbi_load(filename.c_str(), &width, &height, &numComponents, 4);
-
-		if (imageData == NULL) {
-			Log::error("Texture loading failed for texture: {0}", filename);
+		if (data == NULL)
+		{
+			Log::error("Texture loading failed: %s", filename.c_str());
 			return nullptr;
 		}
 
-		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -54,9 +56,10 @@ namespace Razor {
 		glGetFloatv(GL_TEXTURE_MAX_ANISOTROPY, &anisotropy);
 		glTexParameterf(GL_TEXTURE_2D, GL_MAX_TEXTURE_MAX_ANISOTROPY, anisotropy);
 
-		Log::info("Loaded texture: %s : %s", filename.c_str(), Utils::getFileSize(filename).c_str());
-
-		stbi_image_free(imageData);
+		Log::info("Loaded texture: %s %s", filename.c_str(), Utils::bytesToSize(Utils::getFileSize(filename)).c_str());
+	
+		if(free_after_load)
+			stbi_image_free(data);
 
 		return this;
 	}
@@ -77,6 +80,9 @@ namespace Razor {
 
 	Texture::~Texture()
 	{
+		if(!free_after_load)
+			stbi_image_free(data);
+
 		glDeleteTextures(1, &id);
 	}
 

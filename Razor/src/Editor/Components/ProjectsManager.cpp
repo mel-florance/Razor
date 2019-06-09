@@ -4,8 +4,11 @@
 
 namespace Razor {
 
-	ProjectsManager::ProjectsManager(Editor* editor) : EditorComponent(editor)
+	ProjectsManager::ProjectsManager(Editor* editor) : 
+		EditorComponent(editor),
+		projects_path("")
 	{
+		projects_path = "C:\\Users\\overk\\Documents\\RazorProjects";
 	}
 
 	ProjectsManager::~ProjectsManager()

@@ -22,9 +22,12 @@
 #include "Tools/Gizmo.h"
 #include "Tools/GridAxis.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	class Engine;
+	class Texture;
+	class TextureAtlas;
 	class TPSCamera;
 	class FPSCamera;
 
@@ -67,8 +70,14 @@ namespace Razor {
 			return nullptr;
 		}
 
-		static void importFinished(void* result);
-		static void setupMeshBuffers(Node* node);
+		static std::shared_ptr<Node> import(const std::string& path);
+		static void importFinished(std::shared_ptr<Node> result);
+		static void setupMeshBuffers(std::shared_ptr<Node> node);
+
+		static void drawIcon(const std::string& name, const glm::vec2& size = glm::vec2(25.0f, 25.0f));
+		static void drawButtonIcon(const std::string& name, const glm::vec2& size = glm::vec2(25.0f, 25.0f));
+
+		static TextureAtlas* icons_atlas;
 
 	private:
 		Engine* m_Engine;

@@ -19,6 +19,7 @@ namespace Razor {
 		bool transform_opened;
 		bool static_mesh_opened;
 		bool material_opened;
+		bool lights_opened;
 
 		char name[32];
 
@@ -28,6 +29,7 @@ namespace Razor {
 
 		Selection* selection;
 		const char* current_material;
+		const char* current_light_type;
 	};
 
 }

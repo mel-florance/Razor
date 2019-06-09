@@ -1,4 +1,5 @@
 #include <Razor.h>
+//#include <vld.h>
 
 class TestLayer : public Razor::Layer
 {
@@ -8,20 +9,33 @@ public:
 		
 	}
 
-	void OnAttach() 
+	void OnAttach()
 	{
-		Razor::Node* node = new Razor::Node();
-		node->transform.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-		node->transform.setScale(glm::vec3(8.0f, 1.0f, 8.0f));
-		Razor::PhongMaterial* mat = new Razor::PhongMaterial();
-		mat->setDiffuseColor(glm::vec3(0.8f, 0.8f, 0.8f));
-		Razor::Plane* plane = new Razor::Plane();
-		plane->setMaterial(mat);
-		node->meshes.push_back(plane);
-		//sm->getActiveScene()->getSceneGraph()->addNode(node);
-
 		Razor::Script script;
+	}
 
+	void createPlane() 
+	{
+		std::shared_ptr<Razor::Node> node = std::make_shared<Razor::Node>();
+		node->name = "Plane";
+		node->transform.setScale(glm::vec3(8.0f, 1.0f, 8.0f));
+		std::shared_ptr<Razor::PhongMaterial> mat = std::make_shared<Razor::PhongMaterial>();
+		std::shared_ptr<Razor::Plane> plane = std::make_shared<Razor::Plane>();
+		plane->setMaterial(mat);
+
+		node->meshes.push_back(plane);
+		sm->getActiveScene()->getSceneGraph()->addNode(node);
+	}
+
+	void OnEvent(Razor::Event& event) 
+	{
+		if (event.GetEventType() == Razor::EventType::KeyPressed)
+		{
+			Razor::KeyPressedEvent& e = (Razor::KeyPressedEvent&)event;
+
+			if(e.GetKeyCode() == RZ_KEY_J)
+				createPlane();
+		}
 	}
 
 private:
@@ -45,7 +59,5 @@ public:
 
 Razor::Application* Razor::createApplication()
 {
-	//Log::info("Started Application");
-
 	return new Sandbox();
 }

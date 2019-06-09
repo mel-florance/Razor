@@ -5,12 +5,19 @@
 namespace Razor
 {
 	EditorTool::EditorTool(Editor* editor) : 
-		editor(editor)
+		editor(editor),
+		dirty(true),
+		active(true)
 	{
 	}
 
 	EditorTool::~EditorTool()
 	{
+	}
+
+	Editor* EditorTool::getEditor()
+	{
+		return editor;
 	}
 
 }

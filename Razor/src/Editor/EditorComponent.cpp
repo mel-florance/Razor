@@ -6,7 +6,8 @@ namespace Razor {
 
 	EditorComponent::EditorComponent(Editor* editor) : 
 		editor(editor),
-		isDirty(false)
+		dirty(true),
+		active(true)
 	{
 	}
 

@@ -12,9 +12,11 @@
 #include "Razor/Cameras/FPSCamera.h"
 #include "Razor/Scene/ScenesManager.h"
 
-namespace Razor {
+namespace Razor
+{
 
 	Application* Application::s_Instance = nullptr;
+	Editor* Application::m_Editor = nullptr;
 
 	Application::Application(bool headless) : headless(headless), m_Running(true)
 	{
@@ -39,7 +41,7 @@ namespace Razor {
 
 	Application::~Application()
 	{
-		delete m_Editor;
+		//delete m_Editor;
 	}
 
 	void Application::close()
@@ -73,8 +75,8 @@ namespace Razor {
 		{
 			(*--it)->OnEvent(event);
 		
-	/*		if (event.Handled)
-				break;*/
+			if (event.Handled)
+				break;
 		}
 	}
 
@@ -83,9 +85,9 @@ namespace Razor {
 		return m_Engine->getScenesManager();
 	}
 
-	DeferredRenderer* Application::getDeferredRenderer()
+	ForwardRenderer* Application::getForwardRenderer()
 	{
-		return m_Engine->getDeferredRenderer();
+		return m_Engine->getForwardRenderer();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

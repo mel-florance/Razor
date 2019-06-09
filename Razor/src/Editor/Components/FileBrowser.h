@@ -1,14 +1,9 @@
 #pragma once
 
-#include "imgui.h"
 #include "Razor/Core/Core.h"
 
-namespace fs = std::experimental::filesystem;
-
-namespace Razor {
-
-	class TasksManager;
-	class AssetsManager;
+namespace Razor 
+{
 
 	class RAZOR_API FileBrowser
 	{
@@ -16,28 +11,42 @@ namespace Razor {
 		FileBrowser();
 		~FileBrowser();
 
-		const struct File {
+		void render();
+
+		struct TreeItem
+		{
+			TreeItem(const std::string& name, const std::string& path) :
+				name(name),
+				path(path),
+				id(0)
+			{}
+
+			unsigned int id;
 			std::string name;
-			fs::path path;
+			std::string path;
+			std::vector<TreeItem*> childs;
+			bool opened = false;
+
+			inline void addChild(TreeItem* child)
+			{
+				auto it = std::find_if(childs.begin(), childs.end(), [=](TreeItem* i) {
+					return i->name == child->name;
+				});
+
+				if (it == childs.end())
+					childs.push_back(child);
+			}
 		};
 
-		void render();
-		static void getFiles(const fs::path& path, std::vector<File>& files);
-		static const int clampToInt(const size_t data);
-		static bool getFromVector(void* data, int idx, const char** out_text);
-		static void itemClicked(int id);
-
-		static std::vector<File> filesInScope;
-		static TasksManager* tasksManager;
-		static AssetsManager* assetsManager;
+		void loadTreeItem(TreeItem* item, const std::string& path);
+		void unloadTreeItem(TreeItem* item);
+		void drawTreeItem(TreeItem* item);
 
 	private:
-		int selection;
-		std::string filepath;
-		bool oldVisibility;
-		bool isVisible;
-		fs::path currentPath;
-		bool currentPathIsDir;
+		TreeItem* selected;
+		unsigned int index;
+		TreeItem* root;
+		char filter[32];
 	};
 
 }

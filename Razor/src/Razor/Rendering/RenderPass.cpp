@@ -1,7 +1,8 @@
 #include "rzpch.h"
 #include "RenderPass.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	RenderPass::RenderPass()
 	{

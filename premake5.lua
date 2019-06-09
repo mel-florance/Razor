@@ -20,6 +20,7 @@ IncludeDir["stb"] = "Razor/vendor/stb"
 IncludeDir["assimp"] = "Razor/vendor/assimp/include"
 IncludeDir["lua"] = "Razor/vendor/lua/include"
 IncludeDir["bullet"] = "Razor/vendor/bullet/include"
+IncludeDir["openal"] = "Razor/vendor/openal/include"
 
 include "Razor/vendor/GLFW"
 include "Razor/vendor/Glad"
@@ -37,6 +38,8 @@ project "Razor"
 
 	pchheader "rzpch.h"
 	pchsource "Razor/src/rzpch.cpp"
+
+	disablewarnings { "4006", "4221" }
 
 	files
 	{
@@ -58,6 +61,7 @@ project "Razor"
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.lua}",
 		"%{IncludeDir.bullet}",
+		"%{IncludeDir.openal}",
 		"%{prj.name}/vendor/assimp/include",
 		"%{prj.name}/vendor/assimp/build/include"
 	}
@@ -66,6 +70,7 @@ project "Razor"
 		"%{prj.name}/vendor/assimp/build/code/Release",
 		"%{prj.name}/vendor/lua",
 		"%{prj.name}/vendor/bullet/lib",
+		"%{prj.name}/vendor/openal"
 	}
 
 	links
@@ -76,10 +81,7 @@ project "Razor"
 		"opengl32.lib",
 		"assimp",
 		"lua53.lib",
-		"BulletCollision.lib",
-		"BulletDynamics.lib",
-		"BulletSoftBody.lib",
-		"LinearMath.lib"
+		"OpenAL32.lib"
 	}
 
 	filter "system:windows"
@@ -107,23 +109,46 @@ project "Razor"
 			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Release-windows-x86_64/Sandbox",
 			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Debug-windows-x86_64/Sandbox",
 			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Release-windows-x86_64/Server",
-			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Debug-windows-x86_64/Server"
+			"{COPY} ../Razor/vendor/lua/lua53.dll ../bin/Debug-windows-x86_64/Server",
+
+			"{COPY} ../Razor/vendor/openal/OpenAL32.dll ../bin/Release-windows-x86_64/Sandbox",
+			"{COPY} ../Razor/vendor/openal/OpenAL32.dll ../bin/Debug-windows-x86_64/Sandbox",
+			"{COPY} ../Razor/vendor/openal/OpenAL32.dll ../bin/Release-windows-x86_64/Server",
+			"{COPY} ../Razor/vendor/openal/OpenAL32.dll ../bin/Debug-windows-x86_64/Server"
 		}
 
 	filter "configurations:Debug"
 		defines "RZ_DEBUG"
 		buildoptions {"/MTd"}
 		symbols "On"
+		links {
+			"BulletCollision_Debug.lib",
+			"BulletDynamics_Debug.lib",
+			"BulletSoftBody_Debug.lib",
+			"LinearMath_Debug.lib"
+		}
 		
 	filter "configurations:Release"
 		defines "RZ_RELEASE"
 		runtime "Release"
 		optimize "On"
+		links {
+			"BulletCollision.lib",
+			"BulletDynamics.lib",
+			"BulletSoftBody.lib",
+			"LinearMath.lib"
+		}
 		
 	filter "configurations:Dist"
 		defines "RZ_DIST"
 		runtime "Release"
 		optimize "On"
+		links {
+			"BulletCollision.lib",
+			"BulletDynamics.lib",
+			"BulletSoftBody.lib",
+			"LinearMath.lib"
+		}
 
 
 project "Sandbox"

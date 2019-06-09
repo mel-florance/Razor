@@ -1,6 +1,7 @@
 #pragma once
 
-namespace Razor {
+namespace Razor
+{
 
 	class RenderPass
 	{
