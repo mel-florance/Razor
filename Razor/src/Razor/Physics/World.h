@@ -2,10 +2,12 @@
 
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
+#include "Razor/Core/Transform.h"
+
+class btMotionState;
 
 namespace Razor
 {
-
 	class PhysicsBody;
 	class Node;
 	class Camera;
@@ -25,7 +27,9 @@ namespace Razor
 		void addNode(std::shared_ptr<Node> node);
 		void removeNode(std::shared_ptr<Node> node);
 		void updateNodes();
-
+		btDynamicsWorld* getWorld() { return world; }
+		
+		Transform getMotionStateTransform(btMotionState* motion_state);
 		void raycast(Camera* camera, const glm::vec3& start, const glm::vec3& end);
 
 	private:

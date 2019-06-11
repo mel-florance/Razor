@@ -189,6 +189,10 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Razor\Physics\Constraints\ConeTwist.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\PointToPoint.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\SixDOF.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\Gear.h" />
     <ClInclude Include="src\Razor\Physics\Constraints\Slider.h" />
     <ClInclude Include="src\Razor\Physics\Constraints\Hinge.h" />
     <ClInclude Include="src\Razor\Physics\PhysicsConstraint.h" />
@@ -765,6 +769,10 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Razor\Physics\Constraints\ConeTwist.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\PointToPoint.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\SixDOF.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\Gear.cpp" />
     <ClCompile Include="src\Razor\Physics\Constraints\Slider.cpp" />
     <ClCompile Include="src\Razor\Physics\Constraints\Hinge.cpp" />
     <ClCompile Include="src\Razor\Physics\PhysicsConstraint.cpp" />

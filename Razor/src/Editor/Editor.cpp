@@ -14,6 +14,7 @@
 #include "Razor/Cameras/TPSCamera.h"
 
 #include "Razor/Ecs/Components/StaticMeshComponent.h"
+#include "Razor/Physics/PhysicsBody.h"
 #include "Razor/Physics/World.h"
 #include "Razor/Types/Color.h"
 
@@ -275,6 +276,13 @@ namespace Razor
 
 						selection->removeNode(node->id);
 						m_Engine->getPhysicsWorld()->removeNode(node);
+
+						for (auto m : node->meshes) {
+							for (auto i : m->getInstances()) {
+								m_Engine->getPhysicsWorld()->getWorld()->removeRigidBody(i->body->getBody());
+							}
+						}
+
 						m_Engine->getScenesManager()->getActiveScene()->getSceneGraph()->removeNode(node->id);
 					}
 				}

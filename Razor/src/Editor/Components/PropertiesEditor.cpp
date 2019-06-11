@@ -345,6 +345,12 @@ namespace Razor
 
 							ImGui::NextColumn();
 
+							ImGui::TextColored(ImColor(255, 255, 255, 128), "Instances count");
+							ImGui::NextColumn();
+							ImGui::Text((Utils::numberFormatLocale(selected->meshes[0]->getInstances().size())).c_str());
+
+							ImGui::NextColumn();
+
 							ImGui::TextColored(ImColor(255, 255, 255, 128), "Vertex count");
 							ImGui::NextColumn();
 							ImGui::Text((Utils::numberFormatLocale(selected->meshes[0]->getVertexCount())).c_str());

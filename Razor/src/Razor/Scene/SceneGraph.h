@@ -16,15 +16,8 @@ namespace Razor
 
 		bool removeNode(unsigned int id);
 
-		inline std::shared_ptr<Node> createInstance(std::shared_ptr<StaticMesh> mesh)
-		{
-			std::shared_ptr<Node> node = std::make_shared<Node>();
-			instances[mesh].push_back(node);
-		}
-
 	private:
 		std::vector<std::shared_ptr<Node>> nodes;
-		std::map<std::shared_ptr<StaticMesh>, std::vector<std::shared_ptr<Node>>> instances;
 		unsigned int index;
 	};
 

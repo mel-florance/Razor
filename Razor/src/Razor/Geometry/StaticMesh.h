@@ -16,6 +16,22 @@ namespace Razor
 		StaticMesh();
 		virtual ~StaticMesh();
 
+		struct StaticMeshInstance 
+		{
+			StaticMeshInstance(unsigned int index, const std::string& name, Transform* transform, PhysicsBody* body) :
+				index(index), name(name), transform(transform), body(body) {}
+
+			~StaticMeshInstance() {
+				delete transform;
+				delete body;
+			}
+
+			unsigned int index;
+			std::string name;
+			Transform* transform;
+			PhysicsBody* body;
+		};
+
 		enum class DrawMode
 		{
 			POINTS         = 0x0000,
@@ -157,8 +173,9 @@ namespace Razor
 		}
 
 		void draw();
+		void drawInstances();
 		void setupBuffers();
-		void setupInstances(std::vector<glm::mat4>& matrices);
+		void setupInstances();
 		void updateInstance(const glm::mat4& matrix, unsigned int index);
 		void calculateTangents();
 
@@ -186,6 +203,7 @@ namespace Razor
 		inline bool& isBoundingBoxVisible() { return show_bounding_box; }
 		inline PhysicsBody* getPhysicsBody() { return body;  }
 		inline bool& getPhysicsEnabled() { return physics_enabled; }
+		inline std::vector<std::shared_ptr<StaticMeshInstance>>& getInstances() { return instances; }
 
 		inline void setName(const std::string& name) { this->name = name; }
 		inline void setCullType(CullType type) { this->cullType = type; }
@@ -212,6 +230,21 @@ namespace Razor
 		inline void setPhysicsBody(PhysicsBody* body) { this->body = body; }
 		inline void setPhysicsEnabled(bool value) { physics_enabled = value; }
 
+		inline void setInstances(const std::vector<std::shared_ptr<StaticMeshInstance>>& data) { instances = data; }
+		std::shared_ptr<StaticMeshInstance> addInstance(const std::string& name, Transform* transform, PhysicsBody* body);
+
+		inline bool removeInstance(unsigned index)
+		{
+			for (unsigned int i = -1; i < instances.size(); ++i) {
+				if (i == index && index > -1) {
+					instances.erase(instances.begin() + index);
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	protected:
 		VertexArray* vao;
 		VertexBuffer* vbo;
@@ -219,7 +252,7 @@ namespace Razor
 		VertexBuffer* tbo;
 		VertexBuffer* uvbo;
 		IndexBuffer* ibo;
-		unsigned int mbo;
+		VertexBuffer* mbo;
 
 	private:
 		std::string name;
@@ -251,6 +284,8 @@ namespace Razor
 
 		PhysicsBody* body;
 		bool physics_enabled;
+
+		std::vector<std::shared_ptr<StaticMeshInstance>> instances;
 	};
 
 }

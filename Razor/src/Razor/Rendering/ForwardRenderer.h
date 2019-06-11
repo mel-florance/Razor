@@ -13,6 +13,7 @@
 namespace Razor
 {
 
+	class Event;
 	class Window;
 	class Engine;
 	class FPSCamera;
@@ -43,7 +44,8 @@ namespace Razor
 		~ForwardRenderer();
 
 		void update(float delta);
-		
+		void onEvent(Event& event);
+
 		void render();
 		void renderNode(Shader* shader, std::shared_ptr<Node> node, glm::mat4 parent, bool depth = false);
 		void renderParticleSystems();

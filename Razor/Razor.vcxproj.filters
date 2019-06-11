@@ -1842,6 +1842,10 @@
     <ClInclude Include="src\Razor\Physics\Bodies\SpherePhysicsBody.h">
       <Filter>src\Razor\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Constraints\Gear.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\SixDOF.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\ConeTwist.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\PointToPoint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -2165,6 +2169,10 @@
     <ClCompile Include="src\Razor\Physics\Bodies\SpherePhysicsBody.cpp">
       <Filter>src\Razor\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Constraints\Gear.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\SixDOF.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\ConeTwist.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\PointToPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">

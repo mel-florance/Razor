@@ -95,29 +95,55 @@ namespace Razor
 			{
 				if (mesh->getPhysicsEnabled() && mesh->getPhysicsBody() != nullptr)
 				{
-					btTransform transform;
-					mesh->getPhysicsBody()->getBody()->getMotionState()->getWorldTransform(transform);
+					btMotionState* mesh_motion_state = mesh->getPhysicsBody()->getBody()->getMotionState();
 
-					btVector3 origin = transform.getOrigin();
-					node->transform.setPosition(glm::vec3(origin.getX(), origin.getY(), origin.getZ()));
+					if (mesh_motion_state != nullptr)
+					{
+						node->transform = getMotionStateTransform(mesh_motion_state);
+				
+						for (auto i : mesh->getInstances())
+						{
+							if (i->body->initialized)
+							{
+								btMotionState* instance_motion_state = i->body->getBody()->getMotionState();
 
-					btScalar mat[16];
-					transform.getOpenGLMatrix(mat);
-
-					glm::mat4 matrix = glm::make_mat4(mat);
-
-					glm::vec3 scale;
-					glm::quat orientation;
-					glm::vec3 translation;
-					glm::vec3 skew;
-					glm::vec4 persp;
-
-					glm::decompose(matrix, scale, orientation, translation, skew, persp);
-					node->transform.setRotation(glm::eulerAngles(orientation));
-					node->transform.setScale(scale);
+								if (instance_motion_state != nullptr)
+								{
+									mesh->updateInstance(getMotionStateTransform(instance_motion_state).getMatrix(), i->index);
+								}
+							}
+						}
+					}
 				}
 			}
 		}
+	}
+
+	Transform World::getMotionStateTransform(btMotionState* motion_state)
+	{
+		Transform final_transform =Transform();
+		btTransform transform;
+		motion_state->getWorldTransform(transform);
+
+		btVector3 origin = transform.getOrigin();
+		final_transform.setPosition(glm::vec3(origin.getX(), origin.getY(), origin.getZ()));
+
+		btScalar mat[16];
+		transform.getOpenGLMatrix(mat);
+
+		glm::mat4 matrix = glm::make_mat4(mat);
+
+		glm::vec3 scale;
+		glm::quat orientation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 persp;
+
+		glm::decompose(matrix, scale, orientation, translation, skew, persp);
+		final_transform.setRotation(glm::eulerAngles(orientation));
+		final_transform.setScale(scale);
+
+		return final_transform;
 	}
 
 	void World::raycast(Camera* camera, const glm::vec3& start, const glm::vec3& end)

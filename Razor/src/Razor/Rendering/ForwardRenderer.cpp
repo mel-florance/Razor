@@ -34,6 +34,7 @@
 #include "Razor/Materials/TexturesManager.h"
 #include "Razor/Materials/ShadersManager.h"
 #include "Razor/Input/MouseButtons.h"
+#include "Razor/Events/Event.h"
 
 namespace Razor 
 {
@@ -233,64 +234,31 @@ namespace Razor
 		engine->getPhysicsWorld()->addNode(nodeCube);
 		engine->getPhysicsWorld()->addNode(nodeSphere);
 
-		//// For instancing later
+		float radius = 20.0f;
+		int count = 10;
+		float offset = 25.0f;
 
-		//int count = 1000;
-		//float radius = 150.0;
-		//float offset = 25.0f;
+		for (unsigned int i = 0; i < count; i++)
+		{
+			Transform* t = new Transform();
 
-		//AssimpImporter* importer = new AssimpImporter();
-		//importer->importMesh("./data/SM_Pine01_lod2.obj");
+			float angle = (float)i / (float)count * 360.0f;
+			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+			float x = sin(angle) * radius + displacement;
+			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+			float y = displacement * 0.4f;
+			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+			float z = cos(angle) * radius + displacement;
 
-		//std::shared_ptr<Node> node = std::make_shared<Node>(importer->getNodeData());
+			t->setPosition(glm::vec3(x, y, z));
+			PhysicsBody* phys_body = new SpherePhysicsBody(nodeSphere.get(), 1.0f, t->getPosition(), t->getRotation());
+			nodeSphere->meshes[0]->addInstance("test", t, phys_body);
 
-		//Editor::setupMeshBuffers(node);
+			phys_body->init();
+			engine->getPhysicsWorld()->getWorld()->addRigidBody(phys_body->getBody());
+		}
 
-		//pine_tree = node->meshes[0];
-		//pine_tree->setMaterial(defaultMaterial);
-		//scenesManager->getActiveScene()->getSceneGraph()->addNode(node);
-
-
-		//for (int i = 0; i < count; i++)
-		//{
-		//	float angle = (float)i / (float)count * 360.0f;
-		//	float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		//	float x = sin(angle) * radius + displacement;
-		//	displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		//	float y = displacement * 0.4f;
-		//	displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		//	float z = cos(angle) * radius + displacement;
-
-		//	Transform* cube_transform = new Transform();
-		//	cube_transform->setScale(glm::vec3(0.02f));
-		//	cube_transform->setPosition(glm::vec3(x, y, z));
-
-		//	modelMatrices.push_back(cube_transform->getMatrix());
-		//}
-
-		//unsigned int buffer;
-		//glGenBuffers(1, &buffer);
-		//glBindBuffer(GL_ARRAY_BUFFER, buffer);
-		//glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), reinterpret_cast<GLfloat*>(&modelMatrices[0]), GL_STATIC_DRAW);
-
-		//pine_tree->getVao()->bind();
-	
-		//glEnableVertexAttribArray(4);
-		//glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
-		//glEnableVertexAttribArray(5);
-		//glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
-		//glEnableVertexAttribArray(6);
-		//glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
-		//glEnableVertexAttribArray(7);
-		//glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
-
-		//glVertexAttribDivisor(4, 1);
-		//glVertexAttribDivisor(5, 1);
-		//glVertexAttribDivisor(6, 1);
-		//glVertexAttribDivisor(7, 1);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, 0);
-		//pine_tree->getVao()->unbind();
+		nodeSphere->meshes[0]->setupInstances();
 	}
 
 	ForwardRenderer::~ForwardRenderer()
@@ -302,22 +270,24 @@ namespace Razor
 	{
 		deltaTime = (float)delta;
 		angle += deltaTime;
-		engine->getPhysicsWorld()->tick(delta);
-		engine->getPhysicsWorld()->updateNodes();
+	}
+
+	void ForwardRenderer::onEvent(Event& event)
+	{
 		Viewport* vp = (Viewport*)Application::Get().getEditor()->getComponents()["Viewport"];
 
-		if (Input::IsMouseButtonPressed(RZ_MOUSE_BUTTON_3) && vp->isHovered())
+		if (Input::IsMouseButtonPressed(RZ_MOUSE_BUTTON_1) && vp->isHovered()) 
 		{
 			std::shared_ptr<Scene> scene = scenesManager->getActiveScene();
 
-			std::shared_ptr<Node> node = std::make_shared<Node>();
+			/*std::shared_ptr<Node> node = std::make_shared<Node>();
 			glm::vec3 rot = glm::vec3(Utils::randomf(0, TAU), Utils::randomf(0, TAU), Utils::randomf(0, TAU));
 			node->transform.setRotation(rot);
 
 			std::shared_ptr<StaticMesh> object;
 			PhysicsBody* body;
 
-			if (rand() % 2) 
+			if (rand() % 2)
 			{
 				body = new CubePhysicsBody(node.get(), glm::vec3(1.0f, 1.0f, 1.0f), scene->getActiveCamera()->getPosition() + scene->getActiveCamera()->getDirection(), rot);
 				object = std::make_shared<Cube>();
@@ -327,7 +297,7 @@ namespace Razor
 				body = new SpherePhysicsBody(node.get(), 1.0f, scene->getActiveCamera()->getPosition() + scene->getActiveCamera()->getDirection(), rot);
 				object = std::make_shared<UVSphere>();
 			}
-			
+
 			object->setPhysicsEnabled(true);
 			body->init();
 
@@ -336,9 +306,25 @@ namespace Razor
 			engine->getPhysicsWorld()->addNode(node);
 			scene->getSceneGraph()->addNode(node);
 
-			glm::vec3 dir = scene->getActiveCamera()->getDirection() * 20.0f;
-			glm::vec3 pos = scene->getActiveCamera()->getPosition();
-			body->getBody()->applyImpulse(btVector3(dir.x, dir.y, dir.z), btVector3(pos.x, pos.y, pos.z));
+			glm::vec3 dir = scene->getActiveCamera()->getDirection() * 60.0f;
+			body->getBody()->applyCentralImpulse(btVector3(dir.x, dir.y, dir.z));*/
+
+			Transform* t = new Transform();
+			t->setPosition(scene->getActiveCamera()->getPosition());
+
+			glm::vec3 rot = glm::vec3(Utils::randomf(0, TAU), Utils::randomf(0, TAU), Utils::randomf(0, TAU));
+			t->setRotation(rot);
+
+			CubePhysicsBody* body = new CubePhysicsBody(nodeCube.get(), glm::vec3(1.0f, 1.0f, 1.0f), scene->getActiveCamera()->getPosition() + scene->getActiveCamera()->getDirection(), rot);
+			body->init();
+
+			glm::vec3 dir = scene->getActiveCamera()->getDirection() * 60.0f;
+			body->getBody()->applyCentralImpulse(btVector3(dir.x, dir.y, dir.z)); 
+	
+			nodeCube->meshes[0]->addInstance("test", t, body);
+			nodeCube->meshes[0]->setupInstances();
+
+			engine->getPhysicsWorld()->getWorld()->addRigidBody(body->getBody());
 		}
 	}
 
@@ -415,12 +401,14 @@ namespace Razor
 		for (auto& line_mesh : line_meshes)
 			renderLineMesh(line_mesh);
 
+		glActiveTexture(GL_TEXTURE3);
+		depth_attachment->bind();
+
 		if (scene->getSceneGraph()->getNodes().size() > 0)
 		{
 			//glm::vec3 pos = glm::vec3(8*std::cos(angle), 8, 8*std::sin(angle));
 			//directionalLight->setDirection(pos);
 
-		
 			for (auto node : scene->getSceneGraph()->getNodes())
 			{
 				if (node->name == "Terrain")
@@ -428,9 +416,6 @@ namespace Razor
 					landscapeShader->bind();
 					landscapeMaterial->bindLights(landscapeShader, scene->getLights());
 					landscapeMaterial->bind(landscapeShader);
-				
-					glActiveTexture(GL_TEXTURE3);
-					depth_attachment->bind();
 
 					landscapeShader->setUniform3f("lightPos", directionalLight->getDirection());
 					landscapeShader->setUniformMat4f("lightSpaceMatrix", lightSpaceMatrix);
@@ -443,7 +428,8 @@ namespace Razor
 					depth_attachment->unbind();
 					landscapeShader->unbind();
 				}
-				else {
+				else 
+				{
 					defaultShader->bind();
 					defaultMaterial->bindLights(defaultShader, scene->getLights());
 					defaultMaterial->bind(defaultShader);
@@ -453,9 +439,6 @@ namespace Razor
 					glDrawElementsInstanced(GL_TRIANGLES, (unsigned int)pine_tree->getIndices().size(), GL_UNSIGNED_INT, 0, 1000);
 					pine_tree->getVao()->unbind();
 					defaultShader->setUniform1i("instanced", 0);*/
-
-					glActiveTexture(GL_TEXTURE3);
-					depth_attachment->bind();
 
 					defaultShader->setUniform3f("lightPos", directionalLight->getDirection());
 					defaultShader->setUniformMat4f("lightSpaceMatrix", lightSpaceMatrix);
@@ -494,8 +477,17 @@ namespace Razor
 				mesh->getMaterial()->bind(shader);
 			}
 
+			defaultShader->setUniform1i("instanced", 0);
 			mesh->getVao()->bind();
 			mesh->draw();
+
+			if (mesh->getInstances().size() > 0)
+			{
+				defaultShader->setUniform1i("instanced", 1);
+				mesh->drawInstances();
+			}
+
+			mesh->getVao()->unbind();
 
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, 0);

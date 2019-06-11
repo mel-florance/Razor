@@ -11,8 +11,8 @@ namespace Razor
 		EditorTool(editor),
 		show_grid(true),
 		show_axis(true),
-		grid_size(8),
-		axis_size(8)
+		grid_size(10),
+		axis_size(10)
 	{
 		grid_node = std::make_shared<Node>();
 		axis_node = std::make_shared<Node>();

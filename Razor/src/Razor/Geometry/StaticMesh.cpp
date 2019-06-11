@@ -2,6 +2,8 @@
 #include "StaticMesh.h"
 #include <glad/glad.h>
 #include "Razor/Physics/PhysicsBody.h"
+#include "Razor/Core/Transform.h"
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Razor {
 
@@ -22,7 +24,7 @@ namespace Razor {
 		nbo(nullptr),
 		uvbo(nullptr),
 		body(nullptr),
-		physics_enabled(false),
+		physics_enabled(true),
 		show_bounding_box(false)
 	{
 	}
@@ -35,9 +37,17 @@ namespace Razor {
 		delete uvbo;
 		delete tbo;
 		delete ibo;
+		delete mbo;
 
 		delete body;
 		material.reset();
+
+		std::vector<std::shared_ptr<StaticMeshInstance>>::iterator it = instances.begin();
+		for (; it != instances.end(); it++)
+		{
+			it->reset();
+			instances.erase(it);
+		}
 	}
 
 	void StaticMesh::setupBuffers() 
@@ -61,39 +71,54 @@ namespace Razor {
 		setVertexCount((unsigned int)getVertices().size() / 3);
 	}
 
-	void StaticMesh::setupInstances(std::vector<glm::mat4>& matrices)
+	void StaticMesh::setupInstances()
 	{
-		unsigned int buffer;
-		glGenBuffers(1, &buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, buffer);
-		glBufferData(GL_ARRAY_BUFFER, matrices.size() * sizeof(glm::mat4), reinterpret_cast<GLfloat*>(&matrices[0]), GL_DYNAMIC_DRAW);
+		if (vao != nullptr && instances.size() > 0)
+		{
+			std::vector<glm::mat4> matrices;
 
-		vao->bind();
+			for (auto i : instances)
+				matrices.push_back(i->transform->getMatrix());
 
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
-		glEnableVertexAttribArray(7);
-		glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+			vao->bind();
+			mbo = new VertexBuffer(reinterpret_cast<GLfloat*>(&matrices[0]), matrices.size() * sizeof(glm::mat4));
+			mbo->setUsage(VertexBuffer::BufferUsage::DYNAMIC_DRAW);
 
-		glVertexAttribDivisor(4, 1);
-		glVertexAttribDivisor(5, 1);
-		glVertexAttribDivisor(6, 1);
-		glVertexAttribDivisor(7, 1);
+			glEnableVertexAttribArray(4);
+			glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+			glEnableVertexAttribArray(5);
+			glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+			glEnableVertexAttribArray(6);
+			glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+			glEnableVertexAttribArray(7);
+			glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glVertexAttribDivisor(4, 1);
+			glVertexAttribDivisor(5, 1);
+			glVertexAttribDivisor(6, 1);
+			glVertexAttribDivisor(7, 1);
 
-		vao->unbind();
+			mbo->unbind();
+			vao->unbind();
+		}
+		else
+			Log::error("Setup instances: The mesh %s doesn't have a vao.", name.c_str());
+	}
+
+	std::shared_ptr<StaticMesh::StaticMeshInstance> StaticMesh::addInstance(const std::string& name, Transform* transform, PhysicsBody* body)
+	{
+		unsigned int index = instances.size();
+		std::shared_ptr<StaticMeshInstance> instance = std::make_shared<StaticMeshInstance>(index, name, transform, body);
+		instances.push_back(instance);
+
+		return instance;
 	}
 
 	void StaticMesh::updateInstance(const glm::mat4& matrix, unsigned int index)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, mbo);
-		glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(glm::mat4), sizeof(glm::mat4), &matrix);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		mbo->bind();
+		glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(matrix));
+		mbo->unbind();
 	}
 
 	void StaticMesh::calculateTangents()
@@ -114,6 +139,7 @@ namespace Razor {
 			tangents.push_back(tangent.z);
 		}
 	}
+
 
 	void StaticMesh::draw()
 	{
@@ -145,6 +171,23 @@ namespace Razor {
 			glDrawElements((GLenum)drawMode, (GLsizei)getIndices().size(), GL_UNSIGNED_INT, 0);
 		else
 			glDrawArrays((GLenum)drawMode, 0, getVertexCount());
+	}
+
+	void StaticMesh::drawInstances()
+	{
+		if (hasCulling())
+		{
+			glEnable(GL_CULL_FACE);
+			glFrontFace((GLenum)windingOrder);
+			glCullFace((GLenum)cullType);
+		}
+		else
+			glDisable(GL_CULL_FACE);
+
+		if (getIndices().size() > 0)
+			glDrawElementsInstanced((GLenum)drawMode, (GLsizei)getIndices().size(), GL_UNSIGNED_INT, 0, (GLsizei)getInstances().size());
+		else
+			glDrawArraysInstanced((GLenum)drawMode, 0, (GLsizei)getVertexCount(), (GLsizei)getInstances().size());
 	}
 
 }

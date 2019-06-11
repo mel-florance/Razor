@@ -57,6 +57,8 @@ namespace Razor
 
 	void Engine::OnEvent(Event& event)
 	{
+		forward_renderer->onEvent(event);
+
 		Camera* camera = scenes_manager->getActiveScene()->getActiveCamera();
 
 		if (camera != nullptr)
@@ -127,6 +129,9 @@ namespace Razor
 
 		camera->update(delta);
 		camera->onEvent(&self->application->GetWindow());
+
+		self->getPhysicsWorld()->tick((float)loop->getPassedTime());
+		self->getPhysicsWorld()->updateNodes();
 
 		for (Layer* layer : self->application->getLayerStack())
 			layer->OnUpdate((float)delta);
