@@ -12,4 +12,4 @@
 	url = https://github.com/g-truc/glm
 [submodule "Razor/vendor/assimp"]
 	path = Razor/vendor/assimp
-	url = https://github.com/assimp/assimp
+	url = https://github.com/Vyraax/assimp
