@@ -1,8 +1,8 @@
 #include "rzpch.h"
 #include "Engine.h"
-#include "Razor/Rendering/ForwardRenderer.h"
-#include "Razor/Rendering/DeferredRenderer.h"
+#include "Razor/Rendering/Renderer.h"
 #include "Razor/Materials/ShadersManager.h"
+#include "Razor/Core/TasksManager.h"
 #include "Razor/Scene/ScenesManager.h"
 #include "Razor/Cameras/FPSCamera.h"
 #include "Razor/Application/Application.h"
@@ -10,15 +10,24 @@
 #include "Razor/Events/Event.h"
 #include "Razor/Input/KeyCodes.h"
 #include "GLFW/glfw3.h"
+#include <glad/glad.h>
 #include "Razor/Physics/World.h"
 #include "Razor/Audio/SoundsManager.h"
 #include "Razor/Audio/Sound.h"
+#include "Razor/Core/ThreadPool.h"
+#include "Razor/Core/System.h"
+#include "Editor/Editor.h"
 
 namespace Razor
 {
+	Engine::SystemInfos Engine::system_infos = Engine::SystemInfos();
 
-	Engine::Engine(Application* application) : application(application)
+	Engine::Engine(Application* application) : 
+		application(application)
 	{
+		system = new System();
+		//thread_pool = new ThreadPool(8);
+
 		gameLoop = new GameLoop(this);
 		gameLoop->setUpdateCallback(&Engine::update);
 		gameLoop->setRenderCallback(&Engine::render);
@@ -28,18 +37,20 @@ namespace Razor
 		scenes_manager  = new ScenesManager();
 		sounds_manager  = new SoundsManager();
 		shaders_manager = new ShadersManager();
+		//tasks_manager   = new TasksManager();
 
-		forward_renderer = new ForwardRenderer(&application->GetWindow(), this, scenes_manager, shaders_manager);
-		deferred_renderer = new DeferredRenderer(&application->GetWindow(), this, scenes_manager, shaders_manager);
+		renderer = new Renderer(&application->GetWindow(), this, scenes_manager, shaders_manager);
 
-		sounds_manager->loadSound("./data/audio/EpicTrailerFinal.wav", "trailer_music");
+		//sounds_manager->loadSound("./data/audio/EpicTrailerFinal.wav", "trailer_music");
+
+		extractSystemInfos();
 	}
 
 	Engine::~Engine()
 	{
+		delete system;
 		delete gameLoop;
-		delete forward_renderer;
-		delete deferred_renderer;
+		delete renderer;
 		delete sounds_manager;
 		delete scenes_manager;
 		delete shaders_manager;
@@ -57,7 +68,7 @@ namespace Razor
 
 	void Engine::OnEvent(Event& event)
 	{
-		forward_renderer->onEvent(event);
+		//forward_renderer->onEvent(event);
 
 		Camera* camera = scenes_manager->getActiveScene()->getActiveCamera();
 
@@ -89,7 +100,9 @@ namespace Razor
 
 			if (event.GetEventType() == EventType::WindowResize) {
 				WindowResizeEvent& e = (WindowResizeEvent&)event;
-				camera->onWindowResized(glm::vec2(e.GetWidth(), e.GetHeight()));
+				glm::vec2 size = glm::vec2(e.GetWidth(), e.GetHeight());
+				camera->onWindowResized(size);
+				//renderer->onResize(size);
 				//event.Handled = true;
 			}
 
@@ -98,7 +111,7 @@ namespace Razor
 				camera->onKeyDown(e.GetKeyCode());
 				//event.Handled = true;
 
-				if (e.GetKeyCode() == RZ_KEY_H)
+			/*	if (e.GetKeyCode() == RZ_KEY_H)
 				{
 					sounds_manager->playSound("trailer_music");
 				}
@@ -108,7 +121,7 @@ namespace Razor
 					Sound* trailer = sounds_manager->getSounds()["trailer_music"];
 
 					trailer->isPlaying() ? trailer->pause() : trailer->unpause();
-				}
+				}*/
 			}
 
 			if (event.GetEventType() == EventType::KeyReleased) {
@@ -125,8 +138,6 @@ namespace Razor
 		Window& window = self->application->GetWindow();
 		Camera* camera = self->scenes_manager->getActiveScene()->getActiveCamera();
 
-		self->forward_renderer->clear(ForwardRenderer::ClearType::ALL);
-
 		camera->update(delta);
 		camera->onEvent(&self->application->GetWindow());
 
@@ -136,12 +147,14 @@ namespace Razor
 		for (Layer* layer : self->application->getLayerStack())
 			layer->OnUpdate((float)delta);
 
-		self->forward_renderer->setViewport(0, 0, window.GetWidth(), window.GetHeight());
-		self->forward_renderer->update((float)loop->getPassedTime());
+		//self->forward_renderer->setViewport(0, 0, window.GetWidth(), window.GetHeight());
+		//self->forward_renderer->update((float)loop->getPassedTime());
 	}
 
 	void Engine::render(GameLoop* loop, Engine* self)
 	{
+		self->renderer->render();
+			
 		self->application->getImGuiLayer()->Begin();
 
 		for (Layer* layer : self->application->getLayerStack())
@@ -149,10 +162,41 @@ namespace Razor
 
 		self->application->getImGuiLayer()->End();
 
-		self->forward_renderer->render();
 		self->application->GetWindow().OnUpdate();
 
 		glfwPollEvents();
+	}
+
+	void Engine::extractSystemInfos()
+	{
+		system_infos.opengl_version = glGetString(GL_VERSION);
+		system_infos.vendor = glGetString(GL_VENDOR);
+		system_infos.renderer = glGetString(GL_RENDERER);
+		system_infos.shading_language_version = glGetString(GL_SHADING_LANGUAGE_VERSION);
+		
+		const unsigned char* extensions = glGetString(GL_EXTENSIONS);
+		char const* ext = reinterpret_cast<char const*>(extensions);
+		system_infos.extensions = Utils::splitString(std::string(ext), " ");
+
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS,          &system_infos.max_texture_image_units);
+		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &system_infos.max_combined_texture_image_units);
+		glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,   &system_infos.max_vertex_texture_image_units);
+		glGetIntegerv(GL_MAX_TEXTURE_SIZE,                 &system_infos.max_texture_size);
+		glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE,        &system_infos.max_cubemap_texture_size);
+		glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE,            &system_infos.max_render_buffer_size);
+		glGetIntegerv(GL_MAX_VERTEX_ATTRIBS,               &system_infos.max_vertex_attributes);
+		glGetIntegerv(GL_MAX_VARYING_VECTORS,              &system_infos.max_varying_vectors);
+		glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS,     &system_infos.max_fragment_uniform_vectors);
+		glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS,       &system_infos.max_vertex_uniform_vectors);
+		glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS,            &system_infos.max_color_attachments);
+
+		glGetIntegerv(GL_ALIASED_LINE_WIDTH_RANGE,         &system_infos.aliased_line_width_range);
+		glGetIntegerv(GL_SMOOTH_LINE_WIDTH_RANGE,          &system_infos.smooth_line_width_range);
+		glGetIntegerv(GL_ARRAY_BUFFER_BINDING,             &system_infos.array_buffer_binding);
+		glGetBooleanv(GL_BLEND,                            &system_infos.blend);
+		glGetIntegerv(GL_ACTIVE_TEXTURE,                   &system_infos.active_texture_unit);
+
+		system_infos.active_texture_unit = activeUnitToDecimal();
 	}
 
 }

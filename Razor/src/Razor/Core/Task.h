@@ -6,11 +6,11 @@
 
 namespace Razor {
 
-	typedef std::function<void(std::shared_ptr<Node>)> TaskFinished;
-	typedef std::function<void(std::shared_ptr<Node>, TaskFinished, Variant)> TaskCallback;
+	typedef std::function<void(Node*)> TaskFinished;
+	typedef std::function<void(Node*, TaskFinished, Variant)> TaskCallback;
 
 	typedef struct {
-		std::shared_ptr<Node> result;
+		Node* result;
 		TaskCallback fn;
 		TaskFinished tf;
 		Variant opts;
@@ -43,7 +43,7 @@ namespace Razor {
 		inline unsigned int getPriority() { return priority; }
 		inline void setPriority(unsigned int priority) { this->priority = priority; }
  
-		void run(std::shared_ptr<Node> result, TaskCallback fn, Variant opts, TaskFinished tf) {
+		void run(Node* result, TaskCallback fn, Variant opts, TaskFinished tf) {
 			fn(result, tf, opts);
 		}
 
@@ -51,10 +51,10 @@ namespace Razor {
 			return task.priority > priority;
 		}
 
-		std::shared_ptr<Node> result;
+		Node* result;
 		Variant opts;
 		TaskCallback fn;
-		std::function<void(std::shared_ptr<Node>)> tf;
+		std::function<void(Node*)> tf;
 
 	private:
 		std::string name;

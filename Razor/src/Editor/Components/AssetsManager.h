@@ -20,9 +20,11 @@ namespace Razor {
 
 		void watch();
 		void render(float delta) override;
-		static void import(std::shared_ptr<Node> result, TaskFinished tf, Variant opts);
+		static void import(Node* result, TaskFinished tf, Variant opts);
+		inline std::shared_ptr<FileBrowser> getFileBrowser() { return fileBrowser; }
+		inline std::shared_ptr<FileWatcher> getFileWatcher() { return fileWatcher; }
 
-		enum Type { None, Model, Image, Audio, Video };
+		enum Type { None, Model, Image, Audio, Video, Script };
 		typedef std::map<Type, std::vector<const char*>> ExtsMap;
 
 		inline static Type getExt(const std::string& str)
@@ -44,7 +46,11 @@ namespace Razor {
 		static std::unique_ptr<AssimpImporter> importer;
 
 	private:
+		static TaskFinished import_callback;
+		static bool show_import_modal;
+		static std::string current_import_path;
 		static std::map<Type, std::vector<const char*>> exts;
+		static std::map<Type, std::vector<const char*>> internal_exts;
 		std::shared_ptr<DirectoryWatcher> directoryWatcher;
 		std::shared_ptr<FileWatcher> fileWatcher;
 		std::shared_ptr<FileBrowser> fileBrowser;

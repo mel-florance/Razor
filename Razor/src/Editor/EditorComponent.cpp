@@ -2,7 +2,8 @@
 #include "EditorComponent.h"
 #include "Editor/Editor.h"
 
-namespace Razor {
+namespace Razor
+{
 
 	EditorComponent::EditorComponent(Editor* editor) : 
 		editor(editor),

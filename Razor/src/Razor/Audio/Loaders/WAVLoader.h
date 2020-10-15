@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Razor/Audio/Audio.h"
+
 namespace Razor
 {
-
 	class BinaryReader;
 
 	class WAVLoader
@@ -26,7 +27,7 @@ namespace Razor
 			EXPERIMENTAL          = 0xFFFF
 		};
 
-		inline std::string compressionCodeToStr(int code)
+		static inline std::string compressionCodeToStr(int code)
 		{
 			switch (code)
 			{
@@ -45,21 +46,7 @@ namespace Razor
 			}
 		}
 
-		struct WAVData
-		{
-			int channels;
-			int file_size;
-			int sample_rate;
-			int bits_per_sample;
-			int bloc_size;
-			int format;
-			int byte_rate;
-			int block_align;
-			int subchunk_id;
-			int subchunk_size;
-		};
-
-		char* load(const std::string& filename, WAVData& data);
+		static char* load(const std::string& filename, WAVData* data);
 
 	private:
 		BinaryReader* reader;

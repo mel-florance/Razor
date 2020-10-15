@@ -11,13 +11,17 @@ namespace Razor
 		SceneGraph();
 		~SceneGraph();
 
-		inline std::vector<std::shared_ptr<Node>>& getNodes() { return nodes; }
+		typedef std::vector<std::shared_ptr<Node>> NodeList;
+
+		inline NodeList& getNodes() { return nodes; }
 		void addNode(std::shared_ptr<Node> node);
 
 		bool removeNode(unsigned int id);
 
+		std::shared_ptr<Node> getNodeById(unsigned int id);
+
 	private:
-		std::vector<std::shared_ptr<Node>> nodes;
+		NodeList nodes;
 		unsigned int index;
 	};
 

@@ -1,6 +1,7 @@
 #include "rzpch.h"
 #include "WindowsWindow.h"
 
+#include "Editor/Components/AssetsManager.h"
 #include "Razor/Events/ApplicationEvent.h"
 #include "Razor/Events/MouseEvent.h"
 #include "Razor/Events/KeyEvent.h"
@@ -58,23 +59,24 @@ namespace Razor {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_SAMPLES, 4);
+		glfwWindowHint(GLFW_SAMPLES, 8);
 
-		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
+		//glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 		glfwWindowHint(GLFW_DEPTH_BITS, 32);
 
-		glfwMaximizeWindow(m_Window);
+		//glfwMaximizeWindow(m_Window);
 
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		RZ_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		//SetVSync(false);
+		SetVSync(false);
 
-		//Texture* icon = new Texture("./data/logo.png", false, false);
-		//GLFWimage* img = new GLFWimage{ 16, 16, icon->getData() };
+		//Texture* icon = new Texture("./data/logo32x32.png", false, false);
+		//GLFWimage* img = new GLFWimage();
+		//img->width = img->height = 32;
+		//img->pixels = icon->getData();
 		//glfwSetWindowIcon(m_Window, 1, img);
-
 
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
@@ -101,7 +103,7 @@ namespace Razor {
 			{
 			case GLFW_PRESS:
 			{
-				KeyPressedEvent event(key, 0);
+				KeyPressedEvent event(key, 0, mods);
 				data.EventCallback(event);
 				break;
 			}
@@ -113,7 +115,7 @@ namespace Razor {
 			}
 			case GLFW_REPEAT:
 			{
-				KeyPressedEvent event(key, 1);
+				KeyPressedEvent event(key, 1, mods);
 				data.EventCallback(event);
 				break;
 			}
@@ -169,7 +171,7 @@ namespace Razor {
 		{
 			for (int i = 0; i < count; i++)
 			{
-				std::shared_ptr<Node> node = nullptr;
+				Node* node = nullptr;
 				AssetsManager::import(node, &Editor::importFinished, Variant(paths[i]));
 			}
 		});

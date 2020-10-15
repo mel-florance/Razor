@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Razor/Audio/Loaders/WAVLoader.h"
+#include "Razor/Audio/Loaders/OGGLoader.h"
 
 namespace Razor
 {
@@ -8,7 +9,7 @@ namespace Razor
 	class Sound
 	{
 	public:
-		Sound(const std::string& name, char* data, const WAVLoader::WAVData& wav_data);
+		Sound(const std::string& name, AudioData* audio_data);
 		~Sound();
 
 		enum State
@@ -64,9 +65,9 @@ namespace Razor
 	private:
 		unsigned int id;
 		unsigned int format;
-		unsigned int source_id;
 		std::string name;
-		char* data;
+		AudioData* audio_data;
+		bool is_audio_stream;
 
 		State state;
 		bool looping;

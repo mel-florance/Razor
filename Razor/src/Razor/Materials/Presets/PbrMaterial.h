@@ -10,6 +10,9 @@ namespace Razor
 	public:
 		PbrMaterial();
 		~PbrMaterial();
+		
+		void bind(Shader* shader);
+	private:
 	};
 
 }

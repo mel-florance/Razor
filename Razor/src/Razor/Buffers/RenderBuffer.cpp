@@ -8,7 +8,7 @@ namespace Razor {
 	{
 		glGenRenderbuffers(1, &id);
 		bind();
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (GLsizei)size.x, (GLsizei)size.y);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (GLsizei)size.x, (GLsizei)size.y);
 	}
 
 	RenderBuffer::~RenderBuffer()

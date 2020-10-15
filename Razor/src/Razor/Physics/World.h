@@ -1,8 +1,9 @@
 #pragma once
 
-#include "btBulletDynamicsCommon.h"
-#include "btBulletCollisionCommon.h"
-#include "Razor/Core/Transform.h"
+#include <btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
+#include <Razor/Core/Transform.h>
+#include <Razor/Maths/Maths.h>
 
 class btMotionState;
 
@@ -11,12 +12,20 @@ namespace Razor
 	class PhysicsBody;
 	class Node;
 	class Camera;
+	class ColorMaterial;
 
 	class World
 	{
 	public:
 		World();
 		~World();
+
+		struct RaycastResult {
+			bool hit;
+			Node* node;
+			glm::vec3 hit_point;
+			glm::vec3 hit_normal;
+		};
 
 		void tick(float dt);
 
@@ -30,19 +39,21 @@ namespace Razor
 		btDynamicsWorld* getWorld() { return world; }
 		
 		Transform getMotionStateTransform(btMotionState* motion_state);
-		void raycast(Camera* camera, const glm::vec3& start, const glm::vec3& end);
+		void raycast(RaycastResult* result, Camera* camera, const glm::vec2& mouse, glm::vec2& viewport, float distance);
 
 	private:
+		bool debug_ray_trace_lines;
 		float delta;
+		glm::vec3 gravity;
+
 		btDynamicsWorld* world;
 		btDispatcher* dispatcher;
-		btAxisSweep3* broadphase;
+		btDbvtBroadphase* broadphase;
 		btSequentialImpulseConstraintSolver* solver;
 		btCollisionConfiguration* config;
 
-		glm::vec3 gravity;
-
 		std::vector<std::shared_ptr<Node>> nodes;
+		std::shared_ptr<ColorMaterial> debug_lines_mat;
 	};
 
 }

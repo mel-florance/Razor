@@ -13,7 +13,7 @@ namespace Razor
 	class Raycast
 	{
 	public:
-		Raycast(Window* window, Camera* camera, const glm::mat4& projection);
+		Raycast(Window& window, Camera* camera);
 		~Raycast();
 
 		void update();
@@ -24,7 +24,7 @@ namespace Razor
 		
 		void test();
 
-		bool intersects(const BoundingBox& box);
+		bool intersects(const AABB& box);
 
 		void onMouseDown(int button);
 		void onMouseUp(int button);
@@ -40,7 +40,7 @@ namespace Razor
 		glm::mat4 projection;
 		glm::mat4 view;
 		Camera* camera;
-		Window* window;
+		Window& window;
 
 	};
 

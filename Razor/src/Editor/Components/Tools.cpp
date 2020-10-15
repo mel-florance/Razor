@@ -7,6 +7,8 @@
 #include "Razor/Core/Engine.h"
 #include "Razor/Scene/ScenesManager.h"
 #include "Razor/Materials/Presets/PhongMaterial.h"
+#include "Razor/Materials/Presets/ColorMaterial.h"
+#include "Razor/Materials/Presets/PbrMaterial.h"
 #include "Editor/Tools/Selection.h"
 
 #include "Razor/Physics/World.h"
@@ -17,11 +19,14 @@
 #include "Editor/Components/AssetsManager.h"
 #include "Razor/Materials/TexturesManager.h"
 #include "Razor/Materials/Texture.h"
+#include "Razor/Lighting/LightBound.h"
 #include "Razor/Lighting/Directional.h"
 #include "Razor/Lighting/Point.h"
 #include "Razor/Lighting/Spot.h"
+#include "Razor/Rendering/ForwardRenderer.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	Tools::Tools(Editor* editor) :
 		EditorComponent(editor),
@@ -45,7 +50,7 @@ namespace Razor {
 		point_parameters(PointParameters()),
 		spot_parameters(SpotParameters())
 	{
-		selection = editor->getTool<Selection*>("selection");
+		selection = editor->getToolsManager()->getTool<Selection>("selection");
 		checkerMap = new Texture("./data/checker.png", true);
 	}
 
@@ -67,6 +72,7 @@ namespace Razor {
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
+
 			if (Utils::treeNode("Primitives"))
 			{
 				primitives_opened = true;
@@ -75,7 +81,7 @@ namespace Razor {
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("cube", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("cube", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -88,7 +94,7 @@ namespace Razor {
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 			
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("sphere", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("sphere", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -101,7 +107,7 @@ namespace Razor {
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("plane", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("plane", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -117,6 +123,8 @@ namespace Razor {
 			else
 				primitives_opened = false;
 
+
+
 			ImGui::PopStyleVar();
 
 			if (Utils::treeNode("Lights"))
@@ -126,7 +134,7 @@ namespace Razor {
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("directional_light", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("directional_light", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -139,7 +147,7 @@ namespace Razor {
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("point_light", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("point_light", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -152,7 +160,7 @@ namespace Razor {
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("spot_light", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("spot_light", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -176,7 +184,7 @@ namespace Razor {
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("camera", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("camera", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -185,7 +193,7 @@ namespace Razor {
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("camera", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("camera", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -217,7 +225,7 @@ namespace Razor {
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() - 10.0f, ImGui::GetCursorPosY()));
 
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				editor->drawButtonIcon("noisy_curve", glm::vec2(17.0f));
+				editor->icons_manager->drawIcon("noisy_curve", glm::vec2(25.0f), IconsManager::IconType::BUTTON);
 				ImGui::PopItemFlag();
 				ImGui::SameLine();
 				ImGui::Indent(17.0f);
@@ -233,6 +241,8 @@ namespace Razor {
 			else
 				landscape_opened = false;
 			
+			//editor->icons_manager->drawIcon("cube", glm::vec2(60.0f), IconsManager::IconType::BUTTON);
+
 			ImGui::End();
 		}
 
@@ -273,7 +283,7 @@ namespace Razor {
 					std::shared_ptr<Cube> cube = std::make_shared<Cube>(cube_parameters.radius);
 					std::shared_ptr<PhongMaterial> mat = std::make_shared<PhongMaterial>();
 					mat->setTextureMap(Material::TextureType::Diffuse, checkerMap->getId());
-					cube->setPhysicsBody(new CubePhysicsBody(node.get(), glm::vec3(1.0f), cube_parameters.position));
+					cube->setPhysicsBody(new CubePhysicsBody(node.get(), glm::vec3(1.0f)));
 
 					cube->setMaterial(mat);
 
@@ -301,7 +311,7 @@ namespace Razor {
 			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
 			ImGui::SetNextWindowFocus();
 
-			if (ImGui::Begin("Add cube", &show_cube_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+			if (ImGui::Begin("Add cube", &show_cube_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse))
 			{
 				ImGui::Dummy(ImVec2(0, 5.0f));
 				ImGui::Columns(2, "twoColumns", true);
@@ -355,9 +365,9 @@ namespace Razor {
 					std::shared_ptr<Node> node = std::make_shared<Node>();
 					node->name = "Cube_x";
 					std::shared_ptr<Cube> cube = std::make_shared<Cube>(cube_parameters.radius);
-					std::shared_ptr<PhongMaterial> mat = std::make_shared<PhongMaterial>();
+					std::shared_ptr<PbrMaterial> mat = std::make_shared<PbrMaterial>();
 					mat->setTextureMap(Material::TextureType::Diffuse, checkerMap->getId());
-					cube->setPhysicsBody(new CubePhysicsBody(node.get(), glm::vec3(1.0f), cube_parameters.position));
+			
 
 					cube->setMaterial(mat);
 
@@ -368,7 +378,13 @@ namespace Razor {
 					));
 
 					node->transform.setPosition(cube_parameters.position);
+					cube->setPhysicsBody(new CubePhysicsBody(node.get(), glm::vec3(cube_parameters.radius)));
 					node->meshes.push_back(cube);
+
+					cube->updateBoundings(node->transform);
+					cube->getBoundingMesh()->setMaterial(ForwardRenderer::getColorMaterial());
+					ForwardRenderer::addBoundingBox(node);
+
 					selection->clear();
 					selection->addNode(node);
 					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
@@ -385,7 +401,7 @@ namespace Razor {
 			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
 			ImGui::SetNextWindowFocus();
 
-			if (ImGui::Begin("Add UVSphere", &show_uvsphere_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+			if (ImGui::Begin("Add UVSphere", &show_uvsphere_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse))
 			{
 				ImGui::Dummy(ImVec2(0, 5.0f));
 				ImGui::Columns(2, "twoColumns", true);
@@ -448,20 +464,25 @@ namespace Razor {
 					node->name = "UVSphere";
 					std::shared_ptr<UVSphere> uvsphere = std::make_shared<UVSphere>(UVsphere_parameters.radius, UVsphere_parameters.segments);
 
-					std::shared_ptr<PhongMaterial> mat = std::make_shared<PhongMaterial>();
+					std::shared_ptr<PbrMaterial> mat = std::make_shared<PbrMaterial>();
 					mat->setTextureMap(Material::TextureType::Diffuse, checkerMap->getId());
 					uvsphere->setMaterial(mat);
 
 					node->transform.setPosition(UVsphere_parameters.position);
-					uvsphere->setPhysicsBody(new SpherePhysicsBody(node.get(), UVsphere_parameters.radius, UVsphere_parameters.position));
-
+		
 					node->transform.setRotation(glm::vec3(
 						glm::radians(UVsphere_parameters.rotation.x),
 						glm::radians(UVsphere_parameters.rotation.y),
 						glm::radians(UVsphere_parameters.rotation.z)
 					));
 
+					uvsphere->setPhysicsBody(new SpherePhysicsBody(node.get(), UVsphere_parameters.radius));
 					node->meshes.push_back(uvsphere);
+
+					uvsphere->updateBoundings(node->transform);
+					uvsphere->getBoundingMesh()->setMaterial(ForwardRenderer::getColorMaterial());
+					ForwardRenderer::addBoundingBox(node);
+
 					selection->clear();
 					selection->addNode(node);
 					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
@@ -533,11 +554,10 @@ namespace Razor {
 					node->name = "Plane";
 					std::shared_ptr<Plane> plane = std::make_shared<Plane>(plane_parameters.radius);
 
-					std::shared_ptr<PhongMaterial> mat = std::make_shared<PhongMaterial>();
+					std::shared_ptr<PbrMaterial> mat = std::make_shared<PbrMaterial>();
 					mat->setTextureMap(Material::TextureType::Diffuse, checkerMap->getId());
 					plane->setMaterial(mat);
-					plane->setPhysicsBody(new PlanePhysicsBody(node.get(), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, plane_parameters.position));
-
+				
 					node->transform.setRotation(glm::vec3(
 						glm::radians(plane_parameters.rotation.x),
 						glm::radians(plane_parameters.rotation.y),
@@ -545,12 +565,20 @@ namespace Razor {
 					));
 
 					node->transform.setPosition(plane_parameters.position);
+					plane->setPhysicsBody(new PlanePhysicsBody(node.get(), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f));
 					node->meshes.push_back(plane);
+					
+
+					plane->updateBoundings(node->transform);
+					plane->getBoundingMesh()->setMaterial(ForwardRenderer::getColorMaterial());
+					ForwardRenderer::addBoundingBox(node);
+
 					selection->clear();
 					selection->addNode(node);
 					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
 					editor->getEngine()->getPhysicsWorld()->addNode(node);
 					show_plane_props = false;
+				
 				}
 
 				ImGui::End();
@@ -599,7 +627,7 @@ namespace Razor {
 				{
 					std::shared_ptr<Node> node = std::make_shared<Node>();
 					node->name = "Directional light";
-					std::shared_ptr<Directional> directional = std::make_shared<Directional>();
+					std::shared_ptr<Directional> directional = std::make_shared<Directional>(editor->getEngine()->getScenesManager()->getActiveScene()->getActiveCamera());
 
 					directional->setDirection(glm::vec3(
 						glm::radians(plane_parameters.rotation.x),
@@ -611,7 +639,144 @@ namespace Razor {
 					selection->clear();
 					selection->addNode(node);
 					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->addLight(directional, Light::Type::DIRECTIONAL);
 					show_directional_props = false;
+				}
+
+				ImGui::End();
+			}
+		}
+
+		if (show_point_props)
+		{
+			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
+			ImGui::SetNextWindowFocus();
+
+			if (ImGui::Begin("Add directional light", &show_point_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse))
+			{
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::Columns(2, "twoColumns", true);
+
+				static unsigned short initial_column_spacing = 0;
+				if (initial_column_spacing < 2)
+				{
+					ImGui::SetColumnWidth(0, 100.0f);
+					initial_column_spacing++;
+				}
+
+				ImGui::Indent(10.0f);
+				ImGui::Text("Position");
+				ImGui::NextColumn();
+
+				float margin_right = 18.0f;
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Position", &point_parameters.position[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::Columns(1);
+				ImGui::Dummy(ImVec2(0, 50.0f));
+
+				float width = ImGui::GetWindowWidth();
+				float pos_y = ImGui::GetWindowHeight();
+
+				ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
+				ImGui::PushItemWidth(-1);
+				ImGui::Button("Create point light", ImVec2(width - 25.0f, 30.0f));
+				ImGui::PopItemWidth();
+
+				if (ImGui::IsItemClicked())
+				{
+					std::shared_ptr<Node> node = std::make_shared<Node>();
+					node->name = "Point light";
+					std::shared_ptr<Point> point = std::make_shared<Point>(editor->getEngine()->getScenesManager()->getActiveScene()->getActiveCamera());
+
+					point->setPosition(glm::vec3(
+						glm::radians(point_parameters.position.x),
+						glm::radians(point_parameters.position.y),
+						glm::radians(point_parameters.position.z)
+					));
+
+					node->lights.push_back(point);
+					selection->clear();
+					selection->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->addLight(point, Light::Type::POINT);
+					show_point_props = false;
+				}
+
+				ImGui::End();
+			}
+		}
+
+		if (show_spot_props)
+		{
+			ImGui::SetNextWindowPosCenter(ImGuiCond_Once);
+			ImGui::SetNextWindowFocus();
+
+			if (ImGui::Begin("Add spot light", &show_spot_props, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse))
+			{
+				ImGui::Dummy(ImVec2(0, 5.0f));
+				ImGui::Columns(2, "twoColumns", true);
+
+				static unsigned short initial_column_spacing = 0;
+				if (initial_column_spacing < 2)
+				{
+					ImGui::SetColumnWidth(0, 100.0f);
+					initial_column_spacing++;
+				}
+
+				ImGui::Indent(10.0f);
+				ImGui::Text("Position");
+				ImGui::NextColumn();
+
+				float margin_right = 18.0f;
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Position", &spot_parameters.position[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::NextColumn();
+
+				ImGui::PushItemWidth(ImGui::GetColumnWidth() - margin_right);
+				ImGui::DragFloat3("##Direction", &spot_parameters.direction[0]);
+				ImGui::PopItemWidth();
+
+				ImGui::Columns(1);
+				ImGui::Dummy(ImVec2(0, 50.0f));
+
+				float width = ImGui::GetWindowWidth();
+				float pos_y = ImGui::GetWindowHeight();
+
+				ImGui::SetCursorPos(ImVec2(12.0f, pos_y - 45.0f));
+				ImGui::PushItemWidth(-1);
+				ImGui::Button("Create spot light", ImVec2(width - 25.0f, 30.0f));
+				ImGui::PopItemWidth();
+
+				if (ImGui::IsItemClicked())
+				{
+					std::shared_ptr<Node> node = std::make_shared<Node>();
+					node->name = "Spot light";
+					std::shared_ptr<Spot> spot = std::make_shared<Spot>(editor->getEngine()->getScenesManager()->getActiveScene()->getActiveCamera());
+
+					spot->setPosition(glm::vec3(
+						glm::radians(spot_parameters.position.x),
+						glm::radians(spot_parameters.position.y),
+						glm::radians(spot_parameters.position.z)
+					));
+
+					spot->setDirection(glm::vec3(
+						glm::radians(spot_parameters.direction.x),
+						glm::radians(spot_parameters.direction.y),
+						glm::radians(spot_parameters.direction.z)
+					));
+
+					node->lights.push_back(spot);
+					selection->clear();
+					selection->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->getSceneGraph()->addNode(node);
+					editor->getEngine()->getScenesManager()->getActiveScene()->addLight(spot, Light::Type::SPOT);
+					show_spot_props = false;
 				}
 
 				ImGui::End();

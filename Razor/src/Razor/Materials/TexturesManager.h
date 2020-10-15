@@ -16,7 +16,7 @@ namespace Razor
 		Texture* getTexture(const std::string& path);
 
 	private:
-		std::map<std::string, Texture*> textures;
+		std::unordered_map<std::string, Texture*> textures;
 	};
 
 }

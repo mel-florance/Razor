@@ -19,11 +19,13 @@ namespace Razor {
 	class RAZOR_API KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keycode, int repeatCount) :
+		KeyPressedEvent(int keycode, int repeatCount, int mods) :
+			m_mods(mods),
 			KeyEvent(keycode),
 			m_RepeatCount(repeatCount) {}
 
 		inline int GetRepeatCount() const { return m_RepeatCount; }
+		inline int GetMods() const { return m_mods; }
 
 		std::string ToString() const override
 		{
@@ -34,6 +36,7 @@ namespace Razor {
 
 		EVENT_CLASS_TYPE(KeyPressed)
 	private:
+		int m_mods;
 		int m_RepeatCount;
 	};
 

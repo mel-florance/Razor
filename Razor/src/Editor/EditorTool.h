@@ -19,8 +19,10 @@ namespace Razor
 		inline void setActive(bool value) { active = value; }
 		inline void setDirty(bool value) { dirty = value; }
 
-	private:
+	protected:
 		Editor* editor;
+
+	private:
 		bool dirty;
 		bool active;
 	};

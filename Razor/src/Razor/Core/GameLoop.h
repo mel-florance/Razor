@@ -29,6 +29,7 @@ namespace Razor {
 		inline double getFrameTime() { return m_frameTime; }
 		inline double getPassedTime() { return m_passedTime; }
 		inline float getFps() { return m_fps; }
+		inline double getFrameCounter() { return m_frameCounter; }
 
 		float computeAverageFps(float fps);
 		inline std::map<int, float>& getFpsList() { return m_fpsList; }

@@ -4,6 +4,10 @@
 #include "Razor/Application/Application.h"
 #include "ProjectsManager.h"
 #include "Editor/Editor.h"
+#include "Razor/Core/System.h"
+#include "Razor/Core/Engine.h"
+
+#include "Editor/Components/AssetsManager.h"
 
 namespace Razor {
 
@@ -25,14 +29,14 @@ namespace Razor {
 			if (ImGui::BeginMenu("File"))
 			{
 				ImGui::MenuItem("New", "Ctrl + N");
-
-				show_create_project = ImGui::IsItemClicked();
+				if (ImGui::IsItemClicked())
+					//editor->toggleModal("create_project");
 			
 				ImGui::MenuItem("Open", "Ctrl + O");
 
 				if (ImGui::BeginMenu("Open Recent...", "Ctrl + Shift + O"))
 				{
-					ProjectsManager* projManager = (ProjectsManager*) editor->getComponents()["ProjectsManager"];
+					ProjectsManager* projManager = (ProjectsManager*) editor->getComponentsManager()->getComponents()["ProjectsManager"];
 
 					if (projManager != nullptr)
 					{
@@ -57,6 +61,9 @@ namespace Razor {
 				ImGui::Separator();
 
 				ImGui::MenuItem("Import...");
+				if (ImGui::IsItemClicked())
+					//editor->toggleModal("import_asset");
+
 				ImGui::MenuItem("Export...");
 
 				ImGui::Separator();
@@ -81,11 +88,19 @@ namespace Razor {
 
 			if (ImGui::BeginMenu("Window"))
 			{
-				ImGui::MenuItem("Assets Manager");
-				ImGui::MenuItem("Console");
-				ImGui::MenuItem("Outliner");
-				ImGui::MenuItem("Properties Editor");
-				ImGui::MenuItem("Tools");
+				ComponentsManager::ComponentsMap& components = editor->getComponentsManager()->getComponents();
+				ComponentsManager::ComponentsMap::iterator it = components.begin();
+
+				std::vector<const char*> filtered = {
+					"MainMenu",
+					"ProjectsManager",
+					"NotificationsManager"
+				};
+
+				for (; it != components.end(); ++it)
+					if (std::find(filtered.begin(), filtered.end(), it->first) == filtered.end())
+						if (ImGui::MenuItem(it->first, nullptr, it->second->isActive()))
+							it->second->setActive(!it->second->isActive());
 
 				ImGui::EndMenu();
 			}
@@ -98,6 +113,18 @@ namespace Razor {
 
 				ImGui::EndMenu();
 			}
+
+
+			System* system = editor->getEngine()->getSystem();
+			system->getStats();
+			System::PhysicalMemory& pm = system->getPhysicalMemory();
+			std::string size_str = Utils::bytesToSize(pm.process_usage);
+			std::string prefix = "Memory usage: ";
+			char* total_size = (char*)(prefix + size_str).c_str();
+			ImVec2 txt_size = ImGui::CalcTextSize(total_size);
+
+			ImGui::SetCursorPosX(ImGui::GetWindowSize().x - txt_size.x - 15.0f);
+			ImGui::Text("%s", total_size);
 
 			ImGui::EndMenuBar();
 		}

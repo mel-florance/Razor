@@ -46,8 +46,10 @@ namespace Razor {
 		void setRaw(bool raw = true);
 		std::string toString() const;
 		int toInt() const;
+		int& toInt();
 		uint64_t toUInt() const;
 		float toFloat() const;
+		float& toFloat();
 		bool toBool() const;
 		const std::map<std::string, Variant>& toMap() const;
 		glm::vec2 toVec2() const;
@@ -59,6 +61,11 @@ namespace Razor {
 
 		Type type() const;
 		std::string typeString() const;
+
+		inline void* getPtr() { return _ptr; }
+
+		inline int& getInt() { return _int; }
+		inline float& getFloat() { return _float; }
 
 		Variant& operator = (const Variant& other);
 		bool operator == (const Variant& other);

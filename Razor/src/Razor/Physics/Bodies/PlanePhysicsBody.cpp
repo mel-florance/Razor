@@ -7,20 +7,14 @@ namespace Razor
 	PlanePhysicsBody::PlanePhysicsBody(
 		Node* node,
 		const glm::vec3& normal,
-		float constant, 
-		const glm::vec3& position,
-		const glm::vec3& rotation
+		float constant
 		) :
-		PhysicsBody(node, position, rotation),
+		PhysicsBody(node),
 		normal(normal),
 		constant(constant)
 	{
 		mass = 0.0f;
 		shape = new btStaticPlaneShape(btVector3(normal.x, normal.y, normal.z), constant);
-	}
-
-	PlanePhysicsBody::~PlanePhysicsBody()
-	{
 	}
 
 	void PlanePhysicsBody::init()

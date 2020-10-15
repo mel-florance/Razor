@@ -7,3 +7,4 @@
 #include "FrameBuffer.h"
 #include "TextureAttachment.h"
 #include "UniformBuffer.h"
+#include "GBuffer.h"

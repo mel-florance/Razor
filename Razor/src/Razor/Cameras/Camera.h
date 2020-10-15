@@ -2,13 +2,15 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/transform.hpp>
 
 struct GLFWwindow;
 
-namespace Razor {
+namespace Razor 
+{
 
 	class Window;
-	class Editor;
+	class Viewport;
 	class Application;
 
 	class Camera
@@ -17,7 +19,8 @@ namespace Razor {
 		Camera(Window* window);
 		virtual ~Camera();
 
-		enum class Direction {
+		enum class Direction
+		{
 			FORWARD,
 			BACKWARD, 
 			LEFT, 
@@ -30,10 +33,19 @@ namespace Razor {
 
 		virtual void update(double dt) {}
 
+		inline Viewport* getViewport() { return viewport; }
 		inline Window* getWindow() { return window; }
 
 		inline glm::mat4& getViewMatrix() { return view; }
 		inline glm::mat4& getProjectionMatrix() { return projection; }
+
+		inline virtual glm::mat4 getRotationMatrix()
+		{
+			glm::mat4 rot_x = glm::rotate(-glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+			glm::mat4 rot_y = glm::rotate(-glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+
+			return rot_x * rot_y;
+		}
 
 		inline glm::vec3& getPosition() { return position; }
 
@@ -74,6 +86,7 @@ namespace Razor {
 
 	protected:
 		Window* window;
+		Viewport* viewport;
 
 		glm::vec3 position;
 		glm::vec3 velocity;
@@ -95,6 +108,7 @@ namespace Razor {
 
 		float yaw;
 		float pitch;
+		float roll;
 
 		float delta;
 		bool first;

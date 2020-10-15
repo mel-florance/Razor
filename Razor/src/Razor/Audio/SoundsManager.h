@@ -26,10 +26,19 @@ namespace Razor
 			INVERSE_CLAMPED
 		};
 
+		struct DeviceInfo
+		{
+			char* vendor = nullptr;
+			char* renderer = nullptr;
+			char* version = nullptr;
+		};
+
 		void loadSound(const std::string& filename, const std::string& short_name);
 		void playSound(const std::string& short_name);
 		void setSound(const std::string& short_name, Sound* sound) { sounds[short_name] = sound; }
 		bool hasSound(const std::string& short_name) { return sounds.find(short_name) != sounds.end(); }
+
+		inline DeviceInfo& getDeviceInfos() { return device_infos; }
 
 		inline DistanceModel getDistanceModel() { return distance_model; }
 		inline ALCdevice* getDevice() { return device; }
@@ -52,6 +61,8 @@ namespace Razor
 		WAVLoader* wav_loader;
 		OGGLoader* ogg_loader;
 		std::map<std::string, Sound*> sounds;
+
+		DeviceInfo device_infos;
 	};
 
 }

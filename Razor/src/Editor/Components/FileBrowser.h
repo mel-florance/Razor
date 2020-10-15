@@ -4,14 +4,18 @@
 
 namespace Razor 
 {
+	class Editor;
+	class Texture;
 
 	class RAZOR_API FileBrowser
 	{
 	public:
-		FileBrowser();
+		FileBrowser(Editor* editor);
 		~FileBrowser();
 
 		void render();
+
+
 
 		struct TreeItem
 		{
@@ -24,6 +28,7 @@ namespace Razor
 			unsigned int id;
 			std::string name;
 			std::string path;
+			//AssetsManager::Type type;
 			std::vector<TreeItem*> childs;
 			bool opened = false;
 
@@ -38,15 +43,24 @@ namespace Razor
 			}
 		};
 
-		void loadTreeItem(TreeItem* item, const std::string& path);
+		void loadTreeItem(TreeItem* item, const std::string& path, unsigned int depth);
 		void unloadTreeItem(TreeItem* item);
-		void drawTreeItem(TreeItem* item);
+		void drawTreeItem(TreeItem* item, unsigned int depth);
+		static std::string getHomeDirectory();
+		inline std::string getHomeProjectsDirectory() { return home_projects_directory; }
+		inline static std::string getCurrentPath() { return current_path; }
 
 	private:
+		static std::string current_path;
+		char filter_current[128];
+		char filter[128];
 		TreeItem* selected;
 		unsigned int index;
 		TreeItem* root;
-		char filter[32];
+		Texture* thumb_shadow;
+		Editor* editor;
+		std::string home_projects_directory;
+		std::string projects_location_name;
 	};
 
 }

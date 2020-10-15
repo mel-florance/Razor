@@ -4,15 +4,11 @@
 namespace Razor
 {
 
-	SpherePhysicsBody::SpherePhysicsBody(Node* node, float radius, const glm::vec3& position, const glm::vec3& rotation) :
-		PhysicsBody(node, position, rotation),
+	SpherePhysicsBody::SpherePhysicsBody(Node* node, float radius) :
+		PhysicsBody(node),
 		radius(radius)
 	{
 		shape = new btSphereShape(radius);
-	}
-
-	SpherePhysicsBody::~SpherePhysicsBody()
-	{
 	}
 
 	void SpherePhysicsBody::init()

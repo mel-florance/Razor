@@ -19,7 +19,8 @@ namespace Razor {
 			UNSIGNED_SHORT = 0x1403,
 			INT            = 0x1404,
 			UNSIGNED_INT   = 0x1405,
-			FLOAT          = 0x1406
+			FLOAT          = 0x1406,
+			DOUBLE         = 0x140A
 		};
 
 		void addBuffer(

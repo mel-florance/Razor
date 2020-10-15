@@ -23,8 +23,10 @@ namespace Razor {
 				file.close();
 			}
 
+
 			return out;
 		}
+
 	};
 
 }

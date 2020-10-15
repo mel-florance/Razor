@@ -7,7 +7,7 @@ namespace Razor {
 	class Point : public Light
 	{
 	public:
-		Point();
+		Point(Camera* camera, const glm::vec3& position = glm::vec3(0.0f));
 		~Point();
 
 		inline glm::vec3& getPosition() { return position; }
@@ -22,11 +22,11 @@ namespace Razor {
 		inline float& getQuadratic() { return quadratic; }
 		inline void setQuadratic(float value) { quadratic = value; }
 
-	private:
-			glm::vec3 position;
-			float constant;
-			float linear;
-			float quadratic;
+	protected:
+		glm::vec3 position;
+		float constant;
+		float linear;
+		float quadratic;
 	};
 
 }

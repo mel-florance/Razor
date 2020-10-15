@@ -1,16 +1,19 @@
 #include "rzpch.h"
 #include "Directional.h"
+#include "Razor/Cameras/Camera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Razor {
+namespace Razor
+{
 
-	Directional::Directional() :
-		Light(),
-		direction(glm::vec3(0.0f))
+	Directional::Directional(Camera* camera, const glm::vec3& position, const glm::vec3& direction) :
+		Light(camera),
+		position(position),
+		direction(direction)
 	{
 		type = Light::Type::DIRECTIONAL;
-		shadow_generator.setViewMatrix(glm::lookAt(direction, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+		light_bound = new DirectionalBound(this);
 	}
 
 	Directional::~Directional()

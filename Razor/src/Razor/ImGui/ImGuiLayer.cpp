@@ -41,6 +41,16 @@ namespace Razor {
 
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+		io.Fonts->AddFontFromFileTTF("./data/fonts/Roboto-Medium.ttf", 24.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/consola.ttf", 16.0f);
+		//io.Fonts->AddFontFromFileTTF("./data/fonts/Cousine-Regular.ttf", 15.0f);
+		//io.Fonts->AddFontFromFileTTF("./data/fonts/DroidSans.ttf", 16.0f);
+		//io.Fonts->AddFontFromFileTTF("./data/fonts/ProggyTiny.ttf", 10.0f);
+		//io.Fonts->AddFontFromFileTTF("./data/fonts/ProggyClean.ttf", 10.0f);
+		//io.Fonts->AddFontFromFileTTF("./data/fonts/Karla-Regular.ttf", 16.0f);
+		io.Fonts->Build();
+
 		io.IniFilename = "./config/ui.ini";
 
 		ImGuiStyle & style = ImGui::GetStyle();
@@ -53,11 +63,11 @@ namespace Razor {
 		colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
 		colors[ImGuiCol_ChildBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
-		colors[ImGuiCol_WindowBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
+		colors[ImGuiCol_WindowBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
 		colors[ImGuiCol_PopupBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
 		colors[ImGuiCol_Border] = ImVec4(0.12f, 0.12f, 0.12f, 0.71f);
 		colors[ImGuiCol_BorderShadow] = ImVec4(1.00f, 1.00f, 1.00f, 0.06f);
-		colors[ImGuiCol_FrameBg] = ImVec4(0.42f, 0.42f, 0.42f, 0.54f);
+		colors[ImGuiCol_FrameBg] = ImVec4(0.05f, 0.05f, 0.05f, 1.0f);
 		colors[ImGuiCol_FrameBgHovered] = ImVec4(0.42f, 0.42f, 0.42f, 0.40f);
 		colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.56f, 0.67f);
 		colors[ImGuiCol_TitleBg] = ImVec4(0.19f, 0.19f, 0.19f, 1.00f);
@@ -107,8 +117,8 @@ namespace Razor {
 		style.PopupBorderSize = 1;
 		style.FrameBorderSize = (float)is3D;
 
-		style.WindowRounding = 3;
-		style.ChildRounding = 3;
+		style.WindowRounding = 0;
+		style.ChildRounding = 0;
 		style.FrameRounding = 3;
 		style.ScrollbarRounding = 2;
 		style.GrabRounding = 3;
@@ -170,6 +180,7 @@ namespace Razor {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		//ImGuizmo::BeginFrame();
+
 	}
 
 	void ImGuiLayer::End()

@@ -30,10 +30,12 @@ namespace Razor
 		inline glm::vec3& getSpecularColor() { return specular_color; }
 		inline glm::vec3& getAmbientColor() { return ambient_color; }
 		inline glm::vec3& getEmissiveColor() { return emissive_color; }
+
 		inline float& getShininess() { return shininess; }
 		inline float& getShininessStrength() { return shininess_strength; }
 		inline float& getAlpha() { return alpha; }
 		inline float& getNormalStrength() { return normal_strength; }
+
 		inline glm::vec2& getDiffuseTiling() { return diffuse_tiling; }
 		inline glm::vec2& getSpecularTiling() { return specular_tiling; }
 		inline glm::vec2& getNormalTiling() { return normal_tiling; }

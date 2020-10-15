@@ -4,12 +4,13 @@
 #include "Razor/Scene/Node.h"
 #include "Razor/Types/Variant.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/ProgressHandler.hpp>
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp/ProgressHandler.hpp"
 
-namespace Razor {
+namespace Razor 
+{
 
 	class AssimpImporter : public Assimp::ProgressHandler
 	{
@@ -17,7 +18,7 @@ namespace Razor {
 		AssimpImporter();
 		virtual ~AssimpImporter();
 
-		inline std::shared_ptr<Node> getNodeData() { return rootNode; }
+		inline Node* getNodeData() { return rootNode.get(); }
 
 		bool importMesh(const std::string& filename);
 		void processNode(aiNode* node, std::shared_ptr<Node> parentNode, std::shared_ptr<Node> newNode);

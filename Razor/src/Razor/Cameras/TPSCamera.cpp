@@ -6,21 +6,43 @@
 #include <glm/gtx/transform.hpp>
 #include "Razor/Core/Window.h"
 #include "Razor/Core/Transform.h"
-#include "Editor/Components/Viewport.h"
+#include "Razor/Core/Viewport.h"
 #include "Razor/Application/Application.h"
 #include "Editor/Editor.h"
-#include "Editor/Components/Viewport.h"
 #include "Razor/Maths/Maths.h"
 
-namespace Razor {
+namespace Razor 
+{
+
+	TPSCamera::TPSCamera(Window* window, TPSCamera* cam) :
+		Camera(window),
+		target(new Transform()),
+		sensitivity(cam->getSensitivity()),
+		pan_sensitivity(cam->getPanSensitivity()),
+		pitch(cam->getPitch()),
+		yaw(cam->getYaw()),
+		roll(cam->getRoll()),
+		distance(cam->getDistance()),
+		distance_min(cam->getDistanceMin()),
+		distance_max(cam->getDistanceMax()),
+		pitch_min(cam->getPitchMin()),
+		pitch_max(cam->getPitchMax()),
+		pitch_offset(cam->getPitchOffset()),
+		pitch_factor(cam->getPitchFactor()),
+		zoom_factor(cam->getZoomFactor()),
+		angle(cam->getAngle()),
+		alpha(cam->getAlpha()),
+		y_offset(cam->getYOffset()),
+		delta_offset(cam->getDeltaOffset())
+	{
+	}
 
 	TPSCamera::TPSCamera(Window* window) :
 		Camera(window),
-		viewport(nullptr),
 		target(new Transform()),
 		sensitivity(0.3f),
 		pan_sensitivity(0.3f),
-		pitch(45.0f),
+		pitch(-45.0f),
 		yaw(0.0f),
 		roll(0.0f),
 		distance(10.0f),
@@ -46,13 +68,10 @@ namespace Razor {
 
 	void TPSCamera::update(double dt)
 	{
-		if(viewport == nullptr)
-			viewport = (Viewport*)Application::Get().getEditor()->getComponents()["Viewport"];
-
 		//alpha += 0.5f * dt;
-		//y_offset = sin(alpha - dt) - 3.0f;
+		//y_offset = sin(alpha - dt) - 20.0f;
 		//roll += 0.5f * dt;
-		//angle += 8.0f * dt;
+		angle += 8.0f * dt;
 
 		if (target != nullptr)
 		{
@@ -98,7 +117,7 @@ namespace Razor {
 				);
 				break;
 			case Mode::PERSPECTIVE:
-				projection = glm::perspective(fov, aspect_ratio, clip_near, clip_far);
+				projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
 				break;
 		}
 	}
@@ -127,13 +146,13 @@ namespace Razor {
 					mouse_position *= -1.0f;
 
 				if (mouse_position.x > 0)
-					velocity += right * delta * pan_sensitivity * distance;
-				if (mouse_position.x < 0)
 					velocity -= right * delta * pan_sensitivity * distance;
+				if (mouse_position.x < 0)
+					velocity += right * delta * pan_sensitivity * distance;
 				if (mouse_position.y > 0)
-					velocity += up * delta * pan_sensitivity * distance;
-				if (mouse_position.y < 0)
 					velocity -= up * delta * pan_sensitivity * distance;
+				if (mouse_position.y < 0)
+					velocity += up * delta * pan_sensitivity * distance;
 
 				glm::vec3 pos = target->getPosition();
 				target->setPosition(pos + velocity);
@@ -142,14 +161,14 @@ namespace Razor {
 			else
 			{
 				float diff = mouse_position.y * sensitivity;
-				pitch += diff;
+				pitch -= diff;
 
 				if (pitch < pitch_min)
 					pitch = pitch_min;
 				else if (pitch > pitch_max)
 					pitch = pitch_max;
 
-				angle += mouse_position.x * sensitivity;
+				angle -= mouse_position.x * sensitivity;
 			}
 		}
 	}
@@ -190,12 +209,19 @@ namespace Razor {
 		if (keyCode == GLFW_KEY_KP_5 && viewport->isHovered()) 
 		{
 			mode = mode == Camera::Mode::ORTHOGRAPHIC ? Camera::Mode::PERSPECTIVE : Camera::Mode::ORTHOGRAPHIC;
-			ImGuizmo::SetOrthographic(mode == Camera::Mode::ORTHOGRAPHIC);
+			//ImGuizmo::SetOrthographic(mode == Camera::Mode::ORTHOGRAPHIC);
 		}
 	}
 
 	void TPSCamera::onKeyReleased(int keyCode)
 	{
+	}
+
+	void TPSCamera::onWindowResized(const glm::vec2& size)
+	{
+		if (viewport != nullptr) {
+			aspect_ratio = (float)viewport->getSize().x / (float)viewport->getSize().y;
+		}
 	}
 
 	void TPSCamera::setTarget(Transform* transform)

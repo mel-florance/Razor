@@ -1,16 +1,18 @@
 #include "rzpch.h"
 #include "Point.h"
+#include "Razor/Cameras/Camera.h"
 
 namespace Razor {
 
-	Point::Point() :
-		Light(),
-		position(glm::vec3(0.0f)),
+	Point::Point(Camera* camera, const glm::vec3& position) :
+		Light(camera),
+		position(position),
 		constant(1.0f),
-		linear(0.09f),
-		quadratic(0.032f)
+		linear(0.7f),
+		quadratic(1.8f)
 	{
 		type = Light::Type::POINT;
+		light_bound = new PointBound(this);
 	}
 
 	Point::~Point()

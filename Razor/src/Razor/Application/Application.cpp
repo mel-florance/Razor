@@ -18,24 +18,30 @@ namespace Razor
 	Application* Application::s_Instance = nullptr;
 	Editor* Application::m_Editor = nullptr;
 
-	Application::Application(bool headless) : headless(headless), m_Running(true)
+	Application::Application(bool headless, Application::Type applicationType, const WindowProps& props) :
+		headless(headless),
+		is_editor(applicationType == Application::Type::EDITOR),
+		m_Running(true),
+		m_windowProps(props)
 	{
 		RZ_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		if (!headless)
 		{
-			m_Window = std::unique_ptr<Window>(Window::Create());
+			m_Window = std::unique_ptr<Window>(Window::Create(m_windowProps));
 			m_Window->SetEventCallback(RZ_BIND_EVENT_FN(Application::OnEvent));
-
 			m_Engine = new Engine(this);
 
-			m_Editor = new Editor(m_Engine);
-			Log::s_editorLogger = (Logger*)m_Editor->getComponents()["Logger"];
+			if (is_editor)
+			{
+				m_Editor = new Editor(m_Engine);
+				Log::s_editorLogger = (Logger*)m_Editor->getComponentsManager()->getComponent<Logger>("Logger");
 
-			m_ImGuiLayer = m_Editor->getLayer().get();
-			PushLayer(m_Editor);
-			PushOverlay(m_ImGuiLayer);
+				m_ImGuiLayer = m_Editor->getLayer().get();
+				PushLayer(m_Editor);
+				PushOverlay(m_ImGuiLayer);
+			}
 		}
 	}
 
@@ -46,6 +52,7 @@ namespace Razor
 
 	void Application::close()
 	{
+		m_Engine->stop();
 		glfwSetWindowShouldClose((GLFWwindow*)m_Window->GetNativeWindow(), GLFW_TRUE);
 	}
 
@@ -67,8 +74,6 @@ namespace Razor
 
 		dispatcher.Dispatch<WindowCloseEvent>(RZ_BIND_EVENT_FN(Application::OnWindowClose));
 
-		//RZ_CORE_INFO("{0}", e);
-
 		m_Engine->OnEvent(event);
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
@@ -83,11 +88,6 @@ namespace Razor
 	ScenesManager* Application::getScenesManager()
 	{
 		return m_Engine->getScenesManager();
-	}
-
-	ForwardRenderer* Application::getForwardRenderer()
-	{
-		return m_Engine->getForwardRenderer();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

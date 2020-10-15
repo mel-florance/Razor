@@ -33,4 +33,11 @@ namespace Razor {
 		glBufferData(GL_ARRAY_BUFFER, size, data, (GLenum)usage);
 	}
 
+	void VertexBuffer::updateSubData(unsigned int size, const void* data, unsigned int offset)
+	{
+		bind();
+		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+		unbind();
+	}
+
 }

@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "Razor/Core/Window.h"
 
-#include "Editor/Components/Viewport.h"
+#include "Razor/Core/Viewport.h"
 #include "Razor/Application/Application.h"
 #include "Editor/Editor.h"
 
@@ -11,6 +11,7 @@ namespace Razor {
 
 	Camera::Camera(Window* window) : 
 
+		viewport(nullptr),
 		window(window),
 		position(glm::vec3(0.0f, 0.0f, 0.0f)),
 		velocity(glm::vec3(0.0f, 0.0f, 0.0f)),
@@ -21,6 +22,7 @@ namespace Razor {
 
 		yaw(90.0f),
 		pitch(0.0f),
+		roll(0.0f),
 		aspect_ratio(16.0f / 9.0f),
 		clip_near(0.01f),
 		clip_far(1000.0f),
@@ -37,11 +39,13 @@ namespace Razor {
 		min_speed(0.1f),
 		max_speed(1000.0f)
 	{
-		projection = glm::perspective(fov, aspect_ratio, clip_near, clip_far);
+		viewport = new Viewport(window);
+		projection = glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
 	}
 
 	Camera::~Camera()
 	{
+		delete viewport;
 	}
 	
 

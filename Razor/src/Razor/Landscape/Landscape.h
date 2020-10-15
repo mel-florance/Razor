@@ -10,23 +10,25 @@ namespace Razor
 	class Landscape
 	{
 	public:
-		Landscape(const std::string& filename, const glm::dvec3& position = glm::dvec3(0.0f, 0.0f, 0.0f));
+		typedef std::vector<std::shared_ptr<Landscape>> List;
+
+		Landscape(const std::string& filename, const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.0f));
 		~Landscape();
 
 		void generate();
 
 		inline std::shared_ptr<StaticMesh> getMesh() const { return mesh; }
-		glm::dvec3 calculateNormal(const glm::dvec2& position);
-		float getHeightAtXZ(const glm::dvec2& position);
+		glm::vec3 calculateNormal(const glm::vec2& position);
+		float getHeightAtXZ(const glm::vec2& position);
 
 	private:
 		std::string filename;
 		std::shared_ptr<StaticMesh> mesh;
-		glm::dvec3 position;
-		glm::dvec2 size;
-		glm::dvec2 subdivisions;
+		glm::vec3 position;
+		glm::vec2 size;
+		glm::vec2 subdivisions;
 
-		glm::dvec3 filter;
+		glm::vec3 filter;
 		float alpha_filter;
 		float min_height;
 		float max_height;

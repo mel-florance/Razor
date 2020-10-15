@@ -15,12 +15,15 @@ namespace Razor {
 		Outliner(Editor* editor);
 		~Outliner();
 
-		void drawNode(std::shared_ptr<Node> node, unsigned int index);
+		void drawNode(std::shared_ptr<Node> node, unsigned int index, unsigned int depth);
 		void render(float delta) override;
+		void onEvent(Event& event) override;
 
 	private:
 		Selection* selection;
 		ScenesManager* scenesManager;
+		std::string filtered_name;
+		std::shared_ptr<Node> focused_node;
 	};
 
 }

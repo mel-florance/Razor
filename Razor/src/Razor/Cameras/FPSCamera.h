@@ -2,9 +2,8 @@
 
 #include "Camera.h"
 
-namespace Razor {
-
-	class Viewport;
+namespace Razor 
+{
 
 	class FPSCamera : public Camera
 	{
@@ -24,7 +23,6 @@ namespace Razor {
 		virtual void onWindowResized(const glm::vec2& size) override;
 
 	private:
-		Viewport* viewport;
 		float sensitivity;
 	
 		float view_friction;

@@ -10,8 +10,29 @@
     <Filter Include="src\Editor\Components">
       <UniqueIdentifier>{F818EE8A-6485-A985-2D79-41E399A4CBED}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Editor\Components\MaterialEditor">
+      <UniqueIdentifier>{DD0C0636-C9F3-C72D-7244-2E4B5E0A4194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Editor\Components\Sequencer">
+      <UniqueIdentifier>{1206403A-7EE9-4E7A-87EC-7CB6F34E15CB}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Editor\Importers">
       <UniqueIdentifier>{17BAD45E-0349-5E28-AC67-722398D56ECE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Editor\Managers">
+      <UniqueIdentifier>{00A130DC-6C02-0EEA-F56F-549C61D044A9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Editor\Modals">
+      <UniqueIdentifier>{123B9484-7E51-921A-C7C8-1D3C331E63A2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Editor\Modals\Assets">
+      <UniqueIdentifier>{B419B7A0-A03E-0621-C989-EBB0B50D053F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Editor\Modals\Projects">
+      <UniqueIdentifier>{CBFCC22C-B70C-6FFD-20C6-D31B0CF55D96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Editor\Modals\Tools">
+      <UniqueIdentifier>{1205FE2C-7E3C-46C4-8746-AAE7F3FC6CBD}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Editor\Tools">
       <UniqueIdentifier>{83BE1652-6FB7-35A4-98E9-1A29844115B0}</UniqueIdentifier>
@@ -31,8 +52,14 @@
     <Filter Include="src\Razor">
       <UniqueIdentifier>{4A2EBFB3-B698-732A-FFD6-24D06B80517F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Razor\Animation">
+      <UniqueIdentifier>{B9CBB151-252D-8F5F-AE9A-D5111AFBC51E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Razor\Application">
       <UniqueIdentifier>{0D292A10-7995-E50A-4289-7D68AEB40773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Assets">
+      <UniqueIdentifier>{EC3D1908-D836-385A-0169-1DDFEDC01766}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Audio">
       <UniqueIdentifier>{CBCBBBF0-3757-29B5-4068-ACA9AC7285B5}</UniqueIdentifier>
@@ -70,6 +97,9 @@
     <Filter Include="src\Razor\Input">
       <UniqueIdentifier>{C9ED48F1-3579-B6B5-3E8A-39AAAA9412B6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Razor\Landscape">
+      <UniqueIdentifier>{24DED3C0-903F-B1CE-19AD-F780850DE88D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Razor\Lighting">
       <UniqueIdentifier>{0F75A67C-FB58-67D2-64B9-612550BC5154}</UniqueIdentifier>
     </Filter>
@@ -82,11 +112,20 @@
     <Filter Include="src\Razor\Maths">
       <UniqueIdentifier>{363E8AF1-A2C9-F7B5-ABDA-7AAA17E553B6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Razor\Network">
+      <UniqueIdentifier>{C3BA69D3-2FD1-6769-7848-F38AE49D38F1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Razor\Particles">
       <UniqueIdentifier>{A0574CEB-0CB9-29F9-9526-70AB018760B8}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Physics">
       <UniqueIdentifier>{BCDBB574-28F2-B30A-7169-3F2CDDBE8492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Physics\Bodies">
+      <UniqueIdentifier>{21B3800C-0DD8-CF8C-3623-B51C22A7CEAA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Razor\Physics\Constraints">
+      <UniqueIdentifier>{83661989-EF7E-00B3-B82B-904C2403954C}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Rendering">
       <UniqueIdentifier>{17DCD02B-833D-AE39-0CAB-F4EB780BE5F8}</UniqueIdentifier>
@@ -96,9 +135,6 @@
     </Filter>
     <Filter Include="src\Razor\Scripting">
       <UniqueIdentifier>{CC872408-38E9-0116-C156-48C82DB738D5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Razor\Terrains">
-      <UniqueIdentifier>{E1711FC5-CD55-E01A-36B6-DA6D22B9CA9C}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Razor\Types">
       <UniqueIdentifier>{6E0116F2-DA8C-83B6-E39D-06AB4FA8DFB6}</UniqueIdentifier>
@@ -142,6 +178,21 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\protobuff">
+      <UniqueIdentifier>{19EED93D-05E7-F88F-2E19-DE141A71D89B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\protobuff\google">
+      <UniqueIdentifier>{A5BA5B70-11F2-A307-1AFC-072B86B2CA00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\protobuff\google\protobuff">
+      <UniqueIdentifier>{8B0B678F-F779-BC0E-4063-770EAC10B2AA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\protobuff\google\protobuff\compiler">
+      <UniqueIdentifier>{751377A0-617B-3D6E-CAE6-5184B66D545A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\protobuff\google\protobuff\compiler\cpp">
+      <UniqueIdentifier>{C73F2964-B3BD-79FD-9CB5-379588D2BB25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Editor\Components\AssetsManager.h">
@@ -150,13 +201,28 @@
     <ClInclude Include="src\Editor\Components\Console.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\Components\EditorView.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\EditorViewport.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Editor\Components\FileBrowser.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\ImageEditor.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\Components\Logger.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\Components\MainMenu.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\MaterialEditor\MaterialEditor.h">
+      <Filter>src\Editor\Components\MaterialEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\NotificationsManager.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\Components\Outliner.h">
@@ -168,10 +234,19 @@
     <ClInclude Include="src\Editor\Components\PropertiesEditor.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\Components\Sequencer\Sequence.h">
+      <Filter>src\Editor\Components\Sequencer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\Sequencer\Sequencer.h">
+      <Filter>src\Editor\Components\Sequencer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Components\TextEditor.h">
+      <Filter>src\Editor\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Editor\Components\Tools.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\Components\Viewport.h">
+    <ClInclude Include="src\Editor\Components\WorldEditor.h">
       <Filter>src\Editor\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\Editor.h">
@@ -180,11 +255,41 @@
     <ClInclude Include="src\Editor\EditorComponent.h">
       <Filter>src\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\EditorManager.h">
+      <Filter>src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorModal.h">
+      <Filter>src\Editor</Filter>
+    </ClInclude>
     <ClInclude Include="src\Editor\EditorTool.h">
       <Filter>src\Editor</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\Importers\AssimpImporter.h">
       <Filter>src\Editor\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Managers\ComponentsManager.h">
+      <Filter>src\Editor\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Managers\IconsManager.h">
+      <Filter>src\Editor\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Managers\ModalsManager.h">
+      <Filter>src\Editor\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Managers\ToolsManager.h">
+      <Filter>src\Editor\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Modals\Assets\ImportAsset.h">
+      <Filter>src\Editor\Modals\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Modals\Projects\CreateProject.h">
+      <Filter>src\Editor\Modals\Projects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Modals\Tools\AddShape.h">
+      <Filter>src\Editor\Modals\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Tools\Cursor.h">
+      <Filter>src\Editor\Tools</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\Tools\Gizmo.h">
       <Filter>src\Editor\Tools</Filter>
@@ -207,6 +312,21 @@
     <ClInclude Include="src\Razor.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Animation\Animation.h">
+      <Filter>src\Razor\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Animation\AnimationManager.h">
+      <Filter>src\Razor\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Animation\Bone.h">
+      <Filter>src\Razor\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Animation\BoneTransform.h">
+      <Filter>src\Razor\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Animation\Keyframe.h">
+      <Filter>src\Razor\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Application\Application.h">
       <Filter>src\Razor\Application</Filter>
     </ClInclude>
@@ -218,6 +338,24 @@
     </ClInclude>
     <ClInclude Include="src\Razor\Application\LayerStack.h">
       <Filter>src\Razor\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Assets\Asset.h">
+      <Filter>src\Razor\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Assets\AssetManager.h">
+      <Filter>src\Razor\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Assets\AudioAsset.h">
+      <Filter>src\Razor\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Assets\MeshAsset.h">
+      <Filter>src\Razor\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Assets\TextureAsset.h">
+      <Filter>src\Razor\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Audio\Audio.h">
+      <Filter>src\Razor\Audio</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Audio\Loaders\OGGLoader.h">
       <Filter>src\Razor\Audio\Loaders</Filter>
@@ -235,6 +373,9 @@
       <Filter>src\Razor\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Buffers\FrameBuffer.h">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Buffers\GBuffer.h">
       <Filter>src\Razor\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Buffers\IndexBuffer.h">
@@ -282,10 +423,16 @@
     <ClInclude Include="src\Razor\Core\Profiler.h">
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Core\System.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Core\Task.h">
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Core\TasksManager.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\ThreadPool.h">
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Core\Timer.h">
@@ -295,6 +442,9 @@
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Core\Utils.h">
+      <Filter>src\Razor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Core\Viewport.h">
       <Filter>src\Razor\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Core\Window.h">
@@ -345,6 +495,9 @@
     <ClInclude Include="src\Razor\Filesystem\FileWatcher.h">
       <Filter>src\Razor\Filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Filesystem\HuffmanEncoding.h">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Filesystem\Serializer.h">
       <Filter>src\Razor\Filesystem</Filter>
     </ClInclude>
@@ -369,7 +522,13 @@
     <ClInclude Include="src\Razor\ImGui\ImGuizmo.h">
       <Filter>src\Razor\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\ImGui\ImRampEdit.h">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\ImGui\ImSequencer.h">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\ImGui\ImTextEditor.h">
       <Filter>src\Razor\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Input\Input.h">
@@ -381,13 +540,25 @@
     <ClInclude Include="src\Razor\Input\MouseButtons.h">
       <Filter>src\Razor\Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Input\ShortcutsManager.h">
+      <Filter>src\Razor\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Landscape\Landscape.h">
+      <Filter>src\Razor\Landscape</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Lighting\Directional.h">
       <Filter>src\Razor\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Lighting\Light.h">
       <Filter>src\Razor\Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Lighting\LightBound.h">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Lighting\Point.h">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Lighting\ShadowCascade.h">
       <Filter>src\Razor\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Lighting\ShadowGenerator.h">
@@ -399,16 +570,31 @@
     <ClInclude Include="src\Razor\Materials\CubemapTexture.h">
       <Filter>src\Razor\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Materials\EnvironmentTexture.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Materials\Material.h">
       <Filter>src\Razor\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Materials\MaterialsManager.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Presets\AtmosphereMaterial.h">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Materials\Presets\ColorMaterial.h">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Presets\LandscapeMaterial.h">
       <Filter>src\Razor\Materials\Presets</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Materials\Presets\PbrMaterial.h">
       <Filter>src\Razor\Materials\Presets</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Materials\Presets\PhongMaterial.h">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Materials\Presets\SkyboxMaterial.h">
       <Filter>src\Razor\Materials\Presets</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Materials\Shader.h">
@@ -426,11 +612,32 @@
     <ClInclude Include="src\Razor\Materials\TexturesManager.h">
       <Filter>src\Razor\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Materials\VideoTexture.h">
+      <Filter>src\Razor\Materials</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Maths\Maths.h">
       <Filter>src\Razor\Maths</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Maths\Raycast.h">
       <Filter>src\Razor\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Maths\Units.h">
+      <Filter>src\Razor\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Network\Http.h">
+      <Filter>src\Razor\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Network\Network.h">
+      <Filter>src\Razor\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Network\Socket.h">
+      <Filter>src\Razor\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Network\TCPClient.h">
+      <Filter>src\Razor\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Network\TCPServer.h">
+      <Filter>src\Razor\Network</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Particles\Particle.h">
       <Filter>src\Razor\Particles</Filter>
@@ -438,16 +645,61 @@
     <ClInclude Include="src\Razor\Particles\ParticleSystem.h">
       <Filter>src\Razor\Particles</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Bodies\CubePhysicsBody.h">
+      <Filter>src\Razor\Physics\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Bodies\HeightfieldPhysicsBody.h">
+      <Filter>src\Razor\Physics\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Bodies\PlanePhysicsBody.h">
+      <Filter>src\Razor\Physics\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Bodies\SpherePhysicsBody.h">
+      <Filter>src\Razor\Physics\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Constraints\ConeTwist.h">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Constraints\Gear.h">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Constraints\Hinge.h">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Constraints\PointToPoint.h">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Constraints\SixDOF.h">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\Constraints\Slider.h">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Physics\PhysicsBody.h">
+      <Filter>src\Razor\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Physics\PhysicsConstraint.h">
       <Filter>src\Razor\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Physics\World.h">
       <Filter>src\Razor\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Rendering\Pipeline.h">
+    <ClInclude Include="src\Razor\Rendering\BillboardManager.h">
       <Filter>src\Razor\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Rendering\RenderPass.h">
+    <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Rendering\ForwardRenderer.h">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Rendering\PBRPipeline.h">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Rendering\PostProcessPipepeline.h">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Rendering\Renderer.h">
       <Filter>src\Razor\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Scene\Node.h">
@@ -461,6 +713,12 @@
     </ClInclude>
     <ClInclude Include="src\Razor\Scene\ScenesManager.h">
       <Filter>src\Razor\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Scripting\LuaScript.h">
+      <Filter>src\Razor\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Scripting\PythonScript.h">
+      <Filter>src\Razor\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Scripting\Script.h">
       <Filter>src\Razor\Scripting</Filter>
@@ -1815,37 +2073,8 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Landscape\Landscape.h">
-      <Filter>src\Razor\Terrains</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Animation\Bone.h" />
-    <ClInclude Include="src\Razor\Animation\Animation.h" />
-    <ClInclude Include="src\Razor\Animation\Keyframe.h" />
-    <ClInclude Include="src\Razor\Animation\BoneTransform.h" />
-    <ClInclude Include="src\Razor\Animation\AnimationManager.h" />
-    <ClInclude Include="src\Razor\Materials\Presets\LandscapeMaterial.h" />
-    <ClInclude Include="src\Razor\Rendering\Pipelines\PbrPipeline.h" />
-    <ClInclude Include="src\Razor\Rendering\ForwardRenderer.h">
-      <Filter>src\Razor\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h" />
-    <ClInclude Include="src\Razor\Rendering\Renderer.h" />
-    <ClInclude Include="src\Razor\Physics\PhysicsConstraint.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\Hinge.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\Slider.h" />
-    <ClInclude Include="src\Razor\Physics\Bodies\CubePhysicsBody.h">
-      <Filter>src\Razor\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Physics\Bodies\PlanePhysicsBody.h">
-      <Filter>src\Razor\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Physics\Bodies\SpherePhysicsBody.h">
-      <Filter>src\Razor\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Razor\Physics\Constraints\Gear.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\SixDOF.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\ConeTwist.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\PointToPoint.h" />
+    <ClInclude Include="src\Razor\Network\Protocol.h" />
+    <ClInclude Include="src\Razor\Network\Packet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -1854,13 +2083,28 @@
     <ClCompile Include="src\Editor\Components\Console.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\Components\EditorView.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\EditorViewport.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\Editor\Components\FileBrowser.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\ImageEditor.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Components\Logger.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Components\MainMenu.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\MaterialEditor\MaterialEditor.cpp">
+      <Filter>src\Editor\Components\MaterialEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\NotificationsManager.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Components\Outliner.cpp">
@@ -1872,10 +2116,19 @@
     <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\Components\Sequencer\Sequence.cpp">
+      <Filter>src\Editor\Components\Sequencer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\Sequencer\Sequencer.cpp">
+      <Filter>src\Editor\Components\Sequencer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Components\TextEditor.cpp">
+      <Filter>src\Editor\Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\Editor\Components\Tools.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\Components\Viewport.cpp">
+    <ClCompile Include="src\Editor\Components\WorldEditor.cpp">
       <Filter>src\Editor\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Editor.cpp">
@@ -1884,11 +2137,41 @@
     <ClCompile Include="src\Editor\EditorComponent.cpp">
       <Filter>src\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\EditorManager.cpp">
+      <Filter>src\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorModal.cpp">
+      <Filter>src\Editor</Filter>
+    </ClCompile>
     <ClCompile Include="src\Editor\EditorTool.cpp">
       <Filter>src\Editor</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Importers\AssimpImporter.cpp">
       <Filter>src\Editor\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Managers\ComponentsManager.cpp">
+      <Filter>src\Editor\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Managers\IconsManager.cpp">
+      <Filter>src\Editor\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Managers\ModalsManager.cpp">
+      <Filter>src\Editor\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Managers\ToolsManager.cpp">
+      <Filter>src\Editor\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Modals\Assets\ImportAsset.cpp">
+      <Filter>src\Editor\Modals\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Modals\Projects\CreateProject.cpp">
+      <Filter>src\Editor\Modals\Projects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Modals\Tools\AddShape.cpp">
+      <Filter>src\Editor\Modals\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Tools\Cursor.cpp">
+      <Filter>src\Editor\Tools</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Tools\Gizmo.cpp">
       <Filter>src\Editor\Tools</Filter>
@@ -1908,6 +2191,21 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Animation\Animation.cpp">
+      <Filter>src\Razor\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Animation\AnimationManager.cpp">
+      <Filter>src\Razor\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Animation\Bone.cpp">
+      <Filter>src\Razor\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Animation\BoneTransform.cpp">
+      <Filter>src\Razor\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Animation\Keyframe.cpp">
+      <Filter>src\Razor\Animation</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Application\Application.cpp">
       <Filter>src\Razor\Application</Filter>
     </ClCompile>
@@ -1916,6 +2214,24 @@
     </ClCompile>
     <ClCompile Include="src\Razor\Application\LayerStack.cpp">
       <Filter>src\Razor\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Assets\Asset.cpp">
+      <Filter>src\Razor\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Assets\AssetManager.cpp">
+      <Filter>src\Razor\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Assets\AudioAsset.cpp">
+      <Filter>src\Razor\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Assets\MeshAsset.cpp">
+      <Filter>src\Razor\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Assets\TextureAsset.cpp">
+      <Filter>src\Razor\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Audio\Audio.cpp">
+      <Filter>src\Razor\Audio</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Audio\Loaders\OGGLoader.cpp">
       <Filter>src\Razor\Audio\Loaders</Filter>
@@ -1930,6 +2246,9 @@
       <Filter>src\Razor\Audio</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Buffers\FrameBuffer.cpp">
+      <Filter>src\Razor\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Buffers\GBuffer.cpp">
       <Filter>src\Razor\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Buffers\IndexBuffer.cpp">
@@ -1974,10 +2293,16 @@
     <ClCompile Include="src\Razor\Core\Profiler.cpp">
       <Filter>src\Razor\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Core\System.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Core\Task.cpp">
       <Filter>src\Razor\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Core\TasksManager.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\ThreadPool.cpp">
       <Filter>src\Razor\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Core\Timer.cpp">
@@ -1987,6 +2312,9 @@
       <Filter>src\Razor\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Core\Utils.cpp">
+      <Filter>src\Razor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Core\Viewport.cpp">
       <Filter>src\Razor\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Ecs\Component.cpp">
@@ -2022,6 +2350,9 @@
     <ClCompile Include="src\Razor\Filesystem\FileWatcher.cpp">
       <Filter>src\Razor\Filesystem</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Filesystem\HuffmanEncoding.cpp">
+      <Filter>src\Razor\Filesystem</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Filesystem\Serializer.cpp">
       <Filter>src\Razor\Filesystem</Filter>
     </ClCompile>
@@ -2052,13 +2383,28 @@
     <ClCompile Include="src\Razor\ImGui\ImSequencer.cpp">
       <Filter>src\Razor\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\ImGui\ImTextEditor.cpp">
+      <Filter>src\Razor\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Input\ShortcutsManager.cpp">
+      <Filter>src\Razor\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Landscape\Landscape.cpp">
+      <Filter>src\Razor\Landscape</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Lighting\Directional.cpp">
       <Filter>src\Razor\Lighting</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Lighting\Light.cpp">
       <Filter>src\Razor\Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Lighting\LightBound.cpp">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Lighting\Point.cpp">
+      <Filter>src\Razor\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Lighting\ShadowCascade.cpp">
       <Filter>src\Razor\Lighting</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Lighting\ShadowGenerator.cpp">
@@ -2070,16 +2416,31 @@
     <ClCompile Include="src\Razor\Materials\CubemapTexture.cpp">
       <Filter>src\Razor\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Materials\EnvironmentTexture.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Materials\Material.cpp">
       <Filter>src\Razor\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Materials\MaterialsManager.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Presets\AtmosphereMaterial.cpp">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Materials\Presets\ColorMaterial.cpp">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Presets\LandscapeMaterial.cpp">
       <Filter>src\Razor\Materials\Presets</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Materials\Presets\PbrMaterial.cpp">
       <Filter>src\Razor\Materials\Presets</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Materials\Presets\PhongMaterial.cpp">
+      <Filter>src\Razor\Materials\Presets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Materials\Presets\SkyboxMaterial.cpp">
       <Filter>src\Razor\Materials\Presets</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Materials\Shader.cpp">
@@ -2097,8 +2458,29 @@
     <ClCompile Include="src\Razor\Materials\TexturesManager.cpp">
       <Filter>src\Razor\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Materials\VideoTexture.cpp">
+      <Filter>src\Razor\Materials</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Maths\Raycast.cpp">
       <Filter>src\Razor\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Maths\Units.cpp">
+      <Filter>src\Razor\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Network\Http.cpp">
+      <Filter>src\Razor\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Network\Network.cpp">
+      <Filter>src\Razor\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Network\Socket.cpp">
+      <Filter>src\Razor\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Network\TCPClient.cpp">
+      <Filter>src\Razor\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Network\TCPServer.cpp">
+      <Filter>src\Razor\Network</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Particles\Particle.cpp">
       <Filter>src\Razor\Particles</Filter>
@@ -2106,16 +2488,61 @@
     <ClCompile Include="src\Razor\Particles\ParticleSystem.cpp">
       <Filter>src\Razor\Particles</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Bodies\CubePhysicsBody.cpp">
+      <Filter>src\Razor\Physics\Bodies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Bodies\HeightfieldPhysicsBody.cpp">
+      <Filter>src\Razor\Physics\Bodies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Bodies\PlanePhysicsBody.cpp">
+      <Filter>src\Razor\Physics\Bodies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Bodies\SpherePhysicsBody.cpp">
+      <Filter>src\Razor\Physics\Bodies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Constraints\ConeTwist.cpp">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Constraints\Gear.cpp">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Constraints\Hinge.cpp">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Constraints\PointToPoint.cpp">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Constraints\SixDOF.cpp">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\Constraints\Slider.cpp">
+      <Filter>src\Razor\Physics\Constraints</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Physics\PhysicsBody.cpp">
+      <Filter>src\Razor\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Physics\PhysicsConstraint.cpp">
       <Filter>src\Razor\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Physics\World.cpp">
       <Filter>src\Razor\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Rendering\Pipeline.cpp">
+    <ClCompile Include="src\Razor\Rendering\BillboardManager.cpp">
       <Filter>src\Razor\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Rendering\RenderPass.cpp">
+    <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Rendering\ForwardRenderer.cpp">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Rendering\PBRPipeline.cpp">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Rendering\PostProcessPipepeline.cpp">
+      <Filter>src\Razor\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Rendering\Renderer.cpp">
       <Filter>src\Razor\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Razor\Scene\Node.cpp">
@@ -2130,6 +2557,12 @@
     <ClCompile Include="src\Razor\Scene\ScenesManager.cpp">
       <Filter>src\Razor\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Scripting\LuaScript.cpp">
+      <Filter>src\Razor\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Scripting\PythonScript.cpp">
+      <Filter>src\Razor\Scripting</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Scripting\Script.cpp">
       <Filter>src\Razor\Scripting</Filter>
     </ClCompile>
@@ -2142,37 +2575,8 @@
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Landscape\Landscape.cpp">
-      <Filter>src\Razor\Terrains</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Animation\Bone.cpp" />
-    <ClCompile Include="src\Razor\Animation\Animation.cpp" />
-    <ClCompile Include="src\Razor\Animation\Keyframe.cpp" />
-    <ClCompile Include="src\Razor\Animation\BoneTransform.cpp" />
-    <ClCompile Include="src\Razor\Animation\AnimationManager.cpp" />
-    <ClCompile Include="src\Razor\Materials\Presets\LandscapeMaterial.cpp" />
-    <ClCompile Include="src\Razor\Rendering\Pipelines\PbrPipeline.cpp" />
-    <ClCompile Include="src\Razor\Rendering\ForwardRenderer.cpp">
-      <Filter>src\Razor\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp" />
-    <ClCompile Include="src\Razor\Rendering\Renderer.cpp" />
-    <ClCompile Include="src\Razor\Physics\PhysicsConstraint.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\Hinge.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\Slider.cpp" />
-    <ClCompile Include="src\Razor\Physics\Bodies\CubePhysicsBody.cpp">
-      <Filter>src\Razor\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Physics\Bodies\PlanePhysicsBody.cpp">
-      <Filter>src\Razor\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Physics\Bodies\SpherePhysicsBody.cpp">
-      <Filter>src\Razor\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Razor\Physics\Constraints\Gear.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\SixDOF.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\ConeTwist.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\PointToPoint.cpp" />
+    <ClCompile Include="src\Razor\Network\Protocol.cpp" />
+    <ClCompile Include="src\Razor\Network\Packet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">
@@ -2181,32 +2585,26 @@
     <None Include="vendor\assimp\include\assimp\config.h.in">
       <Filter>vendor\assimp\include\assimp</Filter>
     </None>
-    <None Include="src\Shaders\tonemapping.glsl" />
-    <None Include="src\Shaders\pbr.vert" />
-    <None Include="src\Shaders\pbr.frag" />
-    <None Include="src\Shaders\particle.vert" />
-    <None Include="src\Shaders\debug_depth.frag" />
-    <None Include="src\Shaders\debug_depth.vert" />
-    <None Include="src\Shaders\default.frag" />
-    <None Include="src\Shaders\default.vert" />
-    <None Include="src\Shaders\definitions.glsl" />
-    <None Include="src\Shaders\depth.frag" />
-    <None Include="src\Shaders\depth.vert" />
-    <None Include="src\Shaders\grid.frag" />
-    <None Include="src\Shaders\grid.vert" />
-    <None Include="src\Shaders\landscape.frag" />
-    <None Include="src\Shaders\landscape.vert" />
-    <None Include="src\Shaders\lighting.glsl" />
-    <None Include="src\Shaders\particle.frag" />
-    <None Include="src\Shaders\viewport.vert" />
-    <None Include="src\Shaders\viewport.frag" />
-    <None Include="src\Shaders\prefilter.frag" />
-    <None Include="src\Shaders\irradiance.frag" />
-    <None Include="src\Shaders\cubemap.vs" />
-    <None Include="src\Shaders\brdf.vert" />
-    <None Include="src\Shaders\brdf.frag" />
-    <None Include="src\Shaders\background.vert" />
-    <None Include="src\Shaders\background.frag" />
-    <None Include="src\Shaders\eqToCubemap.frag" />
+    <None Include="vendor\protobuff\google\protobuff\compiler\cpp\cpp_unittest.inc">
+      <Filter>vendor\protobuff\google\protobuff\compiler\cpp</Filter>
+    </None>
+    <None Include="vendor\protobuff\google\protobuff\map_test_util.inc">
+      <Filter>vendor\protobuff\google\protobuff</Filter>
+    </None>
+    <None Include="vendor\protobuff\google\protobuff\message_unittest.inc">
+      <Filter>vendor\protobuff\google\protobuff</Filter>
+    </None>
+    <None Include="vendor\protobuff\google\protobuff\port_def.inc">
+      <Filter>vendor\protobuff\google\protobuff</Filter>
+    </None>
+    <None Include="vendor\protobuff\google\protobuff\port_undef.inc">
+      <Filter>vendor\protobuff\google\protobuff</Filter>
+    </None>
+    <None Include="vendor\protobuff\google\protobuff\proto3_lite_unittest.inc">
+      <Filter>vendor\protobuff\google\protobuff</Filter>
+    </None>
+    <None Include="vendor\protobuff\google\protobuff\test_util.inc">
+      <Filter>vendor\protobuff\google\protobuff</Filter>
+    </None>
   </ItemGroup>
 </Project>

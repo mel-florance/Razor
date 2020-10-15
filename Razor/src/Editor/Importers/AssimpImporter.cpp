@@ -6,14 +6,18 @@
 #include "Razor/Maths/Maths.h"
 #include "Razor/Materials/Material.h"
 #include "Razor/Materials/Texture.h"
+#include "Razor/Materials/Presets/ColorMaterial.h"
+#include "Razor/Materials/Presets/PbrMaterial.h"
 #include "Razor/Materials/Presets/PhongMaterial.h"
 #include "Editor/Components/AssetsManager.h"
 #include "Razor/Materials/TexturesManager.h"
+#include "Razor/Rendering/ForwardRenderer.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	AssimpImporter::AssimpImporter() : 
-		ProgressHandler(),
+		Assimp::ProgressHandler(),
 		percent(0.0f) 
 	{
 	}
@@ -37,13 +41,14 @@ namespace Razor {
 		scene = importer->ReadFile(filename,
 			aiProcess_CalcTangentSpace |
 			//aiProcess_GenSmoothNormals |
-			aiProcess_Triangulate |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_PreTransformVertices |
-			aiProcess_RemoveRedundantMaterials |
-			aiProcess_OptimizeMeshes |
-			aiProcess_OptimizeGraph |
-			aiProcess_ImproveCacheLocality
+			aiProcess_Triangulate
+			//aiProcess_JoinIdenticalVertices |
+			//aiProcess_PreTransformVertices
+			//aiProcess_FlipWindingOrder
+			//aiProcess_RemoveRedundantMaterials |
+			//aiProcess_OptimizeMeshes |
+			//aiProcess_OptimizeGraph |
+			//aiProcess_ImproveCacheLocality
 		);
 
 		if (!scene) {
@@ -91,13 +96,21 @@ namespace Razor {
 	{
 		const char* name = node->mName.length != 0 ? node->mName.C_Str() : "child_node";
 
+		glm::mat4 mat = parentNode != nullptr 
+			? parentNode->transform.getMatrix() * glm::mat4(node->mTransformation[0][0])
+			: glm::mat4(node->mTransformation[0][0]);
+
 		newNode->name = name;
 		newNode->transform = Transform();
-		newNode->transform.setMatrix(glm::mat4(node->mTransformation[0][0]));
+		newNode->transform.setMatrix(mat);
+		newNode->parent = parentNode;
 		newNode->meshes.resize(node->mNumMeshes);
 
-		for (unsigned int i = 0; i < node->mNumMeshes; ++i)
-			newNode->meshes[i] = meshes[node->mMeshes[i]];
+		for (unsigned int i = 0; i < node->mNumMeshes; ++i) {
+
+			std::shared_ptr<StaticMesh> m = meshes[node->mMeshes[i]];
+			newNode->meshes[i] = m;
+		}
 
 		for (unsigned int i = 0; i < node->mNumChildren; ++i)
 		{ 
@@ -120,8 +133,8 @@ namespace Razor {
 		std::shared_ptr<StaticMesh> mesh = std::make_shared<StaticMesh>();
 		mesh->setName(name);
 		mesh->setVertexCount(object->mNumVertices);
-		BoundingBox box;
-		std::shared_ptr<PhongMaterial> material = std::make_shared<PhongMaterial>();
+		AABB box;
+		std::shared_ptr<PbrMaterial> material = std::make_shared<PbrMaterial>();
 		std::string textures_path = "./data/";
 
 		if (object->mMaterialIndex >= 0)
@@ -194,33 +207,33 @@ namespace Razor {
 			if(AI_SUCCESS == mat->Get(AI_MATKEY_NAME, materialName))
 				material->setName(materialName.C_Str());
 
-			float shininess;
-			if(AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS, shininess))
-				material->setShininess(shininess);
+			//float shininess;
+			//if(AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS, shininess))
+			//	material->setShininess(shininess);
 
-			float shininess_strength;
-			if(AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS_STRENGTH, shininess_strength))
-				material->setShininessStrength(shininess_strength);
+			//float shininess_strength;
+			//if(AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS_STRENGTH, shininess_strength))
+			//	material->setShininessStrength(shininess_strength);
 
-			//aiColor3D diffuse;
-			//if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse))
-			//	material->setDiffuseColor(glm::vec3(diffuse.r, diffuse.g, diffuse.b));
+			////aiColor3D diffuse;
+			////if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse))
+			////	material->setDiffuseColor(glm::vec3(diffuse.r, diffuse.g, diffuse.b));
 
-			aiColor3D specular;
-			if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_SPECULAR, specular))
-				material->setSpecularColor(glm::vec3(specular.r, specular.g, specular.b));
+			//aiColor3D specular;
+			//if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_SPECULAR, specular))
+			//	material->setSpecularColor(glm::vec3(specular.r, specular.g, specular.b));
 
-			//aiColor3D ambient;
-			//if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient))
-			//	material->setAmbientColor(glm::vec3(ambient.r, ambient.g, ambient.b));
+			////aiColor3D ambient;
+			////if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient))
+			////	material->setAmbientColor(glm::vec3(ambient.r, ambient.g, ambient.b));
 
-			aiColor3D emissive;
-			if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive))
-				material->setEmissiveColor(glm::vec3(emissive.r, emissive.g, emissive.b));
+			//aiColor3D emissive;
+			//if(AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive))
+			//	material->setEmissiveColor(glm::vec3(emissive.r, emissive.g, emissive.b));
 
-			float alpha;
-			if(AI_SUCCESS == mat->Get(AI_MATKEY_OPACITY, alpha))
-				material->setAlpha(alpha);
+			//float alpha;
+			//if(AI_SUCCESS == mat->Get(AI_MATKEY_OPACITY, alpha))
+			//	material->setAlpha(alpha);
 		}
 
 		mesh->setMaterial(material);

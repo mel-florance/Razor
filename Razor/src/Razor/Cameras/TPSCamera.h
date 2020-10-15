@@ -11,7 +11,9 @@ namespace Razor
 	class TPSCamera : public Camera
 	{
 	public:
+		TPSCamera(Window* window, TPSCamera* cam);
 		TPSCamera(Window* window);
+
 		virtual ~TPSCamera();
 
 		virtual void update(double dt) override;
@@ -25,10 +27,23 @@ namespace Razor
 		inline void setAngle(float value) { angle = value; }
 		inline void setDistance(float value) { distance = value; }
 
+		inline float getAlpha() { return alpha; }
 		inline float getPitch() { return pitch; }
+		inline float getPitchMin() { return pitch_min; }
+		inline float getPitchMax() { return pitch_max; }
+		inline glm::vec2& getPitchOffset() { return pitch_offset; }
+		inline float getPitchFactor() { return pitch_factor; }
 		inline float getYaw() { return yaw; }
 		inline float getRoll() { return roll; }
 		inline float getDistance() { return distance; }
+		inline float getDistanceMin() { return distance_min; }
+		inline float getDistanceMax() { return distance_max; }
+		inline float getAngle() { return angle; }
+		inline float getSensitivity() { return sensitivity; }
+		inline float getPanSensitivity() { return pan_sensitivity; }
+		inline float getZoomFactor() { return zoom_factor; }
+		inline float getYOffset() { return y_offset; }
+		inline glm::vec3 getDeltaOffset() { return delta_offset; }
 
 		virtual void onMouseMoved(glm::vec2& pos, bool constrain = true) override;
 		virtual void onMouseScrolled(glm::vec2& offset) override;
@@ -36,9 +51,9 @@ namespace Razor
 		virtual void onMouseUp(int button) override;
 		virtual void onKeyDown(int keyCode) override;
 		virtual void onKeyReleased(int keyCode) override;
+		virtual void onWindowResized(const glm::vec2& size) override;
 
 	private:
-		Viewport* viewport;
 		Transform* target;
 
 		float distance;

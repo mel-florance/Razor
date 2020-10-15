@@ -5,32 +5,46 @@ namespace Razor
 
 	class FrameBuffer;
 	class TextureAttachment;
+	class ShadowFrustum;
+	class ShadowCascade;
+	class Camera;
+	class Directional;
+	class Scene;
 
 	class ShadowGenerator
 	{
 	public:
-		ShadowGenerator(const glm::vec2& size = glm::vec2(1024.0f));
+		ShadowGenerator(Camera* camera, const glm::vec2& size = glm::vec2(2048.0f));
 		~ShadowGenerator();
 
-		inline void setViewMatrix(const glm::mat4& matrix) { view = matrix; }
-		inline void setProjectionMatrix(const glm::mat4& matrix) { projection = matrix; }
+		void update(const glm::mat4& view_matrix, std::shared_ptr<Scene> scene);
+		void render(Scene* scene);
 
-		inline glm::mat4& getViewMatrix() { return view; }
-		inline glm::mat4& getProjectionMatrix() { return projection; }
+		inline void setCascadesCount(unsigned int count) { cascades_count = count; }
+		inline void setCamera(Camera* camera) { this->camera = camera; }
+
 		inline glm::vec2& getSize() { return size; }
 		inline FrameBuffer* getDepthBuffer() { return depth_buffer; }
-		inline TextureAttachment* getDepthAttachment() { return depth_attachment; }
+		inline unsigned int& getCascadesCount() { return cascades_count; }
+		inline std::vector<ShadowCascade*>& getCascades() { return cascades; }
+		inline float& getBias() { return bias; }
+		inline int& getPcfSamples() { return pcf_samples; }
+		inline float& getAlpha() { return alpha; }
+		inline std::array<float, 3>& getCascadesSplits() { return cascades_splits; }
 
 	private:
 		glm::vec2 size;
 
+		Camera* camera;
 		FrameBuffer* depth_buffer;
-		TextureAttachment* depth_attachment;
 
-		glm::mat4 view;
-		glm::mat4 projection;
+		unsigned int cascades_count;
+		std::array<float, 3> cascades_splits;
+		std::vector<ShadowCascade*> cascades;
 
-		glm::vec2 clip_plane;
+		float bias;
+		int pcf_samples;
+		float alpha;
 	};
 
 }

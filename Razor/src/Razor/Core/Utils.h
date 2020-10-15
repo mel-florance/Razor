@@ -20,6 +20,8 @@ namespace Razor
 			bool selected = false
 		);
 
+		static void initColumns(float size);
+
 		static inline glm::vec4 lerp(const glm::vec4& a, const glm::vec4& b, float time)
 		{
 			return glm::vec4(
@@ -60,6 +62,10 @@ namespace Razor
 				str = str.substr(start);
 
 			return str;
+		}
+
+		static inline std::string& trim(std::string& str) {
+			return ltrim(rtrim(str));
 		}
 
 		static inline std::string& rtrim(std::string& str)
@@ -114,6 +120,20 @@ namespace Razor
 			return strings;
 		}
 
+		static inline std::string joinStrings(const std::vector<std::string>& str, const std::string& delimiter = ",")
+		{
+			std::ostringstream stream;
+			for (auto& i : str)
+			{
+				if (&i != &str[0])
+					stream << delimiter;
+
+				stream << i;
+			}
+			
+			return stream.str();
+		}
+
 		static inline int getFileSize(const std::string& filename) 
 		{
 			std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
@@ -122,17 +142,25 @@ namespace Razor
 			return size;
 		};
 
-		static inline std::string bytesToSize(int size) 
+		static inline std::string bytesToSize(uint64_t size)
 		{
-			const char *sizes[5] = { "bytes", "Kb", "Mb", "Gb", "Tb" };
+			char* suffix[] = { "B", "KB", "MB", "GB", "TB" };
+			char length = sizeof(suffix) / sizeof(suffix[0]);
 
-			int i;
-			double dblByte = size;
+			int i = 0;
+			double dblBytes = double(size);
 
-			for (i = 0; i < 5 && size >= 1024; i++, size /= 1024)
-				dblByte = size / 1024.0;
+			if (size > 1024) {
+				for (i = 0; (size / 1024) > 0 && i < length - 1; i++, size /= 1024)
+					dblBytes = size / 1024.0;
+			}
 
-			return std::to_string(dblByte) + " " + std::string(sizes[i]);
+			static char output[200];
+			sprintf(output, "%.02lf %s", dblBytes, suffix[i]);
+
+			// Sprint_f sizeof(dblBytes) + space + sizeof(suffix) / sizeof(suffix[0])
+
+			return std::string(output);
 		}
 
 		static inline std::string remove_extension(const std::string& filename)
@@ -180,6 +208,11 @@ namespace Razor
 			return (value - rangeA[0]) * (rangeB[1] - rangeB[0]) / (rangeA[1] - rangeA[0]) + rangeB[0];
 		}
 
+		static inline double mapValues(double rangeA[], double rangeB[], double value, unsigned int size = 2)
+		{
+			return (value - rangeA[0]) * (rangeB[1] - rangeB[0]) / (rangeA[1] - rangeA[0]) + rangeB[0];
+		}
+
 		static char* cpToUTF8(int cp, char* str)
 		{
 			int n = 0;
@@ -218,7 +251,7 @@ namespace Razor
 			to[2][3] = from.d3; to[3][3] = from.d4;
 		}
 
-		static std::string fileDialog()
+		static std::string fileDialog(int flags = OFN_FILEMUSTEXIST)
 		{
 			OPENFILENAMEA ofn;
 			ZeroMemory(&ofn, sizeof(ofn));
@@ -233,9 +266,14 @@ namespace Razor
 			ofn.lpstrFileTitle = NULL;
 			ofn.nMaxFileTitle = 0;
 			ofn.lpstrInitialDir = NULL;
-			ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+			ofn.Flags = OFN_DONTADDTORECENT | flags;
 
 			return GetOpenFileNameA(&ofn) ? std::string(ofn.lpstrFile) : "";
+		}
+
+		static std::string folderDialog()
+		{
+			return fileDialog(OFN_PATHMUSTEXIST);
 		}
 
 		template<class T>

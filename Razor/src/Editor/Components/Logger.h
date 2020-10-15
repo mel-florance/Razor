@@ -16,8 +16,10 @@ namespace Razor {
 		void clear();
 		void addLog(const std::string& str);
 		void render(float delta) override;
+		void onEvent(Event& event) override;
 
 	private:
+		bool hovered;
 		bool autoScroll;
 		bool scrollToBottom;
 

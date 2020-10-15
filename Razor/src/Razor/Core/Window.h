@@ -5,7 +5,8 @@
 #include "Core.h"
 #include "Razor/Events/Event.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	struct WindowProps
 	{
@@ -21,7 +22,7 @@ namespace Razor {
 		}
 	};
 
-	class RAZOR_API Window
+	class Window
 	{
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;

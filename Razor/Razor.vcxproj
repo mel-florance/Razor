@@ -19,7 +19,7 @@
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Razor</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -76,9 +76,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>4006;4221;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\lua\include;vendor\bullet\include;vendor\openal\include;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\lua\include;vendor\bullet\include;vendor\openal\include;vendor\opencv\include;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -90,22 +89,29 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;assimp.lib;lua53.lib;OpenAL32.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\assimp\build\code\Release;vendor\lua;vendor\bullet\lib;vendor\openal;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;assimp.lib;lua53.lib;OpenAL32.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;opencv_core411d.lib;opencv_imgcodecs411d.lib;opencv_highgui411d.lib;opencv_imgproc411d.lib;opencv_videoio411d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\assimp\build\code\Release;vendor\lua;vendor\bullet\lib;vendor\openal;vendor\opencv;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-IGNORE:4221 -IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)</Command>
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -113,9 +119,8 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>4006;4221;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\lua\include;vendor\bullet\include;vendor\openal\include;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\lua\include;vendor\bullet\include;vendor\openal\include;vendor\opencv\include;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -130,22 +135,29 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;assimp.lib;lua53.lib;OpenAL32.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\assimp\build\code\Release;vendor\lua;vendor\bullet\lib;vendor\openal;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;assimp.lib;lua53.lib;OpenAL32.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;opencv_core411.lib;opencv_imgcodecs411.lib;opencv_highgui411.lib;opencv_imgproc411.lib;opencv_videoio411.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\assimp\build\code\Release;vendor\lua;vendor\bullet\lib;vendor\openal;vendor\opencv;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-IGNORE:4221 -IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)</Command>
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -153,9 +165,8 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>rzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>4006;4221;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>IMGUI_API=__declspec(dllexport);RZ_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;RZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\lua\include;vendor\bullet\include;vendor\openal\include;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;vendor\lua\include;vendor\bullet\include;vendor\openal\include;vendor\opencv\include;vendor\assimp\include;vendor\assimp\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -170,55 +181,64 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;assimp.lib;lua53.lib;OpenAL32.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\assimp\build\code\Release;vendor\lua;vendor\bullet\lib;vendor\openal;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;assimp.lib;lua53.lib;OpenAL32.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;opencv_core411.lib;opencv_imgcodecs411.lib;opencv_highgui411.lib;opencv_imgproc411.lib;opencv_videoio411.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\assimp\build\code\Release;vendor\lua;vendor\bullet\lib;vendor\openal;vendor\opencv;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-IGNORE:4221 -IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
-IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
 IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Server &gt; nul)
-IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)</Command>
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Server &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\assimp\build\code\Release\assimp.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\assimp\build\code\Release\assimp.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\lua\lua53.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\lua\lua53.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Release-windows-x86_64\Client &gt; nul)
+IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Client &gt; nul) ELSE (xcopy /Q /Y /I ..\Razor\vendor\openal\OpenAL32.dll ..\bin\Debug-windows-x86_64\Client &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Razor\Physics\Constraints\ConeTwist.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\PointToPoint.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\SixDOF.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\Gear.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\Slider.h" />
-    <ClInclude Include="src\Razor\Physics\Constraints\Hinge.h" />
-    <ClInclude Include="src\Razor\Physics\PhysicsConstraint.h" />
-    <ClInclude Include="src\Razor\Rendering\Renderer.h" />
-    <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h" />
-    <ClInclude Include="src\Razor\Rendering\Pipelines\PbrPipeline.h" />
-    <ClInclude Include="src\Razor\Materials\Presets\LandscapeMaterial.h" />
-    <ClInclude Include="src\Razor\Animation\AnimationManager.h" />
-    <ClInclude Include="src\Razor\Animation\BoneTransform.h" />
-    <ClInclude Include="src\Razor\Animation\Keyframe.h" />
-    <ClInclude Include="src\Razor\Animation\Animation.h" />
-    <ClInclude Include="src\Razor\Animation\Bone.h" />
     <ClInclude Include="src\Editor\Components\AssetsManager.h" />
     <ClInclude Include="src\Editor\Components\Console.h" />
+    <ClInclude Include="src\Editor\Components\EditorView.h" />
+    <ClInclude Include="src\Editor\Components\EditorViewport.h" />
     <ClInclude Include="src\Editor\Components\FileBrowser.h" />
+    <ClInclude Include="src\Editor\Components\ImageEditor.h" />
     <ClInclude Include="src\Editor\Components\Logger.h" />
     <ClInclude Include="src\Editor\Components\MainMenu.h" />
+    <ClInclude Include="src\Editor\Components\MaterialEditor\MaterialEditor.h" />
+    <ClInclude Include="src\Editor\Components\NotificationsManager.h" />
     <ClInclude Include="src\Editor\Components\Outliner.h" />
     <ClInclude Include="src\Editor\Components\ProjectsManager.h" />
     <ClInclude Include="src\Editor\Components\PropertiesEditor.h" />
+    <ClInclude Include="src\Editor\Components\Sequencer\Sequence.h" />
+    <ClInclude Include="src\Editor\Components\Sequencer\Sequencer.h" />
+    <ClInclude Include="src\Editor\Components\TextEditor.h" />
     <ClInclude Include="src\Editor\Components\Tools.h" />
-    <ClInclude Include="src\Editor\Components\Viewport.h" />
+    <ClInclude Include="src\Editor\Components\WorldEditor.h" />
     <ClInclude Include="src\Editor\Editor.h" />
     <ClInclude Include="src\Editor\EditorComponent.h" />
+    <ClInclude Include="src\Editor\EditorManager.h" />
+    <ClInclude Include="src\Editor\EditorModal.h" />
     <ClInclude Include="src\Editor\EditorTool.h" />
     <ClInclude Include="src\Editor\Importers\AssimpImporter.h" />
+    <ClInclude Include="src\Editor\Managers\ComponentsManager.h" />
+    <ClInclude Include="src\Editor\Managers\IconsManager.h" />
+    <ClInclude Include="src\Editor\Managers\ModalsManager.h" />
+    <ClInclude Include="src\Editor\Managers\ToolsManager.h" />
+    <ClInclude Include="src\Editor\Modals\Assets\ImportAsset.h" />
+    <ClInclude Include="src\Editor\Modals\Projects\CreateProject.h" />
+    <ClInclude Include="src\Editor\Modals\Tools\AddShape.h" />
+    <ClInclude Include="src\Editor\Tools\Cursor.h" />
     <ClInclude Include="src\Editor\Tools\Gizmo.h" />
     <ClInclude Include="src\Editor\Tools\GridAxis.h" />
     <ClInclude Include="src\Editor\Tools\Selection.h" />
@@ -226,16 +246,28 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Razor.h" />
+    <ClInclude Include="src\Razor\Animation\Animation.h" />
+    <ClInclude Include="src\Razor\Animation\AnimationManager.h" />
+    <ClInclude Include="src\Razor\Animation\Bone.h" />
+    <ClInclude Include="src\Razor\Animation\BoneTransform.h" />
+    <ClInclude Include="src\Razor\Animation\Keyframe.h" />
     <ClInclude Include="src\Razor\Application\Application.h" />
     <ClInclude Include="src\Razor\Application\Entrypoint.h" />
     <ClInclude Include="src\Razor\Application\Layer.h" />
     <ClInclude Include="src\Razor\Application\LayerStack.h" />
+    <ClInclude Include="src\Razor\Assets\Asset.h" />
+    <ClInclude Include="src\Razor\Assets\AssetManager.h" />
+    <ClInclude Include="src\Razor\Assets\AudioAsset.h" />
+    <ClInclude Include="src\Razor\Assets\MeshAsset.h" />
+    <ClInclude Include="src\Razor\Assets\TextureAsset.h" />
+    <ClInclude Include="src\Razor\Audio\Audio.h" />
     <ClInclude Include="src\Razor\Audio\Loaders\OGGLoader.h" />
     <ClInclude Include="src\Razor\Audio\Loaders\WAVLoader.h" />
     <ClInclude Include="src\Razor\Audio\Sound.h" />
     <ClInclude Include="src\Razor\Audio\SoundsManager.h" />
     <ClInclude Include="src\Razor\Buffers\Buffers.h" />
     <ClInclude Include="src\Razor\Buffers\FrameBuffer.h" />
+    <ClInclude Include="src\Razor\Buffers\GBuffer.h" />
     <ClInclude Include="src\Razor\Buffers\IndexBuffer.h" />
     <ClInclude Include="src\Razor\Buffers\RenderBuffer.h" />
     <ClInclude Include="src\Razor\Buffers\TextureAttachment.h" />
@@ -251,11 +283,14 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="src\Razor\Core\GameLoop.h" />
     <ClInclude Include="src\Razor\Core\Log.h" />
     <ClInclude Include="src\Razor\Core\Profiler.h" />
+    <ClInclude Include="src\Razor\Core\System.h" />
     <ClInclude Include="src\Razor\Core\Task.h" />
     <ClInclude Include="src\Razor\Core\TasksManager.h" />
+    <ClInclude Include="src\Razor\Core\ThreadPool.h" />
     <ClInclude Include="src\Razor\Core\Timer.h" />
     <ClInclude Include="src\Razor\Core\Transform.h" />
     <ClInclude Include="src\Razor\Core\Utils.h" />
+    <ClInclude Include="src\Razor\Core\Viewport.h" />
     <ClInclude Include="src\Razor\Core\Window.h" />
     <ClInclude Include="src\Razor\Ecs\Component.h" />
     <ClInclude Include="src\Razor\Ecs\Components\StaticMeshComponent.h" />
@@ -272,6 +307,7 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="src\Razor\Filesystem\DirectoryWatcher.h" />
     <ClInclude Include="src\Razor\Filesystem\File.h" />
     <ClInclude Include="src\Razor\Filesystem\FileWatcher.h" />
+    <ClInclude Include="src\Razor\Filesystem\HuffmanEncoding.h" />
     <ClInclude Include="src\Razor\Filesystem\Serializer.h" />
     <ClInclude Include="src\Razor\Geometry\Geometry.h" />
     <ClInclude Include="src\Razor\Geometry\SkeletalMesh.h" />
@@ -280,43 +316,75 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="src\Razor\ImGui\ImGradient.h" />
     <ClInclude Include="src\Razor\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Razor\ImGui\ImGuizmo.h" />
+    <ClInclude Include="src\Razor\ImGui\ImRampEdit.h" />
     <ClInclude Include="src\Razor\ImGui\ImSequencer.h" />
+    <ClInclude Include="src\Razor\ImGui\ImTextEditor.h" />
     <ClInclude Include="src\Razor\Input\Input.h" />
     <ClInclude Include="src\Razor\Input\KeyCodes.h" />
     <ClInclude Include="src\Razor\Input\MouseButtons.h" />
+    <ClInclude Include="src\Razor\Input\ShortcutsManager.h" />
+    <ClInclude Include="src\Razor\Landscape\Landscape.h" />
     <ClInclude Include="src\Razor\Lighting\Directional.h" />
     <ClInclude Include="src\Razor\Lighting\Light.h" />
+    <ClInclude Include="src\Razor\Lighting\LightBound.h" />
     <ClInclude Include="src\Razor\Lighting\Point.h" />
+    <ClInclude Include="src\Razor\Lighting\ShadowCascade.h" />
     <ClInclude Include="src\Razor\Lighting\ShadowGenerator.h" />
     <ClInclude Include="src\Razor\Lighting\Spot.h" />
     <ClInclude Include="src\Razor\Materials\CubemapTexture.h" />
+    <ClInclude Include="src\Razor\Materials\EnvironmentTexture.h" />
     <ClInclude Include="src\Razor\Materials\Material.h" />
+    <ClInclude Include="src\Razor\Materials\MaterialsManager.h" />
+    <ClInclude Include="src\Razor\Materials\Presets\AtmosphereMaterial.h" />
     <ClInclude Include="src\Razor\Materials\Presets\ColorMaterial.h" />
+    <ClInclude Include="src\Razor\Materials\Presets\LandscapeMaterial.h" />
     <ClInclude Include="src\Razor\Materials\Presets\PbrMaterial.h" />
     <ClInclude Include="src\Razor\Materials\Presets\PhongMaterial.h" />
+    <ClInclude Include="src\Razor\Materials\Presets\SkyboxMaterial.h" />
     <ClInclude Include="src\Razor\Materials\Shader.h" />
     <ClInclude Include="src\Razor\Materials\ShadersManager.h" />
     <ClInclude Include="src\Razor\Materials\Texture.h" />
     <ClInclude Include="src\Razor\Materials\TextureAtlas.h" />
     <ClInclude Include="src\Razor\Materials\TexturesManager.h" />
+    <ClInclude Include="src\Razor\Materials\VideoTexture.h" />
     <ClInclude Include="src\Razor\Maths\Maths.h" />
     <ClInclude Include="src\Razor\Maths\Raycast.h" />
+    <ClInclude Include="src\Razor\Maths\Units.h" />
+    <ClInclude Include="src\Razor\Network\Http.h" />
+    <ClInclude Include="src\Razor\Network\Network.h" />
+    <ClInclude Include="src\Razor\Network\Packet.h" />
+    <ClInclude Include="src\Razor\Network\Protocol.h" />
+    <ClInclude Include="src\Razor\Network\Socket.h" />
+    <ClInclude Include="src\Razor\Network\TCPClient.h" />
+    <ClInclude Include="src\Razor\Network\TCPServer.h" />
     <ClInclude Include="src\Razor\Particles\Particle.h" />
     <ClInclude Include="src\Razor\Particles\ParticleSystem.h" />
     <ClInclude Include="src\Razor\Physics\Bodies\CubePhysicsBody.h" />
-    <ClInclude Include="src\Razor\Physics\PhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\Bodies\HeightfieldPhysicsBody.h" />
     <ClInclude Include="src\Razor\Physics\Bodies\PlanePhysicsBody.h" />
     <ClInclude Include="src\Razor\Physics\Bodies\SpherePhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\ConeTwist.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\Gear.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\Hinge.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\PointToPoint.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\SixDOF.h" />
+    <ClInclude Include="src\Razor\Physics\Constraints\Slider.h" />
+    <ClInclude Include="src\Razor\Physics\PhysicsBody.h" />
+    <ClInclude Include="src\Razor\Physics\PhysicsConstraint.h" />
     <ClInclude Include="src\Razor\Physics\World.h" />
+    <ClInclude Include="src\Razor\Rendering\BillboardManager.h" />
+    <ClInclude Include="src\Razor\Rendering\DeferredRenderer.h" />
     <ClInclude Include="src\Razor\Rendering\ForwardRenderer.h" />
-    <ClInclude Include="src\Razor\Rendering\Pipeline.h" />
-    <ClInclude Include="src\Razor\Rendering\RenderPass.h" />
+    <ClInclude Include="src\Razor\Rendering\PBRPipeline.h" />
+    <ClInclude Include="src\Razor\Rendering\PostProcessPipepeline.h" />
+    <ClInclude Include="src\Razor\Rendering\Renderer.h" />
     <ClInclude Include="src\Razor\Scene\Node.h" />
     <ClInclude Include="src\Razor\Scene\Scene.h" />
     <ClInclude Include="src\Razor\Scene\SceneGraph.h" />
     <ClInclude Include="src\Razor\Scene\ScenesManager.h" />
+    <ClInclude Include="src\Razor\Scripting\LuaScript.h" />
+    <ClInclude Include="src\Razor\Scripting\PythonScript.h" />
     <ClInclude Include="src\Razor\Scripting\Script.h" />
-    <ClInclude Include="src\Razor\Landscape\Landscape.h" />
     <ClInclude Include="src\Razor\Types\Array.h" />
     <ClInclude Include="src\Razor\Types\Color.h" />
     <ClInclude Include="src\Razor\Types\Variant.h" />
@@ -769,50 +837,64 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Razor\Physics\Constraints\ConeTwist.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\PointToPoint.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\SixDOF.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\Gear.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\Slider.cpp" />
-    <ClCompile Include="src\Razor\Physics\Constraints\Hinge.cpp" />
-    <ClCompile Include="src\Razor\Physics\PhysicsConstraint.cpp" />
-    <ClCompile Include="src\Razor\Rendering\Renderer.cpp" />
-    <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp" />
-    <ClCompile Include="src\Razor\Rendering\Pipelines\PbrPipeline.cpp" />
-    <ClCompile Include="src\Razor\Materials\Presets\LandscapeMaterial.cpp" />
-    <ClCompile Include="src\Razor\Animation\AnimationManager.cpp" />
-    <ClCompile Include="src\Razor\Animation\BoneTransform.cpp" />
-    <ClCompile Include="src\Razor\Animation\Keyframe.cpp" />
-    <ClCompile Include="src\Razor\Animation\Animation.cpp" />
-    <ClCompile Include="src\Razor\Animation\Bone.cpp" />
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp" />
     <ClCompile Include="src\Editor\Components\Console.cpp" />
+    <ClCompile Include="src\Editor\Components\EditorView.cpp" />
+    <ClCompile Include="src\Editor\Components\EditorViewport.cpp" />
     <ClCompile Include="src\Editor\Components\FileBrowser.cpp" />
+    <ClCompile Include="src\Editor\Components\ImageEditor.cpp" />
     <ClCompile Include="src\Editor\Components\Logger.cpp" />
     <ClCompile Include="src\Editor\Components\MainMenu.cpp" />
+    <ClCompile Include="src\Editor\Components\MaterialEditor\MaterialEditor.cpp" />
+    <ClCompile Include="src\Editor\Components\NotificationsManager.cpp" />
     <ClCompile Include="src\Editor\Components\Outliner.cpp" />
     <ClCompile Include="src\Editor\Components\ProjectsManager.cpp" />
     <ClCompile Include="src\Editor\Components\PropertiesEditor.cpp" />
+    <ClCompile Include="src\Editor\Components\Sequencer\Sequence.cpp" />
+    <ClCompile Include="src\Editor\Components\Sequencer\Sequencer.cpp" />
+    <ClCompile Include="src\Editor\Components\TextEditor.cpp" />
     <ClCompile Include="src\Editor\Components\Tools.cpp" />
-    <ClCompile Include="src\Editor\Components\Viewport.cpp" />
+    <ClCompile Include="src\Editor\Components\WorldEditor.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\Editor\EditorComponent.cpp" />
+    <ClCompile Include="src\Editor\EditorManager.cpp" />
+    <ClCompile Include="src\Editor\EditorModal.cpp" />
     <ClCompile Include="src\Editor\EditorTool.cpp" />
     <ClCompile Include="src\Editor\Importers\AssimpImporter.cpp" />
+    <ClCompile Include="src\Editor\Managers\ComponentsManager.cpp" />
+    <ClCompile Include="src\Editor\Managers\IconsManager.cpp" />
+    <ClCompile Include="src\Editor\Managers\ModalsManager.cpp" />
+    <ClCompile Include="src\Editor\Managers\ToolsManager.cpp" />
+    <ClCompile Include="src\Editor\Modals\Assets\ImportAsset.cpp" />
+    <ClCompile Include="src\Editor\Modals\Projects\CreateProject.cpp" />
+    <ClCompile Include="src\Editor\Modals\Tools\AddShape.cpp" />
+    <ClCompile Include="src\Editor\Tools\Cursor.cpp" />
     <ClCompile Include="src\Editor\Tools\Gizmo.cpp" />
     <ClCompile Include="src\Editor\Tools\GridAxis.cpp" />
     <ClCompile Include="src\Editor\Tools\Selection.cpp" />
     <ClCompile Include="src\Editor\Widgets\NodeGraph\NodeGraph.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Razor\Animation\Animation.cpp" />
+    <ClCompile Include="src\Razor\Animation\AnimationManager.cpp" />
+    <ClCompile Include="src\Razor\Animation\Bone.cpp" />
+    <ClCompile Include="src\Razor\Animation\BoneTransform.cpp" />
+    <ClCompile Include="src\Razor\Animation\Keyframe.cpp" />
     <ClCompile Include="src\Razor\Application\Application.cpp" />
     <ClCompile Include="src\Razor\Application\Layer.cpp" />
     <ClCompile Include="src\Razor\Application\LayerStack.cpp" />
+    <ClCompile Include="src\Razor\Assets\Asset.cpp" />
+    <ClCompile Include="src\Razor\Assets\AssetManager.cpp" />
+    <ClCompile Include="src\Razor\Assets\AudioAsset.cpp" />
+    <ClCompile Include="src\Razor\Assets\MeshAsset.cpp" />
+    <ClCompile Include="src\Razor\Assets\TextureAsset.cpp" />
+    <ClCompile Include="src\Razor\Audio\Audio.cpp" />
     <ClCompile Include="src\Razor\Audio\Loaders\OGGLoader.cpp" />
     <ClCompile Include="src\Razor\Audio\Loaders\WAVLoader.cpp" />
     <ClCompile Include="src\Razor\Audio\Sound.cpp" />
     <ClCompile Include="src\Razor\Audio\SoundsManager.cpp" />
     <ClCompile Include="src\Razor\Buffers\FrameBuffer.cpp" />
+    <ClCompile Include="src\Razor\Buffers\GBuffer.cpp" />
     <ClCompile Include="src\Razor\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\Razor\Buffers\RenderBuffer.cpp" />
     <ClCompile Include="src\Razor\Buffers\TextureAttachment.cpp" />
@@ -827,22 +909,28 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClCompile Include="src\Razor\Core\GameLoop.cpp" />
     <ClCompile Include="src\Razor\Core\Log.cpp" />
     <ClCompile Include="src\Razor\Core\Profiler.cpp" />
+    <ClCompile Include="src\Razor\Core\System.cpp" />
     <ClCompile Include="src\Razor\Core\Task.cpp" />
     <ClCompile Include="src\Razor\Core\TasksManager.cpp" />
+    <ClCompile Include="src\Razor\Core\ThreadPool.cpp" />
     <ClCompile Include="src\Razor\Core\Timer.cpp" />
     <ClCompile Include="src\Razor\Core\Transform.cpp" />
     <ClCompile Include="src\Razor\Core\Utils.cpp" />
+    <ClCompile Include="src\Razor\Core\Viewport.cpp" />
     <ClCompile Include="src\Razor\Ecs\Component.cpp" />
     <ClCompile Include="src\Razor\Ecs\Components\StaticMeshComponent.cpp" />
     <ClCompile Include="src\Razor\Ecs\Components\TransformComponent.cpp" />
     <ClCompile Include="src\Razor\Ecs\Entity.cpp" />
     <ClCompile Include="src\Razor\Ecs\Manager.cpp" />
-    <ClCompile Include="src\Razor\Ecs\System.cpp" />
+    <ClCompile Include="src\Razor\Ecs\System.cpp">
+      <ObjectFileName>$(IntDir)\System1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="src\Razor\Filesystem\BinaryReader.cpp" />
     <ClCompile Include="src\Razor\Filesystem\Config.cpp" />
     <ClCompile Include="src\Razor\Filesystem\DirectoryWatcher.cpp" />
     <ClCompile Include="src\Razor\Filesystem\File.cpp" />
     <ClCompile Include="src\Razor\Filesystem\FileWatcher.cpp" />
+    <ClCompile Include="src\Razor\Filesystem\HuffmanEncoding.cpp" />
     <ClCompile Include="src\Razor\Filesystem\Serializer.cpp" />
     <ClCompile Include="src\Razor\Geometry\Geometry.cpp" />
     <ClCompile Include="src\Razor\Geometry\SkeletalMesh.cpp" />
@@ -853,38 +941,69 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClCompile Include="src\Razor\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImGuizmo.cpp" />
     <ClCompile Include="src\Razor\ImGui\ImSequencer.cpp" />
+    <ClCompile Include="src\Razor\ImGui\ImTextEditor.cpp" />
+    <ClCompile Include="src\Razor\Input\ShortcutsManager.cpp" />
+    <ClCompile Include="src\Razor\Landscape\Landscape.cpp" />
     <ClCompile Include="src\Razor\Lighting\Directional.cpp" />
     <ClCompile Include="src\Razor\Lighting\Light.cpp" />
+    <ClCompile Include="src\Razor\Lighting\LightBound.cpp" />
     <ClCompile Include="src\Razor\Lighting\Point.cpp" />
+    <ClCompile Include="src\Razor\Lighting\ShadowCascade.cpp" />
     <ClCompile Include="src\Razor\Lighting\ShadowGenerator.cpp" />
     <ClCompile Include="src\Razor\Lighting\Spot.cpp" />
     <ClCompile Include="src\Razor\Materials\CubemapTexture.cpp" />
+    <ClCompile Include="src\Razor\Materials\EnvironmentTexture.cpp" />
     <ClCompile Include="src\Razor\Materials\Material.cpp" />
+    <ClCompile Include="src\Razor\Materials\MaterialsManager.cpp" />
+    <ClCompile Include="src\Razor\Materials\Presets\AtmosphereMaterial.cpp" />
     <ClCompile Include="src\Razor\Materials\Presets\ColorMaterial.cpp" />
+    <ClCompile Include="src\Razor\Materials\Presets\LandscapeMaterial.cpp" />
     <ClCompile Include="src\Razor\Materials\Presets\PbrMaterial.cpp" />
     <ClCompile Include="src\Razor\Materials\Presets\PhongMaterial.cpp" />
+    <ClCompile Include="src\Razor\Materials\Presets\SkyboxMaterial.cpp" />
     <ClCompile Include="src\Razor\Materials\Shader.cpp" />
     <ClCompile Include="src\Razor\Materials\ShadersManager.cpp" />
     <ClCompile Include="src\Razor\Materials\Texture.cpp" />
     <ClCompile Include="src\Razor\Materials\TextureAtlas.cpp" />
     <ClCompile Include="src\Razor\Materials\TexturesManager.cpp" />
+    <ClCompile Include="src\Razor\Materials\VideoTexture.cpp" />
     <ClCompile Include="src\Razor\Maths\Raycast.cpp" />
+    <ClCompile Include="src\Razor\Maths\Units.cpp" />
+    <ClCompile Include="src\Razor\Network\Http.cpp" />
+    <ClCompile Include="src\Razor\Network\Network.cpp" />
+    <ClCompile Include="src\Razor\Network\Packet.cpp" />
+    <ClCompile Include="src\Razor\Network\Protocol.cpp" />
+    <ClCompile Include="src\Razor\Network\Socket.cpp" />
+    <ClCompile Include="src\Razor\Network\TCPClient.cpp" />
+    <ClCompile Include="src\Razor\Network\TCPServer.cpp" />
     <ClCompile Include="src\Razor\Particles\Particle.cpp" />
     <ClCompile Include="src\Razor\Particles\ParticleSystem.cpp" />
     <ClCompile Include="src\Razor\Physics\Bodies\CubePhysicsBody.cpp" />
-    <ClCompile Include="src\Razor\Physics\PhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\Bodies\HeightfieldPhysicsBody.cpp" />
     <ClCompile Include="src\Razor\Physics\Bodies\PlanePhysicsBody.cpp" />
     <ClCompile Include="src\Razor\Physics\Bodies\SpherePhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\ConeTwist.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\Gear.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\Hinge.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\PointToPoint.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\SixDOF.cpp" />
+    <ClCompile Include="src\Razor\Physics\Constraints\Slider.cpp" />
+    <ClCompile Include="src\Razor\Physics\PhysicsBody.cpp" />
+    <ClCompile Include="src\Razor\Physics\PhysicsConstraint.cpp" />
     <ClCompile Include="src\Razor\Physics\World.cpp" />
+    <ClCompile Include="src\Razor\Rendering\BillboardManager.cpp" />
+    <ClCompile Include="src\Razor\Rendering\DeferredRenderer.cpp" />
     <ClCompile Include="src\Razor\Rendering\ForwardRenderer.cpp" />
-    <ClCompile Include="src\Razor\Rendering\Pipeline.cpp" />
-    <ClCompile Include="src\Razor\Rendering\RenderPass.cpp" />
+    <ClCompile Include="src\Razor\Rendering\PBRPipeline.cpp" />
+    <ClCompile Include="src\Razor\Rendering\PostProcessPipepeline.cpp" />
+    <ClCompile Include="src\Razor\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Razor\Scene\Node.cpp" />
     <ClCompile Include="src\Razor\Scene\Scene.cpp" />
     <ClCompile Include="src\Razor\Scene\SceneGraph.cpp" />
     <ClCompile Include="src\Razor\Scene\ScenesManager.cpp" />
+    <ClCompile Include="src\Razor\Scripting\LuaScript.cpp" />
+    <ClCompile Include="src\Razor\Scripting\PythonScript.cpp" />
     <ClCompile Include="src\Razor\Scripting\Script.cpp" />
-    <ClCompile Include="src\Razor\Landscape\Landscape.cpp" />
     <ClCompile Include="src\Razor\Types\Array.cpp" />
     <ClCompile Include="src\Razor\Types\Variant.cpp" />
     <ClCompile Include="src\rzpch.cpp">
@@ -892,35 +1011,15 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Shaders\background.frag" />
-    <None Include="src\Shaders\background.vert" />
-    <None Include="src\Shaders\brdf.frag" />
-    <None Include="src\Shaders\brdf.vert" />
-    <None Include="src\Shaders\cubemap.vs" />
-    <None Include="src\Shaders\debug_depth.frag" />
-    <None Include="src\Shaders\debug_depth.vert" />
-    <None Include="src\Shaders\default.frag" />
-    <None Include="src\Shaders\default.vert" />
-    <None Include="src\Shaders\definitions.glsl" />
-    <None Include="src\Shaders\depth.frag" />
-    <None Include="src\Shaders\depth.vert" />
-    <None Include="src\Shaders\eqToCubemap.frag" />
-    <None Include="src\Shaders\grid.frag" />
-    <None Include="src\Shaders\grid.vert" />
-    <None Include="src\Shaders\irradiance.frag" />
-    <None Include="src\Shaders\landscape.frag" />
-    <None Include="src\Shaders\landscape.vert" />
-    <None Include="src\Shaders\lighting.glsl" />
-    <None Include="src\Shaders\particle.frag" />
-    <None Include="src\Shaders\particle.vert" />
-    <None Include="src\Shaders\pbr.frag" />
-    <None Include="src\Shaders\pbr.vert" />
-    <None Include="src\Shaders\prefilter.frag" />
-    <None Include="src\Shaders\tonemapping.glsl" />
-    <None Include="src\Shaders\viewport.frag" />
-    <None Include="src\Shaders\viewport.vert" />
     <None Include="vendor\assimp\include\assimp\.editorconfig" />
     <None Include="vendor\assimp\include\assimp\config.h.in" />
+    <None Include="vendor\protobuff\google\protobuff\compiler\cpp\cpp_unittest.inc" />
+    <None Include="vendor\protobuff\google\protobuff\map_test_util.inc" />
+    <None Include="vendor\protobuff\google\protobuff\message_unittest.inc" />
+    <None Include="vendor\protobuff\google\protobuff\port_def.inc" />
+    <None Include="vendor\protobuff\google\protobuff\port_undef.inc" />
+    <None Include="vendor\protobuff\google\protobuff\proto3_lite_unittest.inc" />
+    <None Include="vendor\protobuff\google\protobuff\test_util.inc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

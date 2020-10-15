@@ -8,10 +8,8 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Server.cpp" />
-    <ClCompile Include="src\Client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Server.h" />
-    <ClInclude Include="src\Client.h" />
   </ItemGroup>
 </Project>

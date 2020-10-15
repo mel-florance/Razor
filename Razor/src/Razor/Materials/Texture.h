@@ -7,14 +7,45 @@ namespace Razor {
 	class RAZOR_API Texture
 	{
 	public:
-		enum ChannelType {
+		enum ChannelType 
+		{
 			GREY = 1,
 			GREY_ALPHA = 2,
 			RGB = 3,
 			RGB_ALPHA = 4
 		};
 
-		Texture(const std::string& filename, bool mimaps = false, bool flipped = true, ChannelType type = ChannelType::RGB_ALPHA, bool free_after_load = true);
+		enum class Type
+		{
+			Diffuse,
+			Specular,
+			Normal
+		};
+
+		enum Filter
+		{
+			NEAREST = 0x2600,
+			LINEAR = 0x2601,
+			NEAREST_MIPMAP_NEAREST = 0x2700,
+			LINEAR_MIPMAP_NEAREST = 0x2701,
+			NEAREST_MIPMAP_LINEAR = 0x2702,
+			LINEAR_MIPMAP_LINEAR = 0x2703
+		};
+
+		enum WrapType
+		{
+			REPEAT = 0x2901,
+			MIRRORED_REPEAT = 0x8370,
+			CLAMP_TO_EDGE = 0x812F
+		};
+
+		Texture(
+			const std::string& filename,
+			bool mimaps = false,
+			bool flipped = true, 
+			ChannelType type = ChannelType::RGB_ALPHA,
+			bool free_after_load = true
+		);
 		virtual ~Texture();
 
 		Texture* load();
@@ -31,6 +62,10 @@ namespace Razor {
 		inline int getHeight() { return height; }
 		inline int getComponentsCount() { return components_count; }
 		inline ChannelType getChannelType() { return channel_type; }
+		inline Filter& getMinFilter() { return min_filter; }
+		inline Filter& getMaxFilter() { return mag_filter; }
+		inline WrapType& getWrapS() { return wrap_s; }
+		inline WrapType& getWrapT() { return wrap_t; }
 
 		inline void setId(unsigned int id) { this->id = id; }
 		inline void setLoadBias(float& value) { lodBias = value; }
@@ -42,6 +77,10 @@ namespace Razor {
 		inline void setHeight(int height) { this->height = height; }
 		inline void setComponentsCount(int count) { components_count = count; }
 		inline void setChannelType(ChannelType type) { channel_type = type; }
+		inline void setMinFilter(Filter filter) { min_filter = filter; }
+		inline void setMagFilter(Filter filter) { mag_filter = filter; }
+		inline void setWrapS(WrapType wrap) { wrap_s = wrap; }
+		inline void setWrapT(WrapType wrap) { wrap_t = wrap; }
 
 	private:
 		unsigned char* data;
@@ -55,6 +94,10 @@ namespace Razor {
 		int height;
 		ChannelType channel_type;
 		bool free_after_load;
+		Filter min_filter;
+		Filter mag_filter;
+		WrapType wrap_s;
+		WrapType wrap_t;
 	};
 
 }

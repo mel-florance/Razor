@@ -4,9 +4,9 @@
 namespace Razor
 {
 
-	ColorMaterial::ColorMaterial() : 
+	ColorMaterial::ColorMaterial(const glm::vec3& color) : 
 		Material(),
-		color(glm::vec3(1.0f, 1.0f, 1.0f))
+		color(color)
 	{
 	}
 
@@ -14,7 +14,7 @@ namespace Razor
 	{
 	}
 
-	void ColorMaterial::bind(Shader * shader)
+	void ColorMaterial::bind(Shader* shader)
 	{
 		if (shader != nullptr)
 		{

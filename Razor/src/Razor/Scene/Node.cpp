@@ -12,7 +12,9 @@ namespace Razor
 		lights({}),
 		parent(nullptr),
 		id(0),
-		isInstance(false)
+		isInstance(false),
+		opened(false),
+		active(true)
 	{
 	}
 
@@ -33,6 +35,15 @@ namespace Razor
 		meshes.clear();
 		nodes.clear();
 		lights.clear();
+	}
+
+	void Node::setupMeshBuffers(std::shared_ptr<Node> node)
+	{
+		for (auto mesh : node->meshes)
+			mesh->setupBuffers();
+
+		for (auto n : node->nodes)
+			setupMeshBuffers(n);
 	}
 
 }

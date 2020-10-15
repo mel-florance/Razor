@@ -3,11 +3,16 @@
 
 #include "Razor/Rendering/ForwardRenderer.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	Scene::Scene(const std::string& name) : 
 		active(false),
-		name(name)
+		name(name),
+		graph(nullptr),
+		active_camera(nullptr),
+		lights({}),
+		particle_systems({})
 	{
 		graph = new SceneGraph();
 	}
@@ -17,11 +22,22 @@ namespace Razor {
 		delete graph;
 	}
 
+	size_t Scene::getInstancesSize()
+	{
+		size_t sum = 0;
+
+		for (auto n : graph->getNodes())
+			for (auto m : n->meshes)
+				sum += m->getInstances().size();
+	
+		return sum;
+	}
+
 	void Scene::addLight(std::shared_ptr<Light> light, Light::Type light_type)
 	{
 		lights.push_back(light);
 
-		switch (light_type)
+		/*switch (light_type)
 		{
 			case Light::Type::DIRECTIONAL:
 				ForwardRenderer::incrementDirectionalLights();
@@ -32,7 +48,7 @@ namespace Razor {
 			case Light::Type::SPOT:
 				ForwardRenderer::incrementSpotLights();
 				break;
-		}
+		}*/
 	}
 
 	void Scene::removeLight(std::shared_ptr<Light> light)

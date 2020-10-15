@@ -1,0 +1,51 @@
+[18:44:46] Razor: Log system initialized.
+[18:44:46] Razor: Application started
+[18:44:46] Razor: Server started !
+[18:44:48] Razor: Invalid client socket.
+[18:44:48] Razor: oria-master.test connected on port 62729
+[18:44:50] Razor: Received from client: aze
+[18:44:50] Razor: Received from client: 
+
+[18:44:53] Razor: Received from client: aze
+[18:44:53] Razor: Received from client: 
+
+[18:44:55] Razor: Received from client: a*
+[18:44:55] Razor: Received from client: 
+
+[18:44:58] Razor: Received from client: azeeeeee
+[18:44:58] Razor: Received from client: 
+
+[18:45:19] Razor: Log system initialized.
+[18:45:19] Razor: Application started
+[18:45:19] Razor: Server started !
+[19:48:56] Razor: Log system initialized.
+[19:48:56] Razor: Application started
+[19:48:56] Razor: Server started !
+[19:49:03] Razor: oria-master.test connected on port 49759
+[19:49:05] Razor: Received: 321
+[19:49:05] Razor: Received: 
+
+[19:49:07] Razor: Received: 3
+[19:49:07] Razor: Received: 
+
+[20:07:52] Razor: Log system initialized.
+[20:07:52] Razor: Application started
+[20:07:52] Razor: Server started !
+[20:07:53] Razor: oria-master.test connected on port 50833
+[20:07:55] Razor: Client disconnected.
+[20:33:34] Razor: Log system initialized.
+[20:33:34] Razor: Application started
+[20:33:34] Razor: Server started !
+[04:14:20] Razor: value: test
+[04:14:20] Razor: value: 1.5
+[04:14:20] Razor: value: toto
+[04:14:20] Razor: value: 8
+[04:14:20] Razor: value: true
+[04:14:39] Razor: value: test
+[04:18:56] Razor: value: test
+[04:18:56] Razor: value: 1.5
+[04:18:56] Razor: value: 8
+[04:19:17] Razor: value: test
+[04:19:17] Razor: value: 1.5
+[04:19:17] Razor: value: 8
+[04:19:17] Razor: value: true

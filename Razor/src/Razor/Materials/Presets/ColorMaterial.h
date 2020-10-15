@@ -8,7 +8,7 @@ namespace Razor
 	class ColorMaterial : public Material
 	{
 	public:
-		ColorMaterial();
+		ColorMaterial(const glm::vec3& color = glm::vec3(1.0f, 1.0f, 1.0f));
 		~ColorMaterial();
 
 		void bind(Shader* shader) override;

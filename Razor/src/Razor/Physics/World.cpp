@@ -7,22 +7,30 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include "Razor/Geometry/Geometry.h"
+#include "Razor/Rendering/ForwardRenderer.h"
+#include "Razor/Materials/Presets/ColorMaterial.h"
+
+#include "btBulletDynamicsCommon.h"
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+#include "BulletCollision/Gimpact/btGImpactShape.h"
 
 namespace Razor
 {
 
 	World::World() :
-		gravity(glm::vec3(0.0f, -9.81f, 0.0f))
+		delta(0.0f),
+		gravity(glm::vec3(0.0f, -9.80665f, 0.0f)),
+		debug_ray_trace_lines(false)
 	{
 		config = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(config);
-		btVector3	worldAabbMin(-1000, -1000, -1000);
-		btVector3	worldAabbMax(1000, 1000, 1000);
-		broadphase = new btAxisSweep3(worldAabbMin, worldAabbMax);
+		broadphase = new btDbvtBroadphase();
 		solver = new btSequentialImpulseConstraintSolver();
 
 		world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, config);
 		world->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+		debug_lines_mat = std::make_shared<ColorMaterial>();
 	}
 
 	World::~World()
@@ -62,54 +70,46 @@ namespace Razor
 	{
 		for (auto mesh : node->meshes)
 			if(mesh->getPhysicsBody() != nullptr)
-				world->removeRigidBody(mesh->getPhysicsBody()->getBody());
+					world->removeRigidBody(mesh->getPhysicsBody()->getBody());
 
 		nodes.erase(std::remove(nodes.begin(), nodes.end(), node), nodes.end());
 	}
 
-	struct btDrawingResult : public btCollisionWorld::ContactResultCallback
-	{
-		virtual	btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)
-		{
-			float z, y, x;
-			btQuaternion quat = colObj1Wrap->getWorldTransform().getRotation();
-			quat.getEulerZYX(z, y, x);
-			
-			Node* node = static_cast<Node*>(colObj1Wrap->getCollisionShape()->getUserPointer());
-
-			if (node != nullptr)
-			{
-				node->transform.setRotation(glm::vec3(x, y, z));
-				Log::trace("%s", "ok");
-			}
-
-			return 0;
-		}
-	};
-
 	void World::updateNodes()
 	{
-		for (auto node : nodes)
+		std::vector<std::shared_ptr<Node>>::iterator node_it = nodes.begin();
+
+		for (; node_it != nodes.end(); ++node_it)
 		{
-			for (auto mesh : node->meshes)
+			std::vector<std::shared_ptr<StaticMesh>>::iterator mesh_it = (*node_it)->meshes.begin();
+
+			for (; mesh_it != (*node_it)->meshes.end(); mesh_it++)
 			{
-				if (mesh->getPhysicsEnabled() && mesh->getPhysicsBody() != nullptr)
+				if ((*mesh_it)->getPhysicsEnabled() && (*mesh_it)->getPhysicsBody() != nullptr)
 				{
-					btMotionState* mesh_motion_state = mesh->getPhysicsBody()->getBody()->getMotionState();
+					btMotionState* mesh_motion_state = (*mesh_it)->getPhysicsBody()->getBody()->getMotionState();
 
 					if (mesh_motion_state != nullptr)
 					{
-						node->transform = getMotionStateTransform(mesh_motion_state);
-				
-						for (auto i : mesh->getInstances())
-						{
-							if (i->body->initialized)
-							{
-								btMotionState* instance_motion_state = i->body->getBody()->getMotionState();
+						(*node_it)->transform = getMotionStateTransform(mesh_motion_state);
 
-								if (instance_motion_state != nullptr)
+						if ((*mesh_it)->getBoundingMesh() != nullptr && (*mesh_it)->isBoundingBoxVisible())
+							(*mesh_it)->updateBoundings((*node_it)->transform);
+
+						for (auto i : (*mesh_it)->getInstances())
+						{
+							if (i->body != nullptr)
+							{
+								if (i->body->initialized)
 								{
-									mesh->updateInstance(getMotionStateTransform(instance_motion_state).getMatrix(), i->index);
+									btMotionState* instance_motion_state = i->body->getBody()->getMotionState();
+
+									if (instance_motion_state != nullptr)
+									{
+								
+										Transform t = getMotionStateTransform(instance_motion_state);
+										(*mesh_it)->updateInstance(t.getMatrix(), i->index);
+									}
 								}
 							}
 						}
@@ -121,7 +121,7 @@ namespace Razor
 
 	Transform World::getMotionStateTransform(btMotionState* motion_state)
 	{
-		Transform final_transform =Transform();
+		Transform final_transform = Transform();
 		btTransform transform;
 		motion_state->getWorldTransform(transform);
 
@@ -146,18 +146,51 @@ namespace Razor
 		return final_transform;
 	}
 
-	void World::raycast(Camera* camera, const glm::vec3& start, const glm::vec3& end)
+	void World::raycast(RaycastResult* result, Camera* camera, const glm::vec2& mouse, glm::vec2& viewport, float distance)
 	{
+		float mx = mouse.x / (viewport.x * 0.5f) - 1.0f;
+		float my = mouse.y / (viewport.y * 0.5f) - 1.0f;
+
+		glm::mat4 inverse = glm::inverse(camera->getProjectionMatrix() * camera->getViewMatrix());
+		glm::vec4 screen = glm::vec4(mx, my, 1.0f, 1.0f);
+
+		glm::vec3 direction = glm::normalize(glm::vec3(inverse * screen));
+
+		glm::vec3 start = camera->getPosition();
+		glm::vec3 end = start + direction * distance;
+
 		btVector3 origin = btVector3(start.x, start.y, start.z);
 		btVector3 target = btVector3(end.x, end.y, end.z);
 
-		btCollisionWorld::AllHitsRayResultCallback hit_result(origin, target);
+		btCollisionWorld::ClosestRayResultCallback hit_result(origin, target);
+		//hit_result.m_flags |= btTriangleRaycastCallback::kF_KeepUnflippedNormal;
+		//hit_result.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
+
+		world->updateAabbs();
+		world->computeOverlappingPairs();
 		world->rayTest(origin, target, hit_result);
+
+		if (debug_ray_trace_lines)
+		{
+			/// TODO: optimize this
+			std::shared_ptr<Ray> ray = std::make_shared<Ray>(start, end, distance);
+			ray->setMaterial(debug_lines_mat);
+			std::shared_ptr<Node> ray_node = std::make_shared<Node>();
+			ray_node->meshes.push_back(ray);
+			ForwardRenderer::addLineMesh(ray_node, 1);
+		}
 
 		if (hit_result.hasHit())
 		{
-			Log::trace("hit result !");
+			Node* ptr = (Node*)(hit_result.m_collisionObject->getUserPointer());
+
+			result->hit = true;
+			result->node = ptr;
+			result->hit_point = glm::vec3(hit_result.m_hitPointWorld.x(), hit_result.m_hitPointWorld.y(), hit_result.m_hitPointWorld.z());
+			result->hit_normal = glm::vec3(hit_result.m_hitNormalWorld.x(), hit_result.m_hitNormalWorld.y(), hit_result.m_hitNormalWorld.z());
 		}
+		else
+			result->hit = false;
 	}
 
 }

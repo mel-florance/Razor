@@ -6,7 +6,8 @@
 #include "Razor/Events/KeyEvent.h"
 #include "Razor/Events/MouseEvent.h"
 
-namespace Razor {
+namespace Razor
+{
 
 	class Editor;
 

@@ -13,7 +13,7 @@ namespace Razor {
 
 	void SceneGraph::addNode(std::shared_ptr<Node> node)
 	{
-		node->id = ++index;
+		node->id = index++;
 		nodes.push_back(node);
 	}
 
@@ -32,6 +32,19 @@ namespace Razor {
 		}
 
 		return false;
+	}
+
+	std::shared_ptr<Node> SceneGraph::getNodeById(unsigned int id)
+	{
+		std::vector<std::shared_ptr<Node>>::iterator it;
+
+		for (it = nodes.begin(); it != nodes.end(); ++it)
+		{
+			if ((*it)->id == id)
+				return *it;
+		}
+
+		return nullptr;
 	}
 
 }

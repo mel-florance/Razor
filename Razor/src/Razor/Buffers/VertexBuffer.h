@@ -24,6 +24,7 @@ namespace Razor {
 		void bind() const;
 		void unbind() const;
 		void update(unsigned int size, const void* data);
+		void updateSubData(unsigned int size, const void* data, unsigned int offset = 0);
 
 		inline BufferUsage getUsage() { return usage; }
 		inline void setUsage(BufferUsage usage) { this->usage = usage; }

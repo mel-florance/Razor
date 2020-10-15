@@ -1,29 +1,68 @@
 #include "rzpch.h"
 #include "Geometry.h"
 
-namespace Razor { 
+namespace Razor
+{ 
 
-	Quad::Quad() :
-		StaticMesh()
+	Circle::Circle(float radius, unsigned int divisions) : 
+		StaticMesh(),
+		radius(radius),
+		divisions(divisions)
+	{
+		std::vector<float> vertices;
+
+		for (unsigned int i = 0; i < divisions; i++)
+		{
+			if (i + 1 <= divisions)
+			{
+				float start = TAU * i / divisions;
+				float end = TAU * (i + 1) / divisions;
+
+				vertices.push_back(radius * cosf(start));
+				vertices.push_back(0.0f);
+				vertices.push_back(radius * sinf(start));
+
+				vertices.push_back(radius * cosf(end));
+				vertices.push_back(0.0f);
+				vertices.push_back(radius * sinf(end));
+			}
+		}
+
+		this->setVertices(vertices);
+
+		vao = new VertexArray();
+		vbo = new VertexBuffer(getVertices().data(), (unsigned int)getVertices().size() * sizeof(float));
+		vao->addBuffer(*vbo, 0, 3);
+
+		setCulling(false);
+		setDrawMode(StaticMesh::DrawMode::LINES);
+		setVertexCount((unsigned int)getVertices().size() / 3);
+		setName("CircleMesh");
+	}
+
+	Circle::~Circle()
+	{
+	}
+
+	Quad::Quad() : StaticMesh()
 	{
 		this->setVertices({
-			-1.0f,  1.0f, 0.0f, 1.0f,
-			-1.0f, -1.0f, 0.0f, 0.0f,
-			 1.0f, -1.0f, 1.0f, 0.0f,
-
-			-1.0f,  1.0f, 0.0f, 1.0f,
-			 1.0f, -1.0f, 1.0f, 0.0f,
-			 1.0f,  1.0f, 1.0f, 1.0f
+			 -1.0f,  1.0f, 0.0f, 1.0f,
+			 -1.0f, -1.0f, 0.0f, 1.0f,
+			  1.0f, -1.0f, 0.0f, 1.0f,
+			  1.0f,  1.0f, 0.0f, 1.0f
 		});
 
 		this->setUvs({
-			0.0f, 1.0f,
 			0.0f, 0.0f,
-			1.0f, 0.0f,
-
 			0.0f, 1.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f
+			1.0f, 1.0f,
+			1.0f, 0.0f
+		});
+
+		this->setIndices({
+			3, 2, 1, 
+			3, 1, 0
 		});
 
 		vao = new VertexArray();
@@ -31,10 +70,12 @@ namespace Razor {
 		vbo = new VertexBuffer(getVertices().data(), (unsigned int)getVertices().size() * sizeof(float));
 		uvbo = new VertexBuffer(getUvs().data(), (unsigned int)getUvs().size() * sizeof(float));
 
-		vao->addBuffer(*vbo, 0, 3);
+		vao->addBuffer(*vbo, 0, 4);
 		vao->addBuffer(*uvbo, 1, 2);
 
-		setDrawMode(StaticMesh::DrawMode::QUADS);
+		ibo = new IndexBuffer(getIndices().data(), (unsigned int)getIndices().size() * sizeof(unsigned int));
+
+		setCulling(false);
 		setVertexCount(6);
 		setName("QuadStaticMesh");
 	}
@@ -85,11 +126,11 @@ namespace Razor {
 		vbo = new VertexBuffer(getVertices().data(), (unsigned int)getVertices().size() * sizeof(float));
 		vao->addBuffer(*vbo, 0, 3);
 
-		nbo = new VertexBuffer(getNormals().data(), (unsigned int)getNormals().size() * sizeof(float));
-		vao->addBuffer(*nbo, 1, 3);
-
 		uvbo = new VertexBuffer(getUvs().data(), (unsigned int)getUvs().size() * sizeof(float));
-		vao->addBuffer(*uvbo, 2, 2);
+		vao->addBuffer(*uvbo, 1, 2);
+
+		nbo = new VertexBuffer(getNormals().data(), (unsigned int)getNormals().size() * sizeof(float));
+		vao->addBuffer(*nbo, 2, 3);
 
 		tbo = new VertexBuffer(getTangents().data(), (unsigned int)getTangents().size() * sizeof(float));
 		vao->addBuffer(*tbo, 3, 3);
@@ -98,6 +139,7 @@ namespace Razor {
 
 		setVertexCount((unsigned int)getVertices().size() / 3);
 		setName("PlaneStaticMesh");
+		setCullType(CullType::FRONT);
 	}
 
 	Plane::~Plane()
@@ -260,11 +302,11 @@ namespace Razor {
 		vbo = new VertexBuffer(getVertices().data(), (unsigned int)getVertices().size() * sizeof(float));
 		vao->addBuffer(*vbo, 0, 3);
 
-		nbo = new VertexBuffer(getNormals().data(), (unsigned int)getNormals().size() * sizeof(float));
-		vao->addBuffer(*nbo, 1, 3);
-
 		uvbo = new VertexBuffer(getUvs().data(), (unsigned int)getUvs().size() * sizeof(float));
-		vao->addBuffer(*uvbo, 2, 2);
+		vao->addBuffer(*uvbo, 1, 2);
+
+		nbo = new VertexBuffer(getNormals().data(), (unsigned int)getNormals().size() * sizeof(float));
+		vao->addBuffer(*nbo, 2, 3);
 
 		tbo = new VertexBuffer(getTangents().data(), (unsigned int)getTangents().size() * sizeof(float));
 		vao->addBuffer(*tbo, 3, 3);
@@ -299,17 +341,17 @@ namespace Razor {
 				float seg_y = (float)y / (float)segments.y;
 				float theta = seg_x * 2.0f * PI;
 				float phi = seg_y * PI;
-				float pos_x = std::cos(theta) * std::sin(phi) * radius;
-				float pos_y = std::sin(-PI / 2 + PI * seg_y) * radius;
-				float pos_z = std::sin(theta) * std::sin(phi) * radius;
+				float pos_x = std::cos(theta) * std::sin(phi) * -radius;
+				float pos_y = std::cos(phi) * -radius;
+				float pos_z = std::sin(theta) * std::sin(phi) * -radius;
 
 				vertices.push_back(pos_x);
 				vertices.push_back(pos_y);
 				vertices.push_back(pos_z);
 
-				normals.push_back(pos_x * inv_len);
-				normals.push_back(pos_y * inv_len);
-				normals.push_back(pos_z * inv_len);
+				normals.push_back(pos_x);
+				normals.push_back(pos_y);
+				normals.push_back(pos_z);
 
 				uvs.push_back(seg_x);
 				uvs.push_back(seg_y);
@@ -350,11 +392,11 @@ namespace Razor {
 		vbo = new VertexBuffer(getVertices().data(), (unsigned int)getVertices().size() * sizeof(float));
 		vao->addBuffer(*vbo, 0, 3);
 
-		nbo = new VertexBuffer(getNormals().data(), (unsigned int)getNormals().size() * sizeof(float));
-		vao->addBuffer(*nbo, 1, 3);
-
 		uvbo = new VertexBuffer(getUvs().data(), (unsigned int)getUvs().size() * sizeof(float));
-		vao->addBuffer(*uvbo, 2, 2);
+		vao->addBuffer(*uvbo, 1, 2);
+
+		nbo = new VertexBuffer(getNormals().data(), (unsigned int)getNormals().size() * sizeof(float));
+		vao->addBuffer(*nbo, 2, 3);
 
 		tbo = new VertexBuffer(getTangents().data(), (unsigned int)getTangents().size() * sizeof(float));
 		vao->addBuffer(*tbo, 3, 3);
@@ -370,36 +412,176 @@ namespace Razor {
 
 	}
 
-	Bounding::Bounding(const BoundingBox& box)
-		: StaticMesh()
+	Cone::Cone(unsigned int slices, float radius, float height) :
+		slices(slices),
+		radius(radius),
+		height(height)
 	{
-		this->setVertices({
-			 -1.0f, -1.0f, -1.0f,
-			  1.0f, -1.0f, -1.0f,
-			  1.0f,  1.0f, -1.0f,
-			 -1.0f,  1.0f, -1.0f,
+		std::vector<unsigned int>* indx = new std::vector<unsigned int>(slices * 6);
+		std::vector<glm::vec3>* vertx = new std::vector<glm::vec3>(slices + 2);
+		std::vector<glm::vec3>* norms = new std::vector<glm::vec3>(slices + 2);
 
-			 -1.0f, -1.0f,  1.0f,
-			  1.0f, -1.0f,  1.0f,
-			  1.0f,  1.0f,  1.0f,
-			 -1.0f,  1.0f,  1.0f
-		});
+		float dt = TAU / float(slices);
 
-		this->setIndices({
-			  0, 1, 2, 3,
-			  4, 5, 6, 7,
-			  0, 4, 1, 5,
-			  2, 6, 3, 7
-		});
+		for (unsigned int i = 0; i < slices; i++)
+		{
+			glm::vec3 position = glm::vec3(
+				cosf(dt * i),
+				0.0f, 
+				sinf(dt * i)
+			);
+
+			(*vertx)[i] = position;
+			(*norms)[i] = position;
+		}
+
+		(*vertx)[slices]     = glm::vec3(0,  1,  0);
+		(*norms)[slices]     = glm::vec3(0,  1,  0);
+		(*vertx)[slices + 1] = glm::vec3(0,  0,  0);
+		(*norms)[slices + 1] = glm::vec3(0,  0,  0);
+
+		for (unsigned int i = 0; i < slices - 1; i++)
+		{
+			(*indx)[i * 6 + 0] = i;
+			(*indx)[i * 6 + 1] = slices;
+			(*indx)[i * 6 + 2] = i + 1;
+			(*indx)[i * 6 + 3] = i;
+			(*indx)[i * 6 + 4] = i + 1;
+			(*indx)[i * 6 + 5] = slices + 1;
+		}
+
+		(*indx)[slices * 6 - 1 - 5] = slices - 1;
+		(*indx)[slices * 6 - 1 - 4] = slices;
+		(*indx)[slices * 6 - 1 - 3] = 0;
+		(*indx)[slices * 6 - 1 - 2] = slices - 1;
+		(*indx)[slices * 6 - 1 - 1] = 0;
+		(*indx)[slices * 6 - 1 - 0] = slices + 1;
+
+
+		std::vector<float> v;
+		for (unsigned int i = 0; i < vertx->size(); i++)
+		{
+			v.push_back((*vertx)[i].x);
+			v.push_back((*vertx)[i].y);
+			v.push_back((*vertx)[i].z);
+		}
+		
+		std::vector<float> n;
+		for (unsigned int i = 0; i < norms->size(); i++)
+		{
+			n.push_back((*norms)[i].x);
+			n.push_back((*norms)[i].y);
+			n.push_back((*norms)[i].z);
+		}
+
+		this->setVertices(v);
+		this->setNormals(n);
+		this->setIndices(*indx);
 
 		vao = new VertexArray();
-
 		vbo = new VertexBuffer(getVertices().data(), (unsigned int)getVertices().size() * sizeof(float));
 		vao->addBuffer(*vbo, 0, 3);
 
+		nbo = new VertexBuffer(getNormals().data(), (unsigned int)getNormals().size() * sizeof(float));
+		vao->addBuffer(*nbo, 0, 3);
+
 		ibo = new IndexBuffer(getIndices().data(), (unsigned int)getIndices().size());
 
+		delete vertx;
+		delete indx;
+		delete norms;
+
+		setVertexCount(slices + 2);
+		setName("ConeStaticMesh");
+	}
+
+	Cone::~Cone()
+	{
+
+	}
+
+	Cylinder::Cylinder()
+	{
+
+	}
+
+	Cylinder::~Cylinder()
+	{
+
+	}
+
+	Bounding::Bounding(const AABB& box) : StaticMesh()
+	{
+		this->setVertices({
+			// Front
+			box.min_x,  box.min_y,  box.max_z,
+			box.max_x,  box.min_y,  box.max_z,
+
+			box.max_x,  box.min_y,  box.max_z,
+			box.max_x,  box.max_y,  box.max_z,
+
+			box.max_x,  box.max_y,  box.max_z,
+			box.min_x,  box.max_y,  box.max_z,
+
+			box.min_x,  box.max_y,  box.max_z,
+			box.min_x,  box.min_y,  box.max_z,
+
+			// Back
+			box.min_x,  box.min_y,  box.min_z,
+			box.max_x,  box.min_y,  box.min_z,
+
+			box.max_x,  box.min_y,  box.min_z,
+			box.max_x,  box.max_y,  box.min_z,
+
+			box.max_x,  box.max_y,  box.min_z,
+			box.min_x,  box.max_y,  box.min_z,
+
+			box.min_x,  box.max_y,  box.min_z,
+			box.min_x,  box.min_y,  box.min_z,
+
+			// Sides
+			box.max_x,  box.min_y,  box.max_z,
+			box.max_x,  box.min_y,  box.min_z,
+
+			box.max_x,  box.max_y,  box.max_z,
+			box.max_x,  box.max_y,  box.min_z,
+
+			box.min_x,  box.min_y,  box.max_z,
+			box.min_x,  box.min_y,  box.min_z,
+
+			box.min_x,  box.max_y,  box.max_z,
+			box.min_x,  box.max_y,  box.min_z,
+		});
+
+		//this->setIndices({
+		//	// front
+		//	0, 1, 2,
+		//	2, 3, 0,
+		//	// right
+		//	1, 5, 2,
+		//	5, 6, 2,
+		//	// back
+		//	4, 5, 6,
+		//	6, 7, 4,
+		//	// left
+		//	0, 4, 7,
+		//	7, 3, 0,
+		//	// top
+		//	3, 2, 6,
+		//	6, 7, 3,
+		//	// bottom
+		//	0, 1, 5,
+		//	5, 4, 0
+		//});
+
+		vao = new VertexArray();
+		vbo = new VertexBuffer(getVertices().data(), (unsigned int)getVertices().size() * sizeof(float));
+		vao->addBuffer(*vbo, 0, 3);
+
+		//ibo = new IndexBuffer(getIndices().data(), (unsigned int)getIndices().size());
+
 		setVertexCount((unsigned int)getVertices().size() / 3);
+		this->setLineWidth(1.1f);
 		this->setDrawMode(StaticMesh::DrawMode::LINES);
 		setName("BoundingBoxStaticMesh");
 	}
@@ -462,14 +644,18 @@ namespace Razor {
 	Ray::Ray(
 		const glm::vec3& origin,
 		const glm::vec3& direction,
-		float length
+		float length,
+		bool normalized
 	) :
 		StaticMesh(),
 		origin(origin),
 		direction(direction),
-		length(length)
+		length(length),
+		normalized(normalized)
 	{
-		glm::vec3 end = origin + direction * length;
+		glm::vec3 end = normalized
+			? origin + glm::normalize(origin + direction) * length
+			: origin + direction * length;
 
 		this->setVertices({
 			origin.x,
@@ -494,4 +680,6 @@ namespace Razor {
 	{
 
 	}
+	
+
 }

@@ -10,13 +10,13 @@
 namespace Razor
 {
 
-	Landscape::Landscape(const std::string& filename, const glm::dvec3& position) :
+	Landscape::Landscape(const std::string& filename, const glm::vec3& position) :
 		filename(filename),
 		position(position),
 		mesh(nullptr),
-		size(glm::dvec2(100.0f, 100.0f)),
-		subdivisions(glm::dvec2(1024.0f, 1024.0f)),
-		filter(glm::dvec3(0.3f, 0.59f, 0.11f)),
+		size(glm::vec2(100.0f, 100.0f)),
+		subdivisions(glm::vec2(1024.0f, 1024.0f)),
+		filter(glm::vec3(0.3f, 0.59f, 0.11f)),
 		alpha_filter(0.0f),
 		min_height(0.0f),
 		max_height(0.05f),
@@ -31,7 +31,7 @@ namespace Razor
 
 	Landscape::~Landscape()
 	{
-
+		
 	}
 
 	void Landscape::generate()
@@ -128,9 +128,11 @@ namespace Razor
 		mesh->setIndices(indices);
 
 		mesh->setupBuffers();
+
+		stbi_image_free(heightmap_data);
 	}
 
-	glm::dvec3 Landscape::calculateNormal(const glm::dvec2& position)
+	glm::vec3 Landscape::calculateNormal(const glm::vec2& position)
 	{
 		float height_l = getHeightAtXZ(glm::dvec2(position.x - 1, position.y));
 		float height_r = getHeightAtXZ(glm::dvec2(position.x + 1, position.y));
@@ -140,7 +142,7 @@ namespace Razor
 		return glm::normalize(glm::dvec3(height_l - height_r, 0.1f, height_d - height_u));
 	}
 
-	float Landscape::getHeightAtXZ(const glm::dvec2& position)
+	float Landscape::getHeightAtXZ(const glm::vec2& position)
 	{
 		if (position.x < 0 || position.x >= heightmap_width || position.y < 0 || position.y >= heightmap_height)
 			return 0.0f;

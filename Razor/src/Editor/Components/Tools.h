@@ -22,7 +22,8 @@ namespace Razor {
 		inline void showDirectionalProps() { show_directional_props = true; }
 		inline void showPoint() { show_point_props = true; }
 		inline void showSpotProps() { show_spot_props = true; }
- 
+		inline bool isPanelVisible() { return panel_visible; }
+
 		inline const glm::vec2& getSize() const { return size; }
 
 		struct CubeParameters

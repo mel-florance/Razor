@@ -1,8 +1,10 @@
 ﻿#include "rzpch.h"
 #include "imgui.h"
 #include "Console.h"
+#include "Editor/Editor.h"
 
-namespace Razor {
+namespace Razor 
+{
 
 	Console::Console(Editor* editor) : EditorComponent(editor)
 	{
@@ -76,13 +78,19 @@ namespace Razor {
 
 		bool reclaim_focus = false;
 
+		editor->icons_manager->drawIcon("terminal", glm::vec2(22.0f));
+		ImGui::SameLine();
+
 		ImGui::PushItemWidth(-1);
+		ImGui::Indent(-1.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(25.0f, 4.0f));
+
 		if (ImGui::InputText("##Command",
 			input,
-			IM_ARRAYSIZE(input), 
+			IM_ARRAYSIZE(input),
 			ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory,
-			&TextEditCallbackStub, 
-			(void*)this))	
+			&TextEditCallbackStub,
+			(void*)this))
 		{
 			char* s = input;
 			Strtrim(s);
@@ -93,7 +101,10 @@ namespace Razor {
 			strcpy(s, "");
 			reclaim_focus = true;
 		}
+
+		ImGui::PopStyleVar();
 		ImGui::PopItemWidth();
+		
 
 		ImGui::SetItemDefaultFocus();
 

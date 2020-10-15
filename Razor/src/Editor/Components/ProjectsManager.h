@@ -13,15 +13,17 @@ namespace Razor {
 
 		typedef std::map<std::string, std::map<std::string, std::string>> ProjectsList;
 
-		struct Project {
+		struct Project 
+		{
 			std::string name;
 			std::string path;
-			unsigned int last_modified;
+			long int last_modified;
 			unsigned int order;
 		};
 
-		void loadProjects();
+		void loadRecentProjects();
 		inline std::vector<Project>& getProjects() { return projects; }
+		void createProject(const std::string& name);
 
 	private:
 		std::string projects_path;

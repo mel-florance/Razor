@@ -9,6 +9,7 @@ namespace Razor
 {
 	class PhysicsBody;
 	class Transform;
+	class Bounding;
 
 	class StaticMesh
 	{
@@ -16,15 +17,14 @@ namespace Razor
 		StaticMesh();
 		virtual ~StaticMesh();
 
+		typedef std::vector<std::shared_ptr<StaticMesh>> List;
+
 		struct StaticMeshInstance 
 		{
-			StaticMeshInstance(unsigned int index, const std::string& name, Transform* transform, PhysicsBody* body) :
+			StaticMeshInstance(unsigned int index, const std::string& name, Transform* transform, PhysicsBody* body = nullptr) :
 				index(index), name(name), transform(transform), body(body) {}
 
-			~StaticMeshInstance() {
-				delete transform;
-				delete body;
-			}
+			~StaticMeshInstance();
 
 			unsigned int index;
 			std::string name;
@@ -34,27 +34,35 @@ namespace Razor
 
 		enum class DrawMode
 		{
-			POINTS         = 0x0000,
-			LINES          = 0x0001,
-			LINE_LOOP      = 0x0002,
-			LINE_STRIP     = 0x0003,
-			TRIANGLES      = 0x0004,
-			TRIANGLE_STRIP = 0x0005,
-			TRIANGLE_FAN   = 0x0006,
-			QUADS          = 0x0007
+			POINTS               = 0x0000,
+			LINES                = 0x0001,
+			LINE_LOOP            = 0x0002,
+			LINE_STRIP           = 0x0003,
+			LINES_ADJACENCY      = 0x000A,
+			LINE_STRIP_ADJACENCY = 0x000B,
+			TRIANGLES            = 0x0004,
+			TRIANGLE_STRIP       = 0x0005,
+			TRIANGLE_FAN         = 0x0006,
+			QUADS                = 0x0007,
+			QUAD_STRIP           = 0x0008,
+			POLYGON              = 0x0009
 		};
 
-		static const std::array<const char*, 8> getDrawModesStr()
+		static const std::array<const char*, 12> getDrawModesStr()
 		{
 			return {
 				"Points",
 				"Lines",
 				"Line loop",
 				"Line strip",
+				"Lines adjacency",
+				"Line strip adjacency",
 				"Triangles",
 				"Triangle strip",
 				"Triangle fan",
-				"Quads"
+				"Quads",
+				"Quad strip",
+				"Polygon"
 			};
 		}
 
@@ -62,27 +70,35 @@ namespace Razor
 		{
 			switch (drawMode) {
 			default:
-			case DrawMode::TRIANGLES:      return "Triangles"; break;
-			case DrawMode::POINTS:         return "Points"; ; break;
-			case DrawMode::LINES:          return "Lines"; ; break;
-			case DrawMode::LINE_LOOP:      return "Line loop" ; break;
-			case DrawMode::LINE_STRIP:     return "Line strip" ; break;
-			case DrawMode::TRIANGLE_STRIP: return "Triangle strip"; break;
-			case DrawMode::TRIANGLE_FAN:   return "Triangle fan"; break;
-			case DrawMode::QUADS:          return "Quads" ; break;
+			case DrawMode::TRIANGLES:            return "Triangles"; break;
+			case DrawMode::POINTS:               return "Points"; ; break;
+			case DrawMode::LINES:                return "Lines"; ; break;
+			case DrawMode::LINE_LOOP:            return "Line loop" ; break;
+			case DrawMode::LINE_STRIP:           return "Line strip" ; break;
+			case DrawMode::LINES_ADJACENCY:      return "Lines adjacency" ; break;
+			case DrawMode::LINE_STRIP_ADJACENCY: return "Line strip adjacency" ; break;
+			case DrawMode::TRIANGLE_STRIP:       return "Triangle strip"; break;
+			case DrawMode::TRIANGLE_FAN:         return "Triangle fan"; break;
+			case DrawMode::QUADS:                return "Quads" ; break;
+			case DrawMode::QUAD_STRIP:           return "Quad strip" ; break;
+			case DrawMode::POLYGON:              return "Polygon" ; break;
 			}
 		}
 
 		inline void setDrawMode(const char* mode) 
 		{
-			if (mode == "Points")         drawMode = DrawMode::POINTS;
-			if (mode == "Lines")          drawMode = DrawMode::LINES;
-			if (mode == "Line loop")      drawMode = DrawMode::LINE_LOOP;
-			if (mode == "Line strip")     drawMode = DrawMode::LINE_STRIP;
-			if (mode == "Triangles")      drawMode = DrawMode::TRIANGLES;
-			if (mode == "Triangle strip") drawMode = DrawMode::TRIANGLE_STRIP;
-			if (mode == "Triangle fan")   drawMode = DrawMode::TRIANGLE_FAN;
-			if (mode == "Quads")          drawMode = DrawMode::QUADS;
+			if (mode == "Points")               drawMode = DrawMode::POINTS;
+			if (mode == "Lines")                drawMode = DrawMode::LINES;
+			if (mode == "Line loop")            drawMode = DrawMode::LINE_LOOP;
+			if (mode == "Line strip")           drawMode = DrawMode::LINE_STRIP;
+			if (mode == "Lines adjacency")      drawMode = DrawMode::LINES_ADJACENCY;
+			if (mode == "Line strip adjacency") drawMode = DrawMode::LINE_STRIP_ADJACENCY;
+			if (mode == "Triangles")            drawMode = DrawMode::TRIANGLES;
+			if (mode == "Triangle strip")       drawMode = DrawMode::TRIANGLE_STRIP;
+			if (mode == "Triangle fan")         drawMode = DrawMode::TRIANGLE_FAN;
+			if (mode == "Quads")                drawMode = DrawMode::QUADS;
+			if (mode == "Quad strip")           drawMode = DrawMode::QUAD_STRIP;
+			if (mode == "Polygon")              drawMode = DrawMode::POLYGON;
 		}
 
 		enum class CullType
@@ -176,6 +192,7 @@ namespace Razor
 		void drawInstances();
 		void setupBuffers();
 		void setupInstances();
+		void updateBoundings(Transform& transform);
 		void updateInstance(const glm::mat4& matrix, unsigned int index);
 		void calculateTangents();
 
@@ -194,7 +211,8 @@ namespace Razor
 		inline VertexBuffer* getVbo() { return vbo; }
 		inline IndexBuffer* getIbo() { return ibo; }
 		inline DrawMode getDrawMode() { return drawMode; }
-		inline BoundingBox& getBoundingBox() { return bounding_box; }
+		inline AABB& getBoundingBox() { return bounding_box; }
+		inline std::shared_ptr<Bounding> getBoundingMesh() { return bounding_mesh; }
 		inline float& getLineWidth() { return line_width; }
 		inline bool& isLineDashed() { return is_line_dashed; }
 		inline int& getLineFactor() { return line_factor; }
@@ -207,7 +225,7 @@ namespace Razor
 
 		inline void setName(const std::string& name) { this->name = name; }
 		inline void setCullType(CullType type) { this->cullType = type; }
-		inline void setHasCulling(bool value) { this->culling = value; }
+		inline void setCulling(bool value) { this->culling = value; }
 		inline void setMaterial(std::shared_ptr<Material> material) { this->material = material; }
 		inline void setIndices(std::vector<unsigned int> indices) { this->indices = indices; }
 		inline void setVertices(std::vector<float> vertices) { this->vertices = vertices; }
@@ -220,7 +238,7 @@ namespace Razor
 		inline void setIbo(IndexBuffer* ibo) { this->ibo = ibo; }
 		inline void setDrawMode(DrawMode mode) { drawMode = mode; }
 		inline void setWindingOrder(WindingOrder order) { windingOrder = order; }
-		inline void setBoundingBox(const BoundingBox& box) { bounding_box = box; }
+		inline void setBoundingBox(const AABB& box) { bounding_box = box; }
 		inline void setLineWidth(float value) { line_width = value; }
 		inline void setLineDashed(bool value) { is_line_dashed = value; }
 		inline void setLineFactor(int factor) { line_factor = factor; }
@@ -229,15 +247,21 @@ namespace Razor
 		inline void setBoundingBoxVisible(bool value) { show_bounding_box = value; }
 		inline void setPhysicsBody(PhysicsBody* body) { this->body = body; }
 		inline void setPhysicsEnabled(bool value) { physics_enabled = value; }
+		inline void setBoundingMesh(std::shared_ptr<Bounding> mesh) { bounding_mesh = mesh; }
 
 		inline void setInstances(const std::vector<std::shared_ptr<StaticMeshInstance>>& data) { instances = data; }
 		std::shared_ptr<StaticMeshInstance> addInstance(const std::string& name, Transform* transform, PhysicsBody* body);
+		std::shared_ptr<StaticMeshInstance> addInstance(const std::string& name, Transform* transform);
 
 		inline bool removeInstance(unsigned index)
 		{
-			for (unsigned int i = -1; i < instances.size(); ++i) {
-				if (i == index && index > -1) {
+			for (unsigned int i = -1; i < instances.size(); ++i) 
+			{
+				if (i == index && index > -1) 
+				{
+					instances[i].reset();
 					instances.erase(instances.begin() + index);
+
 					return true;
 				}
 			}
@@ -279,7 +303,9 @@ namespace Razor
 		int line_factor;
 		int line_pattern;
 
-		BoundingBox bounding_box;
+		AABB bounding_box;
+		std::shared_ptr<Bounding> bounding_mesh;
+
 		bool show_bounding_box;
 
 		PhysicsBody* body;

@@ -21,7 +21,7 @@
 #include <type_traits>
 #include <iomanip>
 #include <locale>
-
+#include <regex>
 #include <array>
 #include <set>
 #include <any>
@@ -34,12 +34,16 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
-
 #include "Razor/Types/Array.h"
 #include "Razor/Types/Variant.h"
 #include "Razor/Core/Log.h"
 #include "Razor/Core/Utils.h"
 
 #ifdef RZ_PLATFORM_WINDOWS
+	#pragma comment (lib, "ws2_32.lib")
+	#include <WS2tcpip.h>
+	#include <winsock2.h>
+
 	#include <Windows.h>
+	#include <psapi.h>
 #endif

@@ -182,6 +182,22 @@ namespace Razor {
 			throw "Can't convert object to int.";
 	}
 
+	int& Variant::toInt()
+	{
+		if (_type == Type::Integer)
+			return _int;
+		else if (_type == Type::UInt)
+			return reinterpret_cast<int&>(_uint);
+		else if (_type == Type::Float)
+			return reinterpret_cast<int&>(_float);
+		else if (_type == Type::Bool)
+			return reinterpret_cast<int&>(_bool);
+		//else if (_type == Type::String)
+		//	return std::stoi(*reinterpret_cast<std::string*>(_ptr));
+		else
+			throw "Can't convert object to int.";
+	}
+
 	uint64_t Variant::toUInt() const
 	{
 		if (_type == Type::UInt)
@@ -210,6 +226,22 @@ namespace Razor {
 			return static_cast<float>(_bool);
 		else if (_type == Type::String)
 			return std::stof(*reinterpret_cast<std::string*>(_ptr));
+		else
+			throw "Can't convert object to float.";
+	}
+
+	float& Variant::toFloat() 
+	{
+		if (_type == Type::Integer)
+			return reinterpret_cast<float&>(_int);
+		else if (_type == Type::UInt)
+			return reinterpret_cast<float&>(_uint);
+		else if (_type == Type::Float)
+			return _float;
+		else if (_type == Type::Bool)
+			return reinterpret_cast<float&>(_bool);
+		//else if (_type == Type::String)
+		//	return std::stof(*reinterpret_cast<std::string*>(_ptr));
 		else
 			throw "Can't convert object to float.";
 	}

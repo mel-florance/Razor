@@ -1,5 +1,6 @@
 #include "rzpch.h"
 #include "SoundsManager.h"
+
 #include "Razor/Audio/Sound.h"
 #include "Razor/Audio/Loaders/WAVLoader.h"
 #include "Razor/Audio/Loaders/OGGLoader.h"
@@ -13,7 +14,8 @@ namespace Razor
 		wav_loader(nullptr),
 		ogg_loader(nullptr),
 		distance_model(DistanceModel::LINEAR),
-		sounds({})
+		sounds({}),
+		device_infos(DeviceInfo())
 	{
 		wav_loader = new WAVLoader();
 		ogg_loader = new OGGLoader();
@@ -33,6 +35,10 @@ namespace Razor
 		}
 
 		alcMakeContextCurrent(context);
+
+		device_infos.renderer = (char*)alGetString(AL_RENDERER);
+		device_infos.vendor = (char*)alGetString(AL_VENDOR);
+		device_infos.version = (char*)alGetString(AL_VERSION);
 	}
 
 	SoundsManager::~SoundsManager()
@@ -51,11 +57,25 @@ namespace Razor
 
 		if (item == sounds.end())
 		{
-			WAVLoader::WAVData wav_data;
-			char* data = wav_loader->load(filename, wav_data);
+			auto ext = filename.substr(filename.find_last_of(".") + 1);
 
-			Sound* sound = new Sound(short_name, data, wav_data);
-			sounds[short_name] = sound;
+			if (ext == "wav")
+			{
+				WAVData* wav_data = new WAVData();
+				char* data = wav_loader->load(filename, wav_data);
+				wav_data->data = data;
+
+				Sound* sound = new Sound(short_name, wav_data);
+				sounds[short_name] = sound;
+			}
+			else if (ext == "ogg")
+			{
+				OGGData* ogg_data = new OGGData();
+				ogg_loader->load(filename, ogg_data);
+
+				Sound* sound = new Sound(short_name, ogg_data);
+				sounds[short_name] = sound;
+			}
 		}
 	}
 

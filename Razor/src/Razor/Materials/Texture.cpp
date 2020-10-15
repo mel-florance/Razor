@@ -8,9 +8,16 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../stb/stb_image.h"
 
-namespace Razor {
+namespace Razor
+{
 
-	Texture::Texture(const std::string& filename, bool mipmaps, bool flipped, ChannelType type, bool free_after_load) :
+	Texture::Texture(
+		const std::string& filename,
+		bool mipmaps,
+		bool flipped,
+		ChannelType type,
+		bool free_after_load
+	) :
 		filename(filename),
 		mipmaps(mipmaps),
 		lodBias(0.0f),
@@ -18,7 +25,12 @@ namespace Razor {
 		id(NULL),
 		data(NULL),
 		channel_type(type),
-		free_after_load(free_after_load)
+		free_after_load(free_after_load),
+		min_filter(Filter::LINEAR),
+		mag_filter(Filter::LINEAR),
+		wrap_s(WrapType::REPEAT),
+		wrap_t(WrapType::REPEAT)
+
 	{
 		glGenTextures(1, &id);
 		this->load();
@@ -27,7 +39,7 @@ namespace Razor {
 	Texture* Texture::Texture::load()
 	{
 		stbi_set_flip_vertically_on_load(flipped);
-		data = stbi_load(filename.c_str(), &width, &height, &components_count, channel_type);
+		data = stbi_load(filename.c_str(), &width, &height, &components_count, 0);
 
 		if (data == NULL)
 		{
@@ -36,27 +48,25 @@ namespace Razor {
 		}
 
 		glBindTexture(GL_TEXTURE_2D, id);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		GLenum format;
+		if (components_count == 1)
+			format = GL_RED;
+		else if (components_count == 3)
+			format = GL_RGB;
+		else if (components_count == 4)
+			format = GL_RGBA;
+
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		if (mipmaps) 
-		{
-			glGenerateMipmap(GL_TEXTURE_2D);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, -1.0f);
-		}
-		else
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-		float anisotropy = 0.6f;
-		glGetFloatv(GL_TEXTURE_MAX_ANISOTROPY, &anisotropy);
-		glTexParameterf(GL_TEXTURE_2D, GL_MAX_TEXTURE_MAX_ANISOTROPY, anisotropy);
-
-		Log::info("Loaded texture: %s %s", filename.c_str(), Utils::bytesToSize(Utils::getFileSize(filename)).c_str());
+		std::string size = std::string("(" + std::to_string(width) + "x" + std::to_string(height) + ")");
+		Log::info("Loaded texture: %s %s %s", filename.c_str(), size.c_str(), Utils::bytesToSize(Utils::getFileSize(filename)).c_str());
 	
 		if(free_after_load)
 			stbi_image_free(data);

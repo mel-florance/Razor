@@ -57,23 +57,25 @@ namespace Razor
 				shader->setUniform1i("material.normalMap", 2);
 			}
 			
-			shader->setUniform1i("material.shadowMap", 3);
+			//shader->setUniform1i("material.shadowMap", 3);
+
+			//shader->setUniform1f("material.alpha", alpha);
 
 			shader->setUniform3f("material.diffuseColor", diffuse_color.x, diffuse_color.y, diffuse_color.z);
-			shader->setUniform3f("material.specularColor", specular_color.x, specular_color.y, specular_color.z);
-			shader->setUniform3f("material.ambientColor", ambient_color.x, ambient_color.y, ambient_color.z);
+		/*	shader->setUniform3f("material.specularColor", specular_color.x, specular_color.y, specular_color.z);
+			shader->setUniform3f("material.ambientColor", ambient_color.x, ambient_color.y, ambient_color.z);*/
 
 			shader->setUniform1f("material.shininess", shininess);
-			shader->setUniform1f("material.shininess_strength", shininess_strength);
-			shader->setUniform1f("material.normal_strength", normal_strength);
+			//shader->setUniform1f("material.shininess_strength", shininess_strength);
+			//shader->setUniform1f("material.normal_strength", normal_strength);
 
 			shader->setUniform1i("material.hasDiffuse", (int)hasDiffuseMap());
-			shader->setUniform1i("material.hasSpecular", (int)hasSpecularMap());
-			shader->setUniform1i("material.hasNormal", (int)hasNormalMap());
+			//shader->setUniform1i("material.hasSpecular", (int)hasSpecularMap());
+			//shader->setUniform1i("material.hasNormal", (int)hasNormalMap());
 
-			shader->setUniform2f("material.diffuse_tiling", diffuse_tiling);
-			shader->setUniform2f("material.specular_tiling", specular_tiling);
-			shader->setUniform2f("material.normal_tiling", normal_tiling);
+			//shader->setUniform2f("material.diffuse_tiling", diffuse_tiling);
+			//shader->setUniform2f("material.specular_tiling", specular_tiling);
+			//shader->setUniform2f("material.normal_tiling", normal_tiling);
 		}
 	}
 

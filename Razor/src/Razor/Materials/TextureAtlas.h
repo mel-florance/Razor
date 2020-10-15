@@ -40,18 +40,26 @@ namespace Razor
 	private:
 		inline const glm::vec4 calculateGridPos(unsigned int x, unsigned int y)
 		{
-			int w = getWidth(), h = getHeight();
+			int w = getWidth(), 
+				h = getHeight();
+
+			glm::vec2 pos = glm::vec2(
+				size.x * y, 
+				size.y * x
+			);
+
+			pos.x += offset.x * y;
+			pos.y += offset.y * x;
 
 			return glm::vec4(
-				(min.x + size.x * y) / w,
-				(min.y + size.y * x) / h,
-				(max.x + size.x * y) / w,
-				(max.y + size.y * x) / h
+				pos.x / w,
+				pos.y / h,
+				(pos.x + size.x) / w,
+				(pos.y + size.y) / h
 			);
 		}
 
-		glm::vec2 min;
-		glm::vec2 max;
+		glm::vec2 offset;
 		glm::vec2 size;
 
 		std::unordered_map<std::string, glm::uvec2> items_coords;

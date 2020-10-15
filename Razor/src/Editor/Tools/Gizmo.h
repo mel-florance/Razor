@@ -14,7 +14,7 @@ namespace Razor
 		Gizmo(Editor* editor);
 		~Gizmo();
 
-		void update();
+		void update(float delta);
 
 		inline std::shared_ptr<Node> getNodePtr() { return node_ptr; }
 		inline glm::vec2& getViewportPosition() { return viewport_position; }
@@ -29,6 +29,8 @@ namespace Razor
 		inline glm::vec3 getBoundsSnap() { return bounds_snap; }
 		inline Camera* getCamera() { return camera; }
 		inline bool isAxisYflipped() { return axis_y_flipped; }
+		inline bool isHovered() { return is_hovered; }
+		inline bool isUsing() { return is_using; }
 
 		inline void setNodePtr(std::shared_ptr<Node> node) { node_ptr = node; }
 		inline void setViewportPosition(const glm::vec2& position) {viewport_position = position; }
@@ -55,6 +57,8 @@ namespace Razor
 		bool bound_sizing = false;
 		bool bound_sizing_snap = false;
 		bool axis_y_flipped;
+		bool is_hovered;
+		bool is_using;
 		glm::mat4 delta_matrix;
 		glm::vec3 snap;
 		glm::mat2x3 bounds;

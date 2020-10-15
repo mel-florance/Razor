@@ -10,13 +10,13 @@
 
 namespace Razor
 {
-	Raycast::Raycast(Window* window, Camera* camera, const glm::mat4& projection) : 
+	Raycast::Raycast(Window& window, Camera* camera) : 
 		window(window),
 		camera(camera),
-		projection(projection),
+		projection(camera->getProjectionMatrix()),
 		view(camera->getViewMatrix())
 	{
-		viewport = glm::vec2(window->GetWidth(), window->GetHeight());
+		viewport = glm::vec2(window.GetWidth(), window.GetHeight());
 	}
 
 	Raycast::~Raycast()
@@ -49,7 +49,7 @@ namespace Razor
 		return glm::normalize(glm::vec3(coords.x, coords.y, coords.z));
 	}
 
-	bool Raycast::intersects(const BoundingBox& box)
+	bool Raycast::intersects(const AABB& box)
 	{
 		glm::vec3 r = computeRay();
 		glm::vec3 p = camera->getPosition();
@@ -80,16 +80,16 @@ namespace Razor
 		view = camera->getViewMatrix();
 
 		double x, y;
-		glfwGetCursorPos((GLFWwindow*)window->GetNativeWindow(), &x, &y);
+		glfwGetCursorPos((GLFWwindow*)window.GetNativeWindow(), &x, &y);
 
-		mouse = glm::vec2(x, -y); // Maybe return -y ? 
+		mouse = glm::vec2(x, y); // Maybe return -y ? 
 
-		Tools* tools = (Tools*)Application::Get().getEditor()->getComponents()["Tools"];
+		//Tools* tools = (Tools*)Application::Get().getEditor()->getComponents()["Tools"];
 
-		if (tools != nullptr) {
-			mouse.x -= tools->getSize().x;
-			mouse.y -= 22.0f;
-		}
+		//if (tools != nullptr) {
+		//	mouse.x -= tools->getSize().x;
+		//	mouse.y -= 22.0f;
+		//}
 
 		glm::vec2 coords = getNormalizedCoords(mouse);
 
@@ -114,7 +114,7 @@ namespace Razor
 
 	glm::vec3 Raycast::scaleRay(float distance)
 	{
-		return camera->getPosition() + ray * distance;
+		return ray * distance;
 	}
 
 }

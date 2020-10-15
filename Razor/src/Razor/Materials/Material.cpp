@@ -11,9 +11,21 @@ namespace Razor {
 		has_diffuse(false),
 		has_specular(false),
 		has_normal(false),
+		has_metallic(false),
+		has_roughness(false),
+		has_ao(false),
+		has_orm(false),
+		has_opacity(false),
+		has_emissive(false),
 		diffuse_path("Not set"),
 		specular_path("Not set"),
-		normal_path("Not set")
+		normal_path("Not set"),
+		metallic_path("Not set"),
+		roughness_path("Not set"),
+		ao_path("Not set"),
+		orm_path("Not set"),
+		opacity_path("Not set"),
+		emissive_path("Not set")
 	{
 
 	}
@@ -36,6 +48,7 @@ namespace Razor {
 					std::shared_ptr<Directional> directional = std::dynamic_pointer_cast<Directional>(light);
 					paramType = "directionalLights";
 
+					shader->setUniform3f(formatParamName(paramType, dIdx, "position"), directional->getPosition());
 					shader->setUniform3f(formatParamName(paramType, dIdx, "direction"), directional->getDirection());
 					shader->setUniform3f(formatParamName(paramType, dIdx, "ambient"), directional->getAmbient());
 					shader->setUniform3f(formatParamName(paramType, dIdx, "diffuse"), directional->getDiffuse());
@@ -94,6 +107,12 @@ namespace Razor {
 			case TextureType::Diffuse  : has_diffuse  = true; break;
 			case TextureType::Specular : has_specular = true; break;
 			case TextureType::Normal : has_normal = true; break;
+			case TextureType::Metallic : has_metallic = true; break;
+			case TextureType::Roughness : has_roughness = true; break;
+			case TextureType::Ao : has_ao = true; break;
+			case TextureType::Orm : has_orm = true; break;
+			case TextureType::Opacity : has_opacity = true; break;
+			case TextureType::Emissive : has_emissive = true; break;
 		}
 
 		textures_maps[type] = id;
@@ -110,6 +129,12 @@ namespace Razor {
 				case TextureType::Diffuse: has_diffuse = false; break;
 				case TextureType::Specular: has_specular = false; break;
 				case TextureType::Normal: has_normal = false; break;
+				case TextureType::Metallic: has_metallic = false; break;
+				case TextureType::Roughness: has_roughness = false; break;
+				case TextureType::Ao: has_ao = false; break;
+				case TextureType::Orm: has_orm = false; break;
+				case TextureType::Opacity: has_opacity = false; break;
+				case TextureType::Emissive: has_emissive = false; break;
 			}
 
 			textures_maps.erase(it);

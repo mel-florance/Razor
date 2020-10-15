@@ -21,7 +21,18 @@ namespace Razor {
 	class RAZOR_API Application
 	{
 	public:
-		Application(bool headless = false);
+
+		enum class Type {
+			CLIENT,
+			SERVER,
+			EDITOR
+		};
+
+		Application(
+			bool headless = false,
+			Type applicationType = Type::CLIENT,
+			const WindowProps& props = WindowProps()
+		);
 		virtual ~Application();
 		void run();	
 		void OnEvent(Event& e);
@@ -31,13 +42,14 @@ namespace Razor {
 		void PushOverlay(Layer* layer);
 
 		inline Window& GetWindow() { return *m_Window; }
+		inline Window* GetWindowPtr() { return m_Window.get(); }
 		inline static Application& Get() { return *s_Instance; }
 		inline Editor* getEditor() { return m_Editor; }
+		inline Engine* getEngine() { return m_Engine; }
 		ScenesManager* getScenesManager();
 		inline LayerStack& getLayerStack() { return m_LayerStack; }
 		inline ImGuiLayer* getImGuiLayer() { return m_ImGuiLayer; }
 
-		ForwardRenderer* getForwardRenderer();
 		static Editor* m_Editor;
 
 	private:
@@ -53,6 +65,8 @@ namespace Razor {
 
 		static Application* s_Instance;
 		bool headless;
+		bool is_editor;
+		WindowProps m_windowProps;
 	};
 
 	Application* createApplication();

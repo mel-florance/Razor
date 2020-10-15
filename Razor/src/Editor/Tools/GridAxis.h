@@ -12,12 +12,6 @@ namespace Razor
 	class GridAxis : public EditorTool
 	{
 	public:
-		GridAxis(Editor* editor);
-		~GridAxis();
-
-		inline std::shared_ptr<Node> getGridNode() { return grid_node; }
-		inline std::shared_ptr<Node> getAxisNode() { return axis_node; }
-
 		struct Axis
 		{
 			Axis(int size = 8);
@@ -30,6 +24,12 @@ namespace Razor
 			std::shared_ptr<ColorMaterial> y_material;
 			std::shared_ptr<ColorMaterial> z_material;
 		};
+
+		GridAxis(Editor* editor);
+		~GridAxis();
+
+		inline std::shared_ptr<Node> getGridNode() { return grid_node; }
+		inline std::shared_ptr<Node> getAxisNode() { return axis_node; }
 
 	private:
 		bool show_grid;
