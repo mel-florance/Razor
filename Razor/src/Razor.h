@@ -46,10 +46,12 @@
 #include "Razor/Input/KeyCodes.h"
 #include "Razor/Core/Engine.h"
 #include "Razor/Core/System.h"
+
 #include "Razor/Network/Network.h"
 #include "Razor/Network/TCPServer.h"
 #include "Razor/Network/Socket.h"
 #include "Razor/Network/TCPClient.h"
+#include "Razor/Network/Protocol.h"
 
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>

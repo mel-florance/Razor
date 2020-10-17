@@ -12,7 +12,6 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-
 #include "Razor/ImGui/ImGuizmo.h"
 #include "imgui_internal.h"
 
@@ -42,9 +41,9 @@ namespace Razor {
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-		io.Fonts->AddFontFromFileTTF("./data/fonts/Roboto-Medium.ttf", 24.0f);
-		io.Fonts->AddFontFromFileTTF("./data/fonts/consola.ttf", 16.0f);
-		//io.Fonts->AddFontFromFileTTF("./data/fonts/Cousine-Regular.ttf", 15.0f);
+		//io.Fonts->AddFontFromFileTTF("./data/fonts/Roboto-Medium.ttf", 20.0f);
+		//io.Fonts->AddFontFromFileTTF("./data/fonts/consola.ttf", 16.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/Cousine-Regular.ttf", 15.0f);
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/DroidSans.ttf", 16.0f);
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/ProggyTiny.ttf", 10.0f);
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/ProggyClean.ttf", 10.0f);

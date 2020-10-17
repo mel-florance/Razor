@@ -70,13 +70,14 @@ namespace Razor {
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		RZ_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(false);
+		SetVSync(true);
 
-		//Texture* icon = new Texture("./data/logo32x32.png", false, false);
-		//GLFWimage* img = new GLFWimage();
-		//img->width = img->height = 32;
-		//img->pixels = icon->getData();
-		//glfwSetWindowIcon(m_Window, 1, img);
+		Texture* icon = new Texture("./data/logo32x32.png", false, false);
+		GLFWimage* img = new GLFWimage();
+		img->width = 32;
+		img->height = 32;
+		img->pixels = icon->getData();
+		glfwSetWindowIcon(m_Window, 1, img);
 
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{

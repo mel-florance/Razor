@@ -22,7 +22,6 @@ IncludeDir["lua"] = "Razor/vendor/lua/include"
 IncludeDir["bullet"] = "Razor/vendor/bullet/include"
 IncludeDir["openal"] = "Razor/vendor/openal/include"
 IncludeDir["opencv"] = "Razor/vendor/opencv/include"
-IncludeDir["protobuff"] = "Razor/vendor/protobuff"
 
 include "Razor/vendor/GLFW"
 include "Razor/vendor/Glad"	
@@ -45,11 +44,11 @@ project "Razor"
 	files
 	{
 		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cc",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 		"%{prj.name}/vendor/assimp/include/**",
-		"%{prj.name}/vendor/**.inc"
 	}
 
 	includedirs
@@ -65,7 +64,6 @@ project "Razor"
 		"%{IncludeDir.bullet}",
 		"%{IncludeDir.openal}",
 		"%{IncludeDir.opencv}",
-		--"%{IncludeDir.protobuff}",
 		"%{prj.name}/vendor/assimp/include",
 		"%{prj.name}/vendor/assimp/build/include"
 	}
@@ -76,7 +74,6 @@ project "Razor"
 		"%{prj.name}/vendor/bullet/lib",
 		"%{prj.name}/vendor/openal",
 		"%{prj.name}/vendor/opencv",
-		--"%{prj.name}/vendor/protobuff"
 	}
 
 	links
@@ -88,7 +85,6 @@ project "Razor"
 		"assimp",
 		"lua53.lib",
 		"OpenAL32.lib",
-		--"libprotobuf-lite.lib"
 	}
 
 	filter "system:windows"

@@ -207,6 +207,7 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Razor\Maths\sha512.h" />
     <ClInclude Include="src\Editor\Components\AssetsManager.h" />
     <ClInclude Include="src\Editor\Components\Console.h" />
     <ClInclude Include="src\Editor\Components\EditorView.h" />
@@ -837,6 +838,7 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Razor\Maths\sha512.cpp" />
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp" />
     <ClCompile Include="src\Editor\Components\Console.cpp" />
     <ClCompile Include="src\Editor\Components\EditorView.cpp" />
@@ -1013,13 +1015,6 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig" />
     <None Include="vendor\assimp\include\assimp\config.h.in" />
-    <None Include="vendor\protobuff\google\protobuff\compiler\cpp\cpp_unittest.inc" />
-    <None Include="vendor\protobuff\google\protobuff\map_test_util.inc" />
-    <None Include="vendor\protobuff\google\protobuff\message_unittest.inc" />
-    <None Include="vendor\protobuff\google\protobuff\port_def.inc" />
-    <None Include="vendor\protobuff\google\protobuff\port_undef.inc" />
-    <None Include="vendor\protobuff\google\protobuff\proto3_lite_unittest.inc" />
-    <None Include="vendor\protobuff\google\protobuff\test_util.inc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

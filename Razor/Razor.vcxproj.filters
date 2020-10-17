@@ -178,21 +178,6 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendor\protobuff">
-      <UniqueIdentifier>{19EED93D-05E7-F88F-2E19-DE141A71D89B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\protobuff\google">
-      <UniqueIdentifier>{A5BA5B70-11F2-A307-1AFC-072B86B2CA00}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\protobuff\google\protobuff">
-      <UniqueIdentifier>{8B0B678F-F779-BC0E-4063-770EAC10B2AA}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\protobuff\google\protobuff\compiler">
-      <UniqueIdentifier>{751377A0-617B-3D6E-CAE6-5184B66D545A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\protobuff\google\protobuff\compiler\cpp">
-      <UniqueIdentifier>{C73F2964-B3BD-79FD-9CB5-379588D2BB25}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Editor\Components\AssetsManager.h">
@@ -628,6 +613,12 @@
       <Filter>src\Razor\Network</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Network\Network.h">
+      <Filter>src\Razor\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Network\Packet.h">
+      <Filter>src\Razor\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razor\Network\Protocol.h">
       <Filter>src\Razor\Network</Filter>
     </ClInclude>
     <ClInclude Include="src\Razor\Network\Socket.h">
@@ -2073,8 +2064,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Network\Protocol.h" />
-    <ClInclude Include="src\Razor\Network\Packet.h" />
+    <ClInclude Include="src\Razor\Maths\sha512.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -2473,6 +2463,12 @@
     <ClCompile Include="src\Razor\Network\Network.cpp">
       <Filter>src\Razor\Network</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Network\Packet.cpp">
+      <Filter>src\Razor\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razor\Network\Protocol.cpp">
+      <Filter>src\Razor\Network</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Network\Socket.cpp">
       <Filter>src\Razor\Network</Filter>
     </ClCompile>
@@ -2575,8 +2571,7 @@
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Network\Protocol.cpp" />
-    <ClCompile Include="src\Razor\Network\Packet.cpp" />
+    <ClCompile Include="src\Razor\Maths\sha512.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">
@@ -2584,27 +2579,6 @@
     </None>
     <None Include="vendor\assimp\include\assimp\config.h.in">
       <Filter>vendor\assimp\include\assimp</Filter>
-    </None>
-    <None Include="vendor\protobuff\google\protobuff\compiler\cpp\cpp_unittest.inc">
-      <Filter>vendor\protobuff\google\protobuff\compiler\cpp</Filter>
-    </None>
-    <None Include="vendor\protobuff\google\protobuff\map_test_util.inc">
-      <Filter>vendor\protobuff\google\protobuff</Filter>
-    </None>
-    <None Include="vendor\protobuff\google\protobuff\message_unittest.inc">
-      <Filter>vendor\protobuff\google\protobuff</Filter>
-    </None>
-    <None Include="vendor\protobuff\google\protobuff\port_def.inc">
-      <Filter>vendor\protobuff\google\protobuff</Filter>
-    </None>
-    <None Include="vendor\protobuff\google\protobuff\port_undef.inc">
-      <Filter>vendor\protobuff\google\protobuff</Filter>
-    </None>
-    <None Include="vendor\protobuff\google\protobuff\proto3_lite_unittest.inc">
-      <Filter>vendor\protobuff\google\protobuff</Filter>
-    </None>
-    <None Include="vendor\protobuff\google\protobuff\test_util.inc">
-      <Filter>vendor\protobuff\google\protobuff</Filter>
     </None>
   </ItemGroup>
 </Project>

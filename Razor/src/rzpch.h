@@ -34,6 +34,8 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
+#include <streambuf>
+
 #include "Razor/Types/Array.h"
 #include "Razor/Types/Variant.h"
 #include "Razor/Core/Log.h"

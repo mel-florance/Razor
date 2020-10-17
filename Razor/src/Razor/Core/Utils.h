@@ -22,8 +22,7 @@ namespace Razor
 
 		static void initColumns(float size);
 
-		static inline glm::vec4 lerp(const glm::vec4& a, const glm::vec4& b, float time)
-		{
+		static inline glm::vec4 lerp(const glm::vec4& a, const glm::vec4& b, float time) {
 			return glm::vec4(
 				a.x + (b.x - a.x) * time,
 				a.y + (b.y - a.y) * time,
@@ -32,8 +31,7 @@ namespace Razor
 			);
 		}
 
-		static inline glm::vec3 lerp(const glm::vec3& a, const glm::vec3& b, float time)
-		{
+		static inline glm::vec3 lerp(const glm::vec3& a, const glm::vec3& b, float time) {
 			return glm::vec3(
 				a.x + (b.x - a.x) * time,
 				a.y + (b.y - a.y) * time,
@@ -41,21 +39,18 @@ namespace Razor
 			);
 		}
 
-		static inline glm::vec2 lerp(const glm::vec2& a, const glm::vec2& b, float time)
-		{
+		static inline glm::vec2 lerp(const glm::vec2& a, const glm::vec2& b, float time) {
 			return glm::vec2(
 				a.x + (b.x - a.x) * time,
 				a.y + (b.y - a.y) * time
 			);
 		}
 
-		static inline float lerp(float a, float b, float time)
-		{
+		static inline float lerp(float a, float b, float time) {
 			return a + (b - a) * time;
 		}
 
-		static inline std::string& ltrim(std::string& str)
-		{
+		static inline std::string& ltrim(std::string& str) {
 			size_t start = str.find_first_not_of(" \t\r\n\v\f");
 		
 			if (std::string::npos != start)
@@ -68,8 +63,7 @@ namespace Razor
 			return ltrim(rtrim(str));
 		}
 
-		static inline std::string& rtrim(std::string& str)
-		{
+		static inline std::string& rtrim(std::string& str) {
 			size_t end = str.find_last_not_of(" \t\r\n\v\f");
 
 			if (std::string::npos != end)
@@ -78,8 +72,24 @@ namespace Razor
 			return str;
 		}
 
-		static inline std::vector<std::string> splitPath(const std::string& str, const std::set<char> delimiters)
-		{
+		static inline std::string random_string(size_t length) {
+			auto randchar = []() -> char {
+				const char charset[] =
+					"0123456789"
+					"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+					"abcdefghijklmnopqrstuvwxyz";
+				const size_t max_index = (sizeof(charset) - 1);
+
+				return charset[rand() % max_index];
+			};
+
+			std::string str(length, 0);
+			std::generate_n(str.begin(), length, randchar);
+
+			return str;
+		}
+
+		static inline std::vector<std::string> splitPath(const std::string& str, const std::set<char> delimiters) {
 			std::vector<std::string> result;
 
 			char const* pch = str.c_str();
@@ -103,8 +113,7 @@ namespace Razor
 			return result;
 		}
 
-		static inline std::vector<std::string> splitString(const std::string& str, const std::string& delimiter)
-		{
+		static inline std::vector<std::string> splitString(const std::string& str, const std::string& delimiter) {
 			std::vector<std::string> strings;
 			std::string::size_type pos = 0;
 			std::string::size_type prev = 0;
@@ -120,8 +129,7 @@ namespace Razor
 			return strings;
 		}
 
-		static inline std::string joinStrings(const std::vector<std::string>& str, const std::string& delimiter = ",")
-		{
+		static inline std::string joinStrings(const std::vector<std::string>& str, const std::string& delimiter = ",") {
 			std::ostringstream stream;
 			for (auto& i : str)
 			{
@@ -134,16 +142,14 @@ namespace Razor
 			return stream.str();
 		}
 
-		static inline int getFileSize(const std::string& filename) 
-		{
+		static inline int getFileSize(const std::string& filename)  {
 			std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
 			int size = (int)in.tellg();
 			in.close();
 			return size;
 		};
 
-		static inline std::string bytesToSize(uint64_t size)
-		{
+		static inline std::string bytesToSize(uint64_t size) {
 			char* suffix[] = { "B", "KB", "MB", "GB", "TB" };
 			char length = sizeof(suffix) / sizeof(suffix[0]);
 
@@ -163,15 +169,24 @@ namespace Razor
 			return std::string(output);
 		}
 
-		static inline std::string remove_extension(const std::string& filename)
-		{
+		static inline std::string pad(int value, int n = 1) {
+			std::string str;
+
+			for (unsigned int i = 0; i < n; ++i)
+				str += "0";
+
+			auto v = std::to_string(value);
+
+			return value <= 9 ? str + v : v;
+		};
+
+		static inline std::string remove_extension(const std::string& filename) {
 			size_t lastdot = filename.find_last_of(".");
 			if (lastdot == std::string::npos) return filename;
 			return filename.substr(0, lastdot);
 		}
 
-		static void gen_random(char* str, const int len)
-		{
+		static void gen_random(char* str, const int len) {
 			static const char alphanum[] =
 				"0123456789"
 				"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -183,8 +198,7 @@ namespace Razor
 			str[len] = 0;
 		}
 
-		static float randomf(float a, float b)
-		{
+		static float randomf(float a, float b) {
 			float random = ((float)rand()) / (float)RAND_MAX;
 			float diff = b - a;
 			float r = random * diff;
@@ -192,8 +206,7 @@ namespace Razor
 			return a + r;
 		}
 
-		static glm::vec2 randomPointInCircle(const glm::vec2& center, float radius)
-		{
+		static glm::vec2 randomPointInCircle(const glm::vec2& center, float radius) {
 			float r = radius * sqrt(rand() / (float)(RAND_MAX));
 			float theta = rand() / (float)(RAND_MAX) * 2 * PI;
 
@@ -203,18 +216,15 @@ namespace Razor
 			);
 		}
 
-		static inline float mapValues(float rangeA[], float rangeB[], float value, unsigned int size = 2)
-		{
+		static inline float mapValues(float rangeA[], float rangeB[], float value, unsigned int size = 2) {
 			return (value - rangeA[0]) * (rangeB[1] - rangeB[0]) / (rangeA[1] - rangeA[0]) + rangeB[0];
 		}
 
-		static inline double mapValues(double rangeA[], double rangeB[], double value, unsigned int size = 2)
-		{
+		static inline double mapValues(double rangeA[], double rangeB[], double value, unsigned int size = 2) {
 			return (value - rangeA[0]) * (rangeB[1] - rangeB[0]) / (rangeA[1] - rangeA[0]) + rangeB[0];
 		}
 
-		static char* cpToUTF8(int cp, char* str)
-		{
+		static char* cpToUTF8(int cp, char* str) {
 			int n = 0;
 
 			if (cp < 0x80) n = 1;
@@ -239,8 +249,7 @@ namespace Razor
 		}
 
 		template <typename F, typename T>
-		static void copyMatrix(F& from, T& to)
-		{
+		static void copyMatrix(F& from, T& to) {
 			to[0][0] = from.a1; to[1][0] = from.a2;
 			to[2][0] = from.a3; to[3][0] = from.a4;
 			to[0][1] = from.b1; to[1][1] = from.b2;
@@ -251,8 +260,7 @@ namespace Razor
 			to[2][3] = from.d3; to[3][3] = from.d4;
 		}
 
-		static std::string fileDialog(int flags = OFN_FILEMUSTEXIST)
-		{
+		static std::string fileDialog(int flags = OFN_FILEMUSTEXIST) {
 			OPENFILENAMEA ofn;
 			ZeroMemory(&ofn, sizeof(ofn));
 			wchar_t buffer[MAX_PATH] = L"";
@@ -271,14 +279,12 @@ namespace Razor
 			return GetOpenFileNameA(&ofn) ? std::string(ofn.lpstrFile) : "";
 		}
 
-		static std::string folderDialog()
-		{
+		static std::string folderDialog() {
 			return fileDialog(OFN_PATHMUSTEXIST);
 		}
 
 		template<class T>
-		static std::string numberFormatLocale(T value, char sep = ' ')
-		{
+		static std::string numberFormatLocale(T value, char sep = ' ') {
 			struct Numpunct : public std::numpunct<char> 
 			{
 				Numpunct(char separator) : separator(separator) {}

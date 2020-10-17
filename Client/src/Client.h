@@ -16,12 +16,23 @@ namespace Razor {
 	class TestLayer : public Razor::Layer
 	{
 	public:
+		enum MenuState {
+			CONNECT,
+			INGAME
+		};
+
 		TestLayer(Razor::ScenesManager* sceneManager, Razor::Engine* engine);
 
 		void OnUpdate(float delta);
 		void OnAttach();
 		void OnImGuiRender();
 		void OnEvent(Razor::Event& event);
+
+		void Send();
+		void Login();
+
+		void display_connect();
+		void display_game();
 
 		Razor::ScenesManager* sm;
 		Razor::Engine* engine;
@@ -32,7 +43,11 @@ namespace Razor {
 		bool connected;
 		char input_host[15];
 		char input_port[6];
+		char input_name[20];
 		char input_message[128];
+		bool scrollToBottom;
+		TCPClient::Message* lastMessage;
+		MenuState current_state;
 	};
 
 }
