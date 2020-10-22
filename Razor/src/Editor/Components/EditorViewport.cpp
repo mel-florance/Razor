@@ -76,8 +76,6 @@ namespace Razor
 
 		ImGui::Begin("Viewport", &viewport->isVisible(), flags);
 
-	
-
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("Properties"))

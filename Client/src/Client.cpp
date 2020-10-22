@@ -2,14 +2,77 @@
 
 #include "Razor/Cameras/FPSCamera.h"
 #include "Razor/Scene/ScenesManager.h"
+#include "Razor/Network/Packet.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
+#include "Controllers/LobbyController.h"
+#include "Controllers/MultiplayerController.h"
+
+static const std::array<const char*, 5> game_modes_str()
+{
+	return {
+		"Casual",
+		"Competitive",
+		"Deathmatch",
+		"Arms race",
+		"Battle Royale"
+	};
+}
+
+static std::unordered_map<uint32_t, std::string> maps = {
+	{0, "Hangar"},
+	{1, "City"},
+	{2, "Port"},
+	{3, "Building"},
+};
+
+static const std::vector<const char*> maps_str() {
+	std::vector<const char*> out;
+
+	for (auto it = maps.begin(); it != maps.end(); ++it) {
+		out.push_back(it->second.c_str());
+	}
+
+	return out;
+}
+
+static std::string get_map_name(uint32_t map) {
+	auto it = maps.find(map);
+
+	if (it != maps.end()) {
+		return it->second;
+	}
+
+	return std::to_string(map);
+}
+
+static uint32_t get_map_from_name(const char* name) {
+	for (auto it = maps.begin(); it != maps.end(); ++it) {
+		if (it->second == name) {
+			return it->first;
+		}
+	}
+
+	return 0;
+}
+
+static uint32_t get_mode_from_name(const char* name) {
+	auto names = game_modes_str();
+
+	for (unsigned int i = 0; i < 5; ++i) {
+		if (names.at(i) == name) {
+			return i;
+		}
+	}
+
+	return 0;
+}
+
+
 
 namespace Razor {
 
 	Client::Client() :
-		Application(false, Application::Type::CLIENT, WindowProps("Razor Client", 800.0f, 600.0f))
+		Application(false, Application::Type::CLIENT, WindowProps("Razor Client"))
 	{
 		Razor::ScenesManager* sm = this->getScenesManager();
 		Razor::Engine* engine = this->getEngine();
@@ -30,6 +93,9 @@ namespace Razor {
 	{
 	}
 
+	Controller::State TestLayer::current_state = Controller::State::MAIN_MENU;
+	std::unordered_map<std::string, std::shared_ptr<Controller>> TestLayer::controllers = {};
+
 	TestLayer::TestLayer(Razor::ScenesManager* sceneManager, Razor::Engine* engine) :
 		Layer("Test"),
 		sm(sceneManager),
@@ -39,19 +105,26 @@ namespace Razor {
 		input_port("55555"),
 		input_message(""),
 		input_name("Guest"),
-		scrollToBottom(false),
-		current_state(MenuState::CONNECT)
+		main_menu_button_size(ImVec2(200, 0))
 	{
-		client = std::make_unique<TCPClient>();
+		ui_textures["logo"] = new Razor::Texture("./data/logo.png", true);
+		ui_textures["background"] = new Razor::Texture("./data/background.jpg", true);
 
-		logo = new Razor::Texture("./data/logo.png", true);
+		client = std::make_shared<TCPClient>();
+		controllers["lobby"] = std::make_shared<LobbyController>(client, ui_textures);
+		controllers["multiplayer"] = std::make_shared<MultiplayerController>(client, ui_textures);
 
-		//tutorial::AddressBook book;
+		client->bind(PacketType::LOGIN_RESPONSE, &MultiplayerController::onLoginResponse);
+		client->bind(PacketType::GAME_CREATED, &LobbyController::onGameCreated);
+		client->bind(PacketType::PLAYER_READY, &LobbyController::onPlayerReady);
 	}
 
 	void TestLayer::OnUpdate(float delta)
 	{
-
+		for (auto it = controllers.begin(); it != controllers.end(); ++it) {
+			if (it->second->state == current_state);
+				it->second->OnUpdate(delta);
+		}
 	}
 
 	void TestLayer::OnAttach()
@@ -60,26 +133,26 @@ namespace Razor {
 	}
 
 	void TestLayer::OnEvent(Razor::Event& event) {
-
+		for (auto it = controllers.begin(); it != controllers.end(); ++it) {
+			if (it->second->state == current_state);
+			it->second->OnEvent(event);
+		}
 	}
 
 	void TestLayer::Send() {
-		PacketChatMessage packet;
-		std::strncpy(packet.message, input_message, sizeof(PacketChatMessage::message));
+		ChatMessage packet;
+		std::strncpy(packet.message, input_message, sizeof(ChatMessage::message));
 		packet.id = PacketType::CHAT_MESSAGE;
-		packet.size = sizeof(PacketChatMessage);
+		packet.size = sizeof(ChatMessage);
 		client->emit(client->handle, packet);
 
 		memset(input_message, 0, 128);
 		scrollToBottom = true;
 	}
 
-	void TestLayer::Login() {
-		PacketLoginRequest packet;
-		std::strncpy(packet.username, input_name, sizeof(PacketLoginRequest::username));
-		std::strncpy(packet.password, "test", sizeof(PacketLoginRequest::password));
-		packet.id = PacketType::LOGIN;
-		packet.size = sizeof(PacketLoginRequest);
+	void TestLayer::SetPlayerReady()
+	{
+		auto packet = Packet::create<MarkPlayerReady>(TCPClient::session_token);
 		client->emit(client->handle, packet);
 	}
 
@@ -89,7 +162,7 @@ namespace Razor {
 		unsigned int logo_size = 128;
 
 		ImGui::SetCursorPosX((ImGui::GetWindowWidth() * 0.5f) - logo_size * 0.5f);
-		ImGui::Image((void*)logo->getId(), ImVec2(logo_size, logo_size), ImVec2(), ImVec2(1, -1));
+		ImGui::Image((void*)ui_textures["logo"]->getId(), ImVec2(logo_size, logo_size), ImVec2(), ImVec2(1, -1));
 		ImGui::Dummy(ImVec2(-1, 20));
 
 		std::string text = "Welcome to the razor client!";
@@ -121,7 +194,8 @@ namespace Razor {
 				connected = client->Connect(input_host, std::stoi(input_port));
 
 				if (connected) {
-					Login();
+					//Login();
+					Application::Get().GetWindow().Maximize();
 				}
 			}
 		}
@@ -233,6 +307,52 @@ namespace Razor {
 
 	}
 
+	void TestLayer::display_main_menu()
+	{
+		ImGui::Image((void*)ui_textures["background"]->getId(), ImGui::GetWindowSize(), ImVec2(), ImVec2(1, -1));
+		ImGui::SetCursorPosY(ImGui::GetWindowSize().y - 90);
+
+		ImGui::SetCursorPosX(20);
+		if (ImGui::Button("MULTIPLAYER", main_menu_button_size)) {
+			if (connected) {
+				//RefreshGames();
+			}
+			current_state = Controller::State::GAMES_LIST;
+		}
+
+		ImGui::SetCursorPosX(20);
+		if (ImGui::Button("OPTIONS", main_menu_button_size)) {
+			current_state = Controller::State::OPTIONS;
+		}
+
+		ImGui::SetCursorPosX(20);
+		if (ImGui::Button("QUIT", main_menu_button_size)) {
+			Application::Get().close();
+		}
+	}
+
+	void TestLayer::display_options()
+	{
+		ImGui::Image((void*)ui_textures["background"]->getId(), ImGui::GetWindowSize(), ImVec2(), ImVec2(1, -1));
+
+		ImGui::SetCursorPosX(20);
+		ImGui::SetCursorPosY(20);
+
+		ImGuiIO& io = ImGui::GetIO();
+		ImFont* font = io.Fonts->Fonts[1];
+
+		ImGui::PushFont(font);
+		ImGui::Text("OPTIONS");
+		ImGui::PopFont();
+
+		ImGui::SetCursorPosX(20);
+		ImGui::SetCursorPosY(ImGui::GetWindowSize().y - 36);
+
+		if (ImGui::Button("BACK", main_menu_button_size)) {
+			current_state = Controller::State::MAIN_MENU;
+		}
+	}
+
 	void TestLayer::OnImGuiRender()
 	{
 		ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -243,15 +363,29 @@ namespace Razor {
 		bool p_open;
 		static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_DockNodeHost | ImGuiWindowFlags_NoResize;
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20.0f, 0.0f));
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		ImGui::Begin("Razor Client", &p_open, window_flags);
 		ImGui::PopStyleVar();
 
+		for (auto it = controllers.begin(); it != controllers.end(); ++it) {
+			if (it->second->state == current_state)
+				it->second->OnRender();
+		}
+			
 		switch (current_state) {
-		case MenuState::CONNECT:
+		case Controller::State::MAIN_MENU:
+			display_main_menu();
+			break;
+		case Controller::State::OPTIONS:
+			display_options();
+			break;
+		case Controller::State::CONNECT:
 			display_connect();
-		case MenuState::INGAME:
+			break;
+		case Controller::State::GAME:
 			display_game();
+			break;
 		}
 
 		ImGui::End();

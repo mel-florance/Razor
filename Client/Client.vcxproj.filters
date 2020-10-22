@@ -1,10 +1,70 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Client.cpp" />
+    <Filter Include="Controllers">
+      <UniqueIdentifier>{7C21CA00-E8D6-42F6-71CB-3CCDDD7F39FA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{A9FC10E8-95B4-5235-FEBB-2B91EA92ED25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Client.h" />
+    <ClInclude Include="src\Controller.h" />
+    <ClInclude Include="src\Controllers\LobbyController.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controllers\MultiplayerController.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interface.h" />
+    <ClInclude Include="src\Interfaces\Connect.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interfaces\Game.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interfaces\Lobby.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interfaces\MainMenu.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interfaces\Multiplayer.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interfaces\Options.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Client.cpp" />
+    <ClCompile Include="src\Controller.cpp" />
+    <ClCompile Include="src\Controllers\LobbyController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controllers\MultiplayerController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Interface.cpp" />
+    <ClCompile Include="src\Interfaces\Connect.cpp">
+      <Filter>Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Interfaces\Game.cpp">
+      <Filter>Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Interfaces\Lobby.cpp">
+      <Filter>Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Interfaces\MainMenu.cpp">
+      <Filter>Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Interfaces\Multiplayer.cpp">
+      <Filter>Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Interfaces\Options.cpp">
+      <Filter>Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
 </Project>

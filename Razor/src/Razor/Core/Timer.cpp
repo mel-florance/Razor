@@ -23,7 +23,9 @@ namespace Razor {
 	double Timer::report(double divisor)
 	{
 		divisor = (divisor == 0) ? m_calls : divisor;
-		double result = (m_totalTime == 0 && divisor == 0.0) ? 0.0 : (1000.0 * m_totalTime) / ((double)divisor);
+		double result = (m_totalTime == 0 && divisor == 0.0) 
+			? 0.0 
+			: (1000.0 * m_totalTime) / ((double)divisor);
 
 		m_totalTime = 0.0;
 		m_calls = 0;

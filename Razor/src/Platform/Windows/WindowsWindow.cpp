@@ -204,4 +204,9 @@ namespace Razor {
 		return m_Data.VSync;
 	}
 
+	void WindowsWindow::Maximize() const
+	{
+		glfwMaximizeWindow(m_Window);
+	}
+
 }

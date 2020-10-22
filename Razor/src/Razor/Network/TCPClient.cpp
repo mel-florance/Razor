@@ -2,6 +2,7 @@
 
 #include "TCPClient.h"
 #include "Razor/Network/Packet.h"
+#include "Razor/Core/Timer.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -12,8 +13,15 @@ namespace Razor {
 
 	std::vector<TCPClient::Message> TCPClient::Messages = {};
 	std::vector<std::string> TCPClient::Clients = {};
+	std::vector<GameInfo> TCPClient::Games = {};
+	std::chrono::steady_clock::time_point TCPClient::ping_start = {};
+	unsigned int TCPClient::ping = 0;
+	uint32_t TCPClient::session_user_id = 0;
+	char TCPClient::session_token[64] = {};
 
-	TCPClient::TCPClient()
+	std::unordered_map<PacketType, TCPClient::PacketCallback> TCPClient::bindings = {};
+
+	TCPClient::TCPClient()  
 	{
 		WSAData data;
 		WORD version = MAKEWORD(2, 2);
@@ -65,6 +73,7 @@ namespace Razor {
 		HANDLE thread;
 		DWORD threadId;
 
+		timer_start = clock();
 		thread = CreateThread(NULL, 0, &ReadingThread, (void*)handle, 0, &threadId);
 
 		if (!thread) {
@@ -72,6 +81,27 @@ namespace Razor {
 			closesocket(handle);
 			return false;
 		}
+
+		std::thread hearbeat_thread([=]() {
+			while (true) {
+				if ((clock() - timer_start) / CLOCKS_PER_SEC >= 2) {
+					//std::cout << "Ping Heartbeat" << std::endl;
+
+					timer_start = clock();
+					ping_start = std::chrono::high_resolution_clock::now();
+
+					int min = 27, max = 33;
+					int range = max - min + 1;
+					int ms = rand() % range + min;
+					Sleep(ms);
+
+					auto ping = Packet::create<Ping>();
+					this->emit(this->handle, ping);
+				}
+			}
+		});
+
+		hearbeat_thread.detach();
 
 		return true;
 	}
@@ -89,15 +119,19 @@ namespace Razor {
 		}
 	}
 
+	void TCPClient::bind(PacketType type, PacketCallback callback) {
+		bindings[type] = callback;
+	}
+
 	DWORD WINAPI TCPClient::ReadingThread(LPVOID param)
 	{
 		SOCKET s = (SOCKET)param;
-		const int length = 8192;
+		const int length = 16384;
 		char buffer[length];
 		int state;
 
 		while (true) {
- 			state = recv(s, buffer, length, 0);
+		    state = recv(s, buffer, length, 0);
 
 			if (state <= 0) {
 				Log::trace("Client disconnected");
@@ -106,16 +140,21 @@ namespace Razor {
 
 			buffer[state] = '\0';
 
-			time_t curr_time;
-			curr_time = time(NULL);
-			tm* tm_local = localtime(&curr_time);
+			tm* tm_local = Utils::getLocalTime();
 
 			auto packet = reinterpret_cast<Packet*>(buffer);
 
 			if (packet != nullptr) {
-				if (packet->id == PacketType::PONG) {
+
+				for (auto it = bindings.begin(); it != bindings.end(); ++it) {
+					if (it->first == packet->id) {
+						it->second(packet);
+					}
 				}
-				else if (packet->id == PacketType::GAMES_LIST) {
+
+				if (packet->id == PacketType::PONG) {
+					auto end = std::chrono::high_resolution_clock::now();
+					TCPClient::ping = std::chrono::duration_cast<std::chrono::milliseconds>(end - ping_start).count();
 				}
 				else if (packet->id == PacketType::GAME_INFO) {
 				}
@@ -125,55 +164,145 @@ namespace Razor {
 					
 				}
 				else if (packet->id == PacketType::CLIENT_JOINED) {
-					auto response = (PacketClientJoined*)packet;
+					auto response = (ClientJoined*)packet;
 					Message message;
 					message.username = response->username;
 					message.text = "has joined the server";
 					message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
 
+					auto it = std::find(TCPClient::Clients.begin(), TCPClient::Clients.end(), response->username);
+
+					if (it == TCPClient::Clients.end()) {
+						TCPClient::Clients.push_back(response->username);
+					}
+
 					TCPClient::Messages.push_back(message);
 				}
 				else if (packet->id == PacketType::CLIENT_DISCONNECTED) {
-					auto response = (PacketClientDisconnect*)packet;
+					auto response = (ClientDisconnect*)packet;
+					auto it = std::find(TCPClient::Clients.begin(), TCPClient::Clients.end(), response->username);
+
+					if (it != TCPClient::Clients.end()) {
+						TCPClient::Clients.erase(it);
+					}
+
+					Message message;
+					message.username = response->username;
+					message.text = "has disconnected";
+					message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
+
+					TCPClient::Messages.push_back(message);
+
+					std::cout << "User disconnected: " << response->username << std::endl;
 				}
 				else if (packet->id == PacketType::CHAT_MESSAGE) {
-					auto item = (PacketChatMessage*)packet;
+					auto item = (ChatMessage*)packet;
 
 					Message message;
 					message.username = item->username;
 					message.text = item->message;
 					message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
 
+			
 					TCPClient::Messages.push_back(message);
-
 					Log::trace("Received: %s", std::string(item->message).c_str());
 				}
 				else if (packet->id == PacketType::LOGIN_RESPONSE) {
-					auto response = (PacketLoginResponse*)packet;
+					auto response = (LoginResponse*)packet;
+
+					session_user_id = response->userId;
 
 					Message message;
 					message.text = response->message;
 					message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
 
-					std::cout << response->token << std::endl;
+					std::strncpy(session_token, response->token, sizeof(TCPClient::session_token));
+
 					TCPClient::Messages.push_back(message);
 
-					auto list = reinterpret_cast<PacketClientsList*>(&response->clients);
+					auto list = reinterpret_cast<ClientsList*>(&response->clients);
 
 					std::cout << "CLIENTS LIST: " << std::endl;
 
 					unsigned int i = 0;
 					for (auto& c : list->clients) {
-						auto info = reinterpret_cast<PacketClientInfo*>(&c);
+						auto info = reinterpret_cast<ClientInfo*>(&c);
 
 						if (strlen(info->username) > 0) {
 							TCPClient::Clients.push_back(info->username);
+
 							std::cout << "USER INFO: " << std::string(info->username).c_str() << std::endl;
 							++i;
 						}
 					}
 
 					Log::trace("Received: %s", std::string(response->message).c_str());
+				}
+				//else if (packet->id == PacketType::GAME_CREATED) {
+				//	auto game_infos = reinterpret_cast<GameCreated*>(packet);
+
+				//	if (game_infos != nullptr) {
+
+				//		auto infos = reinterpret_cast<GameInfo*>(&game_infos->infos);
+				//		TCPClient::Games.push_back(*infos);
+
+				//		if (session_user_id == infos->creator) {
+
+				//		}
+
+				//		std::cout << "Received new game infos:" << std::endl;
+				//		std::cout << "------------------------" << std::endl;
+				//		std::cout << "GameId: " << infos->gameId << std::endl;
+				//		//std::cout << "Nb Players: " << sizeof(infos->players) << std::endl;
+				//		std::cout << "Max Players: " << infos->max_players << std::endl;
+				//		std::cout << "Ping: " << infos->ping << std::endl;
+				//	}
+				//}
+				else if (packet->id == PacketType::GAMES_LIST) {
+					auto list = reinterpret_cast<GamesList*>(packet);
+
+					std::cout << "GAMES LIST: " << std::endl;
+
+					for (auto game : list->games) {
+						auto info = reinterpret_cast<GameInfo*>(&game);
+
+						if (info != nullptr) {
+
+							if (strlen(info->name) > 0) {
+								std::cout << "INFO NAME: " << info->name << std::endl;
+
+								auto it = std::find_if(TCPClient::Games.begin(), TCPClient::Games.end(),
+								[=](const GameInfo& game_info) {
+									return game_info.gameId == info->gameId;
+								});
+
+								if (it != TCPClient::Games.end()) {
+									*it = *info;
+								}
+								else {
+									TCPClient::Games.push_back(*info);
+								}
+							}
+						}
+					}
+				}
+				else if (packet->id == PacketType::GAME_DESTROYED) {
+					auto game_infos = reinterpret_cast<GameDestroyed*>(packet);
+					std::cout << "RECEIVE GAME DESTROY" << std::endl;
+
+					if (game_infos != nullptr) {
+						std::vector<GameInfo>::iterator it = Games.begin();
+
+						for (; it != Games.end();) {
+							if (it->gameId == game_infos->gameId) {
+								it = Games.erase(it);
+								Log::trace("Game %d destroyed", game_infos->gameId);
+							}
+							else {
+								it++;
+							}
+						}
+					}
 				}
 			}
 

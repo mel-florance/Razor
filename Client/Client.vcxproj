@@ -138,9 +138,29 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Client.h" />
+    <ClInclude Include="src\Controller.h" />
+    <ClInclude Include="src\Controllers\LobbyController.h" />
+    <ClInclude Include="src\Controllers\MultiplayerController.h" />
+    <ClInclude Include="src\Interface.h" />
+    <ClInclude Include="src\Interfaces\Connect.h" />
+    <ClInclude Include="src\Interfaces\Game.h" />
+    <ClInclude Include="src\Interfaces\Lobby.h" />
+    <ClInclude Include="src\Interfaces\MainMenu.h" />
+    <ClInclude Include="src\Interfaces\Multiplayer.h" />
+    <ClInclude Include="src\Interfaces\Options.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Client.cpp" />
+    <ClCompile Include="src\Controller.cpp" />
+    <ClCompile Include="src\Controllers\LobbyController.cpp" />
+    <ClCompile Include="src\Controllers\MultiplayerController.cpp" />
+    <ClCompile Include="src\Interface.cpp" />
+    <ClCompile Include="src\Interfaces\Connect.cpp" />
+    <ClCompile Include="src\Interfaces\Game.cpp" />
+    <ClCompile Include="src\Interfaces\Lobby.cpp" />
+    <ClCompile Include="src\Interfaces\MainMenu.cpp" />
+    <ClCompile Include="src\Interfaces\Multiplayer.cpp" />
+    <ClCompile Include="src\Interfaces\Options.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

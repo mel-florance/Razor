@@ -8,96 +8,253 @@
 #define MAX_TOKEN_LENGTH 64
 #define MAX_GAMES_LIST 10
 #define MAX_MESSAGE_LENGTH 50
+#define MAX_CHANNEL_NAME_LENGTH 20
+#define MAX_GAME_NAME_LENGTH 20
+#define MAX_PLAYERS_LIST 10
+#define MAX_GAME_MAP_LENGTH 20
 
-struct Packet 
-{
-	PacketType id;
-	uint32_t size;
-	char token[MAX_TOKEN_LENGTH];
+namespace Razor {
 
-	template<typename T>
-	static T create(const char* token = nullptr) {
-		T packet;
-		packet.id = Protocol::GetPacketId<T>();
-		packet.size = sizeof(T);
+	enum class PacketType : uint32_t {
+		PING,
+		PONG,
+		LOGIN,
+		GAME_INFO,
+		GAMES_LIST,
+		PLAYER_POSITION,
+		CHAT_MESSAGE,
+		LOGIN_RESPONSE,
+		CLIENTS_LIST,
+		CLIENT_INFO,
+		CLIENT_JOINED,
+		CLIENT_DISCONNECTED,
+		CREATE_GAME,
+		GAME_CREATED,
+		GAME_DESTROYED,
+		JOIN_GAME,
+		REFRESH_GAMES_LIST,
+		PLAYER_INFO,
+		PLAYERS_LIST,
+		PLAYER_READY,
+		MARK_PLAYER_READY,
+		NULL_PACKET
+	};
 
-		if (token != nullptr) {
-			std::strncpy(packet.token, token, sizeof(Packet::token));
+	struct Packet
+	{
+		PacketType id;
+		uint32_t size;
+		char token[MAX_TOKEN_LENGTH];
+
+		template<typename T>
+		inline static T create(const char* token = nullptr) {
+			T packet;
+			packet.id = getId<T>();
+			packet.size = sizeof(T);
+
+			if (token != nullptr) {
+				std::strncpy(packet.token, token, sizeof(Packet::token));
+			}
+
+			return packet;
 		}
 
-		return packet;
-	}
-};
+		template<typename T>
+		inline static PacketType getId() {
+			if constexpr (std::is_same_v<T, ChatMessage>)
+				return PacketType::CHAT_MESSAGE;
+			if constexpr (std::is_same_v<T, GameInfo>)
+				return PacketType::GAME_INFO;
+			if constexpr (std::is_same_v<T, Ping>)
+				return PacketType::PING;
+			if constexpr (std::is_same_v<T, Pong>)
+				return PacketType::PONG;
+			if constexpr (std::is_same_v<T, LoginRequest>)
+				return PacketType::LOGIN;
+			if constexpr (std::is_same_v<T, GamesList>)
+				return PacketType::GAMES_LIST;
+			if constexpr (std::is_same_v<T, LoginResponse>)
+				return PacketType::LOGIN_RESPONSE;
+			if constexpr (std::is_same_v<T, PlayerPosition>)
+				return PacketType::PLAYER_POSITION;
+			if constexpr (std::is_same_v<T, ClientsList>)
+				return PacketType::CLIENTS_LIST;
+			if constexpr (std::is_same_v<T, ClientInfo>)
+				return PacketType::CLIENT_INFO;
+			if constexpr (std::is_same_v<T, ClientJoined>)
+				return PacketType::CLIENT_JOINED;
+			if constexpr (std::is_same_v<T, ClientDisconnect>)
+				return PacketType::CLIENT_DISCONNECTED;
+			if constexpr (std::is_same_v<T, CreateGame>)
+				return PacketType::CREATE_GAME;
+			if constexpr (std::is_same_v<T, GameCreated>)
+				return PacketType::GAME_CREATED;
+			if constexpr (std::is_same_v<T, JoinGame>)
+				return PacketType::JOIN_GAME;
+			if constexpr (std::is_same_v<T, GameDestroyed>)
+				return PacketType::GAME_DESTROYED;
+			if constexpr (std::is_same_v<T, RefreshGamesList>)
+				return PacketType::REFRESH_GAMES_LIST;
+			if constexpr (std::is_same_v<T, PlayerInfo>)
+				return PacketType::PLAYER_INFO;
+			if constexpr (std::is_same_v<T, PlayersList>)
+				return PacketType::PLAYERS_LIST;
+			if constexpr (std::is_same_v<T, PlayerReady>)
+				return PacketType::PLAYER_READY;
+			if constexpr (std::is_same_v<T, MarkPlayerReady>)
+				return PacketType::MARK_PLAYER_READY;
+		}
 
-enum class RequestStatus : uint32_t {
-	OK = 200,
-	CREATED = 201,
-	ACCEPTED = 202,
-	PARTIAL = 206,
-	BAD_REQUEST = 400,
-	UNAUTHORIZED = 401,
-	FORBIDDEN = 403,
-	NOT_FOUND = 404,
-	METHOD_NOT_ALLOWED = 405,
-	TEAPOT = 418,
-	TOO_MANY_REQUESTS = 429,
-	CONNECTED = 200,
-	LOGGED = 205
-};
+		inline std::string to_string() {
+			switch (id) {
+			default: return "NULL_PACKET";
+			case PacketType::PING: return "PING";
+			case PacketType::PONG: return "PONG";
+			case PacketType::LOGIN: return "LOGIN";
+			case PacketType::GAME_INFO: return "GAME_INFO";
+			case PacketType::GAMES_LIST: return "GAMES_LIST";
+			case PacketType::PLAYER_POSITION: return "PLAYER_POSITION";
+			case PacketType::CHAT_MESSAGE: return "CHAT_MESSAGE";
+			case PacketType::LOGIN_RESPONSE: return "LOGIN_RESPONSE";
+			case PacketType::CLIENTS_LIST: return "CLIENTS_LIST";
+			case PacketType::CLIENT_INFO: return "CLIENT_INFO";
+			case PacketType::CLIENT_JOINED: return "CLIENT_JOINED";
+			case PacketType::CLIENT_DISCONNECTED: return "CLIENT_DISCONNECTED";
+			case PacketType::CREATE_GAME: return "CREATE_GAME";
+			case PacketType::GAME_CREATED: return "GAME_CREATED";
+			case PacketType::JOIN_GAME: return "JOIN_GAME";
+			case PacketType::GAME_DESTROYED: return "GAME_DESTROYED";
+			case PacketType::REFRESH_GAMES_LIST: return "REFRESH_GAMES_LIST";
+			case PacketType::PLAYER_INFO: return "PLAYER_INFO";
+			case PacketType::PLAYERS_LIST: return "PLAYERS_LIST";
+			case PacketType::MARK_PLAYER_READY: return "MARK_PLAYER_READY";
+			}
+		}
+	};
 
-enum class ResponseStatus : uint32_t {
-	INTERNAL_SERVER_ERROR = 500,
-	NOT_IMPLEMENTED = 501,
-	BAD_GATEWAY = 502,
-	SERVICE_UNAVAILABLE = 503
-};
+	//----------------------------------------
+	// GENERAL
+	//----------------------------------------
 
-struct PacketPing : public Packet {};
-struct PacketPong : public Packet {};
+	struct Ping : public Packet {};
+	struct Pong : public Packet {};
 
-struct PacketClientInfo : public Packet {
-	char username[MAX_USERNAME_LENGTH];
-};
+	//----------------------------------------
+	// CLIENTS
+	//----------------------------------------
 
-struct PacketClientsList : public Packet {
-	PacketClientInfo clients[MAX_CLIENTS_LIST] = {};
-};
+	struct ClientInfo : public Packet {
+		uint32_t userId;
+		char username[MAX_USERNAME_LENGTH];
+	};
 
-struct PacketLoginRequest : public Packet {
-	char username[MAX_USERNAME_LENGTH];
-	char password[MAX_PASSWORD_LENGTH];
-};
+	struct ClientJoined : public Packet {
+		char username[MAX_USERNAME_LENGTH];
+	};
 
-struct PacketClientJoined : public Packet {
-	char username[MAX_USERNAME_LENGTH];
-};
+	struct ClientDisconnect : public Packet {
+		char username[MAX_USERNAME_LENGTH];
+	};
 
-struct PacketClientDisconnect : public Packet {
-	char username[MAX_USERNAME_LENGTH];
-};
+	struct ClientsList : public Packet {
+		ClientInfo clients[MAX_CLIENTS_LIST] = {};
+	};
 
-struct PacketLoginResponse : public Packet{
-	RequestStatus status;
-	char message[MAX_MESSAGE_LENGTH];
-	char token[MAX_TOKEN_LENGTH];
-	PacketClientsList clients;
-};
 
-struct PacketGameInfo : public Packet {
-	unsigned int gameId = 0;
-	unsigned int ping = 0;
-	unsigned int players = 0;
-};
+	//----------------------------------------
+	// AUTHENTICATION
+	//----------------------------------------
 
-struct PacketGamesList : public Packet {
-	PacketGameInfo games[MAX_GAMES_LIST] = {};
-};
+	struct LoginRequest : public Packet {
+		char username[MAX_USERNAME_LENGTH];
+		char password[MAX_PASSWORD_LENGTH];
+	};
 
-struct PacketPlayerPosition : public Packet {
-	float position[3] = {0, 0, 0};
-};
+	struct LoginResponse : public Packet {
+		Protocol::RequestStatus status;
+		char message[MAX_MESSAGE_LENGTH];
+		uint32_t userId = 0;
+		char token[MAX_TOKEN_LENGTH];
+		ClientsList clients;
+	};
 
-struct PacketChatMessage : public Packet {
-	char username[MAX_USERNAME_LENGTH];
-	char message[MAX_MESSAGE_LENGTH];
-};
+	//----------------------------------------
+	// GAMES
+	//----------------------------------------
+
+	struct CreateGame : public Packet {
+		char name[MAX_CHANNEL_NAME_LENGTH];
+		int32_t max_players = MAX_PLAYERS_LIST;
+		int32_t mode = 0;
+		int32_t map = 0;
+	};
+
+	struct JoinGame : public Packet {
+		uint32_t gameId = 0;
+	};
+
+	struct PlayerReady : public Packet {
+		uint32_t userId = 0;
+	};
+
+	struct MarkPlayerReady : public Packet {
+	};
+
+	struct PlayerInfo : public Packet {
+		uint32_t userId = 0;
+		char username[MAX_USERNAME_LENGTH];
+	};
+
+	struct PlayersList : public Packet {
+		PlayerInfo players[MAX_PLAYERS_LIST] = {};
+	};
+
+	struct GameInfo : public Packet {
+		uint32_t gameId = 0;
+		uint32_t creator = 0;
+		char name[MAX_GAME_NAME_LENGTH];
+		uint32_t ping = 0;
+		uint32_t mode = 0;
+		uint32_t map = 0;
+		uint32_t max_players = 10;
+		uint32_t players_count = 0;
+		PlayersList players;
+	};
+
+	struct RefreshGamesList : public Packet {
+		uint32_t max_ping = 0;
+		uint32_t maps[5];
+		uint32_t min_players = 0;;
+		uint32_t max_players = MAX_PLAYERS_LIST;
+	};
+
+	struct GamesList : public Packet {
+		GameInfo games[MAX_GAMES_LIST] = {};
+	};
+
+	struct GameCreated : public Packet {
+		GameInfo infos;
+	};
+
+	struct GameDestroyed : public Packet {
+		uint32_t gameId;
+	};
+
+	//----------------------------------------
+	// CHAT
+	//----------------------------------------
+
+	struct ChatMessage : public Packet {
+		char username[MAX_USERNAME_LENGTH];
+		char message[MAX_MESSAGE_LENGTH];
+	};
+
+	//----------------------------------------
+	// IN GAME
+	//----------------------------------------
+
+	struct PlayerPosition : public Packet {
+		float position[3] = { 0, 0, 0 };
+	};
+
+}

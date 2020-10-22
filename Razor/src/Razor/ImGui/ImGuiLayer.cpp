@@ -41,10 +41,13 @@ namespace Razor {
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-		//io.Fonts->AddFontFromFileTTF("./data/fonts/Roboto-Medium.ttf", 20.0f);
-		//io.Fonts->AddFontFromFileTTF("./data/fonts/consola.ttf", 16.0f);
-		io.Fonts->AddFontFromFileTTF("./data/fonts/Cousine-Regular.ttf", 15.0f);
-		//io.Fonts->AddFontFromFileTTF("./data/fonts/DroidSans.ttf", 16.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/Roboto-Medium.ttf", 17.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/Roboto-Medium.ttf", 20.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/Roboto-Medium.ttf", 42.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/consola.ttf", 17.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/consola.ttf", 42.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/Cousine-Regular.ttf", 17.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/DroidSans.ttf", 17.0f);
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/ProggyTiny.ttf", 10.0f);
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/ProggyClean.ttf", 10.0f);
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/Karla-Regular.ttf", 16.0f);
@@ -64,7 +67,7 @@ namespace Razor {
 		colors[ImGuiCol_ChildBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
 		colors[ImGuiCol_WindowBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
 		colors[ImGuiCol_PopupBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
-		colors[ImGuiCol_Border] = ImVec4(0.12f, 0.12f, 0.12f, 0.71f);
+		colors[ImGuiCol_Border] = ImVec4(0.6f, 0.6f, 0.6f, 0.71f);
 		colors[ImGuiCol_BorderShadow] = ImVec4(1.00f, 1.00f, 1.00f, 0.06f);
 		colors[ImGuiCol_FrameBg] = ImVec4(0.05f, 0.05f, 0.05f, 1.0f);
 		colors[ImGuiCol_FrameBgHovered] = ImVec4(0.42f, 0.42f, 0.42f, 0.40f);
@@ -86,7 +89,7 @@ namespace Razor {
 		colors[ImGuiCol_Header] = ImVec4(0.38f, 0.38f, 0.38f, 1.00f);
 		colors[ImGuiCol_HeaderHovered] = ImVec4(0.47f, 0.47f, 0.47f, 1.00f);
 		colors[ImGuiCol_HeaderActive] = ImVec4(0.76f, 0.76f, 0.76f, 0.77f);
-		colors[ImGuiCol_Separator] = ImVec4(0.000f, 0.000f, 0.000f, 0.137f);
+		colors[ImGuiCol_Separator] = ImVec4(0.6f, 0.6f, 0.6f, 0.71f);
 		colors[ImGuiCol_SeparatorHovered] = ImVec4(0.700f, 0.671f, 0.600f, 0.290f);
 		colors[ImGuiCol_SeparatorActive] = ImVec4(0.702f, 0.671f, 0.600f, 0.674f);
 		colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.25f);

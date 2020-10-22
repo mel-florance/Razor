@@ -72,6 +72,16 @@ namespace Razor
 			return str;
 		}
 
+		static inline double diff_clock(clock_t c1, clock_t c2) {
+			return (c1 - c2) / (CLOCKS_PER_SEC / 1000);
+		}
+
+		static inline tm* getLocalTime() {
+			time_t curr_time;
+			curr_time = time(NULL);
+			return localtime(&curr_time);
+		}
+
 		static inline std::string random_string(size_t length) {
 			auto randchar = []() -> char {
 				const char charset[] =
@@ -172,7 +182,7 @@ namespace Razor
 		static inline std::string pad(int value, int n = 1) {
 			std::string str;
 
-			for (unsigned int i = 0; i < n; ++i)
+			for (int i = 0; i < n; ++i)
 				str += "0";
 
 			auto v = std::to_string(value);

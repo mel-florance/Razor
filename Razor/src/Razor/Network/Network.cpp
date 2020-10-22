@@ -11,7 +11,7 @@ namespace Razor {
 		{ State::SOCKET_BIND_FAILED, std::make_pair("Can't bind the socket", false)},
 		{ State::SOCKET_BIND_SUCCEED, std::make_pair("Socket binded", true) },
 		{ State::SOCKET_LISTENING, std::make_pair("Socket listening", true) },
-		{ State::SOCKET_CONNECTED, std::make_pair("New connection", true) },
+		{ State::SOCKET_CONNECTED, std::make_pair("Client connected", true) },
 		{ State::SOCKET_DISCONNECTED, std::make_pair("Client disconnected", false) },
 		{ State::WELCOME_MESSAGE, std::make_pair("Welcome to the server !", true) },
 	};

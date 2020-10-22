@@ -41,7 +41,7 @@ namespace Razor
 
 		renderer = new Renderer(&application->GetWindow(), this, scenes_manager, shaders_manager);
 
-		//sounds_manager->loadSound("./data/audio/EpicTrailerFinal.wav", "trailer_music");
+		sounds_manager->loadSound("./data/audio/EpicTrailerFinal.wav", "trailer_music");
 
 		extractSystemInfos();
 	}
@@ -111,7 +111,7 @@ namespace Razor
 				camera->onKeyDown(e.GetKeyCode());
 				//event.Handled = true;
 
-			/*	if (e.GetKeyCode() == RZ_KEY_H)
+				if (e.GetKeyCode() == RZ_KEY_H)
 				{
 					sounds_manager->playSound("trailer_music");
 				}
@@ -121,7 +121,7 @@ namespace Razor
 					Sound* trailer = sounds_manager->getSounds()["trailer_music"];
 
 					trailer->isPlaying() ? trailer->pause() : trailer->unpause();
-				}*/
+				}
 			}
 
 			if (event.GetEventType() == EventType::KeyReleased) {

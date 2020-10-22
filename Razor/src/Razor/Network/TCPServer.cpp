@@ -3,18 +3,24 @@
 
 #include "Razor/Network/Packet.h"
 #include <glm/gtx/string_cast.hpp>
-#include <glm/gtc/type_ptr.hpp>.
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Razor/Maths/sha512.h"
 
 namespace Razor {
 
-	TCPServer::TCPServer()
+	TCPServer::TCPServer() :
+		clients({}),
+		channels({}),
+		channels_infos({}),
+		generated_clients_ids({})
 	{
 		init();
 		auto sock = create_socket();
 		bind_socket(sock);
 		listen_socket(sock);
+
+		srand(time(NULL));
 	}
 
 	TCPServer::~TCPServer()
@@ -77,7 +83,7 @@ namespace Razor {
 			{
 				SOCKET sock = copy.fd_array[i];
 
-				sockaddr_in addr;
+				sockaddr_in addr = { 0 };
 				int addrlen = sizeof(addr);
 
 				// Accept new connection
@@ -103,18 +109,69 @@ namespace Razor {
 			
 					// Drop the connection
 					if (bytes <= 0) {
+						getpeername(sock, (sockaddr*)&addr, &addrlen);
+
 						std::string disconnected = Network::getState(Network::State::SOCKET_DISCONNECTED);
-						Log::info(disconnected.c_str());
+						Log::info(std::string(disconnected + " (%s:%d)").c_str(), inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
 
-						auto it = clients.find(sock);
+						//auto clients_it = clients.find(sock);
 
-						if (it != clients.end());
-							clients.erase(it);
+						//if (clients_it != clients.end());
+						//	clients.erase(clients_it);
 
-						std::unordered_map<SOCKET, Client>::iterator i = clients.begin();
+						std::unordered_map<uint32_t, std::vector<SOCKET>>::iterator ch = channels.begin();
 
-						for (; i != clients.end(); ++i)
-							std::cout << "Client: " << (*i).second.name << std::endl;
+						for (; ch != channels.end(); ++ch) {
+							std::vector<SOCKET>::iterator it2 = ch->second.begin();
+
+							for (; it2 != ch->second.end(); ++it2) {
+								if (*it2 == sock) {
+									ch->second.erase(it2);
+									break;
+								}
+							}
+						}
+
+						std::unordered_map<uint32_t, std::vector<SOCKET>>::iterator ch2 = channels.begin();
+						std::vector<uint32_t> to_erase = {};
+
+						for (; ch2 != channels.end(); ++ch2) {
+							if (ch2->second.size() == 0) {
+								to_erase.push_back(ch2->first);
+							}
+						}
+
+						if (to_erase.size() > 0) {
+							for (auto id : to_erase) {
+								auto channel_it = channels.find(id);
+
+								if (channel_it != channels.end()) {
+									channels.erase(channel_it);
+								}
+
+								auto info_it = channels_infos.find(id);
+
+								if (info_it != channels_infos.end())
+									channels_infos.erase(info_it);
+							}
+						}
+
+						for (int i = 0; i < master.fd_count; i++) {
+							SOCKET out = master.fd_array[i];
+
+							if (out != listening && out != sock) {
+								if (to_erase.size() > 0) {
+									auto response = Packet::create<GameDestroyed>();
+									response.gameId = to_erase[0];
+									send(out, reinterpret_cast<char*>(&response), sizeof(GameDestroyed), 0);
+								}
+
+								auto response = Packet::create<ClientDisconnect>();
+
+								std::strncpy(response.username, clients[sock].name, sizeof(ClientDisconnect::username));
+								send(out, reinterpret_cast<char*>(&response), sizeof(ClientDisconnect), 0);
+							}
+						}
 
 						closesocket(sock);
 						FD_CLR(sock, &master);
@@ -123,75 +180,72 @@ namespace Razor {
 						auto packet = reinterpret_cast<Packet*>(buffer);
 
 						if (packet != nullptr) {
-							std::cout << "Packet type: " << Protocol::to_string(packet->id) << std::endl;
+							if (packet->id != PacketType::PING) {
+								getpeername(sock, (sockaddr*)&addr, &addrlen);
+
+								Log::warn(
+									"[IN] %s - %s (%s:%d)", 
+									packet->to_string().c_str(),
+									Utils::bytesToSize(bytes).c_str(),
+									inet_ntoa(addr.sin_addr), 
+									ntohs(addr.sin_port)
+								);
+							}
 
 							if (packet->id == PacketType::LOGIN) {
-								auto login = reinterpret_cast<PacketLoginRequest*>(packet);
+								auto login = reinterpret_cast<LoginRequest*>(packet);
 
 								for (int i = 0; i < master.fd_count; i++) {
 									SOCKET out = master.fd_array[i];
 
 									if (out != listening && out == sock) {
-										auto response = Packet::create<PacketLoginResponse>();
-										response.status = RequestStatus::LOGGED;
+										auto response = Packet::create<LoginResponse>();
+										response.status = Protocol::RequestStatus::LOGGED;
 
 										auto message = std::string("Welcome to the server ") + login->username;
-										std::strncpy(response.message, message.data(), sizeof(PacketLoginResponse::message));
+										std::strncpy(response.message, message.data(), sizeof(LoginResponse::message));
 
 										auto token = Utils::random_string(64);
-										std::strncpy(response.token, token.data(), sizeof(PacketLoginResponse::token));
+										std::strncpy(response.token, token.data(), sizeof(LoginResponse::token));
 
 										Client client;
+										client.id = generateClientId();
 										std::strncpy(client.name, login->username, sizeof(Client::name));
 
 										clients.insert(std::make_pair(sock, client));
 
 										unsigned int i = 0;
 										std::unordered_map<SOCKET, Client>::iterator it = clients.begin();
-										auto pkt = Packet::create<PacketClientsList>();
+										auto pkt = Packet::create<ClientsList>();
 
 										for (; it != clients.end(); ++it, ++i) {
-											std::cout << "Client: " << (*it).second.name << std::endl;
-
-											auto info = Packet::create<PacketClientInfo>();
-											std::strncpy(info.username, (*it).second.name, sizeof(PacketClientInfo::username));
+											auto info = Packet::create<ClientInfo>();
+											info.userId = (*it).second.id;
+											std::strncpy(info.username, (*it).second.name, sizeof(ClientInfo::username));
 											pkt.clients[i] = info;
 										}
 
+										response.userId = clients[sock].id;
 										response.clients = pkt;
-										send(out, reinterpret_cast<char*>(&response), sizeof(PacketLoginResponse), 0);
+										send(out, reinterpret_cast<char*>(&response), sizeof(LoginResponse), 0);
 									}
 									else if (out != listening && out != sock) {
-										auto response = Packet::create<PacketClientJoined>();
+										auto response = Packet::create<ClientJoined>();
 
-										std::strncpy(response.username, login->username, sizeof(PacketClientJoined::username));
-										send(out, reinterpret_cast<char*>(&response), sizeof(PacketClientJoined), 0);
+										std::strncpy(response.username, login->username, sizeof(ClientJoined::username));
+										send(out, reinterpret_cast<char*>(&response), sizeof(ClientJoined), 0);
 									}
 								}
 							} 
-							else if (packet->id == PacketType::GAMES_LIST) {
-								auto list = reinterpret_cast<PacketGamesList*>(packet);
-								
-								std::cout << "Game infos: " << std::endl;
-								std::cout << "---------------------------" << std::endl;
-
-								for (auto& item : list->games) {
-									auto game = reinterpret_cast<PacketGameInfo*>(&item);
-
-									if (game->gameId != 0) {
-										std::cout << "id: " << game->gameId << std::endl;
-										std::cout << "ping: " << game->ping << std::endl;
-										std::cout << "players: " << game->players << std::endl;
-										std::cout << "---------------------------" << std::endl;
-									}
-								}
+							else if (packet->id == PacketType::PING) {
+								auto response = Packet::create<Pong>();
+								send(sock, reinterpret_cast<char*>(&response), sizeof(Pong), 0);
 							}
 							else if (packet->id == PacketType::CHAT_MESSAGE) {
-								auto chatMessage = reinterpret_cast<PacketChatMessage*>(packet);
+								auto chatMessage = reinterpret_cast<ChatMessage*>(packet);
 
 								if (chatMessage != nullptr) {
-									std::cout << "Message: " << chatMessage->message << std::endl;
-									std::strncpy(chatMessage->username, clients[sock].name, sizeof(PacketChatMessage::username));
+									std::strncpy(chatMessage->username, clients[sock].name, sizeof(ChatMessage::username));
 
 									// Broadcast the message
 									Log::info(std::string("> " + std::string(buffer)).c_str());
@@ -203,13 +257,113 @@ namespace Razor {
 								}
 							}
 							else if (packet->id == PacketType::PLAYER_POSITION) {
-								auto player = reinterpret_cast<PacketPlayerPosition*>(packet);
+								auto player = reinterpret_cast<PlayerPosition*>(packet);
 
 								if (player != nullptr) {
 									std::cout << "Player Position: " << player->position[0] << ", "
 																	 << player->position[1] << ", "
 																	 << player->position[2] << std::endl;
 								}
+							}
+							else if (packet->id == PacketType::CREATE_GAME) {
+								auto params = reinterpret_cast<CreateGame*>(packet);
+
+								if (params != nullptr) {
+									std::unordered_map<uint32_t, std::vector<SOCKET>>::iterator it = channels.begin();
+
+									unsigned int count = 0;
+
+									for (; it != channels.end(); ++it) {
+										std::vector<SOCKET>::iterator it2 = it->second.begin();
+
+										for (; it2 != it->second.end(); ++it2) {
+											if (*it2 == sock) {
+												count++;
+												break;
+											}
+										}
+									}
+
+									if (count == 0) {
+										uint32_t channel = channels.size();
+
+										std::vector<SOCKET> array;
+										array.push_back(sock);
+										channels[channel] = array;
+
+										auto response = Packet::create<GameCreated>();
+										auto info = Packet::create<GameInfo>();
+										auto creator = clients.find(sock);
+
+										if (creator != clients.end()) {
+
+											info.creator = creator->second.id;
+											info.gameId = channel;
+											info.ping = rand() % 100 + 1;
+											info.max_players = params->max_players;
+											info.players_count = 1;
+											info.mode = params->mode;
+											info.map = params->map;
+											std::strncpy(info.name, params->name, sizeof(GameInfo::name));
+
+											auto players = Packet::create<PlayersList>();
+											auto player = Packet::create<PlayerInfo>();
+
+											std::strncpy(player.username, clients[sock].name, sizeof(PlayerInfo::username));
+											players.players[0] = player;
+
+											info.players = players;
+
+											channels_infos[channel] = info;
+											response.infos = info;
+
+											for (int i = 0; i < master.fd_count; i++) {
+												SOCKET out = master.fd_array[i];
+												send(out, reinterpret_cast<char*>(&response), sizeof(GameCreated), 0);
+											}
+
+											Log::info("Game created with id %d", channel);
+										}
+									}
+								}
+							}
+							else if (packet->id == PacketType::JOIN_GAME) {
+
+							}
+							else if (packet->id == PacketType::REFRESH_GAMES_LIST)
+							{
+								auto response = Packet::create<GamesList>();
+								auto it = channels.begin();
+								unsigned int j = 0;
+
+								for (; it != channels.end(); ++it, j++) {
+									auto info = Packet::create<GameInfo>();
+									auto index = channels_infos.find(it->first);
+
+									if (index != channels_infos.end()) {
+										std::strncpy(info.name, index->second.name, sizeof(GameInfo::name));
+										info.gameId = index->second.gameId;
+										info.ping = index->second.ping;
+										info.mode = index->second.mode;
+										info.map = index->second.map;
+									
+										
+										int count = 0;
+
+										for (unsigned int i = 0; i < MAX_PLAYERS_LIST; i++) {
+											if (strlen(index->second.players.players[i].username) > 0) {
+												count++;
+											}
+										}
+										
+										info.players_count = count;
+										info.max_players = index->second.max_players;
+
+										response.games[j] = info;
+									}
+								}
+
+								send(sock, reinterpret_cast<char*>(&response), sizeof(GamesList), 0);
 							}
 						}
 					}

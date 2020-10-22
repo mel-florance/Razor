@@ -207,7 +207,6 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Razor\Maths\sha512.h" />
     <ClInclude Include="src\Editor\Components\AssetsManager.h" />
     <ClInclude Include="src\Editor\Components\Console.h" />
     <ClInclude Include="src\Editor\Components\EditorView.h" />
@@ -351,6 +350,7 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="src\Razor\Maths\Maths.h" />
     <ClInclude Include="src\Razor\Maths\Raycast.h" />
     <ClInclude Include="src\Razor\Maths\Units.h" />
+    <ClInclude Include="src\Razor\Maths\sha512.h" />
     <ClInclude Include="src\Razor\Network\Http.h" />
     <ClInclude Include="src\Razor\Network\Network.h" />
     <ClInclude Include="src\Razor\Network\Packet.h" />
@@ -838,7 +838,6 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Razor\Maths\sha512.cpp" />
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp" />
     <ClCompile Include="src\Editor\Components\Console.cpp" />
     <ClCompile Include="src\Editor\Components\EditorView.cpp" />
@@ -971,6 +970,7 @@ IF EXIST ..\Razor\vendor\openal\OpenAL32.dll\ (xcopy /Q /E /Y /I ..\Razor\vendor
     <ClCompile Include="src\Razor\Materials\VideoTexture.cpp" />
     <ClCompile Include="src\Razor\Maths\Raycast.cpp" />
     <ClCompile Include="src\Razor\Maths\Units.cpp" />
+    <ClCompile Include="src\Razor\Maths\sha512.cpp" />
     <ClCompile Include="src\Razor\Network\Http.cpp" />
     <ClCompile Include="src\Razor\Network\Network.cpp" />
     <ClCompile Include="src\Razor\Network\Packet.cpp" />

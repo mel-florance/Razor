@@ -609,6 +609,9 @@
     <ClInclude Include="src\Razor\Maths\Units.h">
       <Filter>src\Razor\Maths</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razor\Maths\sha512.h">
+      <Filter>src\Razor\Maths</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razor\Network\Http.h">
       <Filter>src\Razor\Network</Filter>
     </ClInclude>
@@ -2064,7 +2067,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Razor\Maths\sha512.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Components\AssetsManager.cpp">
@@ -2457,6 +2459,9 @@
     <ClCompile Include="src\Razor\Maths\Units.cpp">
       <Filter>src\Razor\Maths</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razor\Maths\sha512.cpp">
+      <Filter>src\Razor\Maths</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razor\Network\Http.cpp">
       <Filter>src\Razor\Network</Filter>
     </ClCompile>
@@ -2571,7 +2576,6 @@
     <ClCompile Include="src\rzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Razor\Maths\sha512.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\assimp\include\assimp\.editorconfig">
