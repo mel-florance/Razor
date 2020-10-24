@@ -36,6 +36,7 @@ namespace Razor {
 		PLAYER_INFO,
 		PLAYERS_LIST,
 		PLAYER_READY,
+		PLAYER_JOINED,
 		MARK_PLAYER_READY,
 		NULL_PACKET
 	};
@@ -101,6 +102,8 @@ namespace Razor {
 				return PacketType::PLAYERS_LIST;
 			if constexpr (std::is_same_v<T, PlayerReady>)
 				return PacketType::PLAYER_READY;
+			if constexpr (std::is_same_v<T, PlayerJoined>)
+				return PacketType::PLAYER_JOINED;
 			if constexpr (std::is_same_v<T, MarkPlayerReady>)
 				return PacketType::MARK_PLAYER_READY;
 		}
@@ -127,6 +130,8 @@ namespace Razor {
 			case PacketType::REFRESH_GAMES_LIST: return "REFRESH_GAMES_LIST";
 			case PacketType::PLAYER_INFO: return "PLAYER_INFO";
 			case PacketType::PLAYERS_LIST: return "PLAYERS_LIST";
+			case PacketType::PLAYER_READY: return "PLAYER_READY";
+			case PacketType::PLAYER_JOINED: return "PLAYERS_JOINED";
 			case PacketType::MARK_PLAYER_READY: return "MARK_PLAYER_READY";
 			}
 		}
@@ -196,13 +201,16 @@ namespace Razor {
 	struct PlayerReady : public Packet {
 		uint32_t userId = 0;
 	};
-
 	struct MarkPlayerReady : public Packet {
 	};
 
 	struct PlayerInfo : public Packet {
 		uint32_t userId = 0;
 		char username[MAX_USERNAME_LENGTH];
+	};
+
+	struct PlayerJoined : public Packet {
+		PlayerInfo info;
 	};
 
 	struct PlayersList : public Packet {
@@ -219,6 +227,7 @@ namespace Razor {
 		uint32_t max_players = 10;
 		uint32_t players_count = 0;
 		PlayersList players;
+		bool started = false;
 	};
 
 	struct RefreshGamesList : public Packet {

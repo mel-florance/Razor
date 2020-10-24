@@ -49,8 +49,15 @@ namespace Razor
 	{
 		GLFWwindow* native = (GLFWwindow*)window->GetNativeWindow();
 
-		if (viewport != nullptr)
-			aspect_ratio = window->GetWidth() / window->GetHeight();
+		if (viewport != nullptr) {
+			auto w = window->GetWidth();
+			auto h = window->GetHeight();
+
+			if (w != 0.0f && h != 0.0f)
+				aspect_ratio = window->GetWidth() / window->GetHeight();
+			else
+				return;
+		}
 
 		updateVectors();
 

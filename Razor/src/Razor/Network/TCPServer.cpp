@@ -328,7 +328,14 @@ namespace Razor {
 								}
 							}
 							else if (packet->id == PacketType::JOIN_GAME) {
+								auto request = reinterpret_cast<JoinGame*>(packet);
+								auto response = Packet::create<PlayerJoined>();
 
+								auto index = channels_infos.find(request->gameId);
+
+								if (index != channels_infos.end()) {
+									
+								}
 							}
 							else if (packet->id == PacketType::REFRESH_GAMES_LIST)
 							{

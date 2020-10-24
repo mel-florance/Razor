@@ -195,18 +195,6 @@ namespace Razor {
 
 					std::cout << "User disconnected: " << response->username << std::endl;
 				}
-				else if (packet->id == PacketType::CHAT_MESSAGE) {
-					auto item = (ChatMessage*)packet;
-
-					Message message;
-					message.username = item->username;
-					message.text = item->message;
-					message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
-
-			
-					TCPClient::Messages.push_back(message);
-					Log::trace("Received: %s", std::string(item->message).c_str());
-				}
 				else if (packet->id == PacketType::LOGIN_RESPONSE) {
 					auto response = (LoginResponse*)packet;
 

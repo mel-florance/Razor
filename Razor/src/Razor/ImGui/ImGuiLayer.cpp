@@ -48,6 +48,10 @@ namespace Razor {
 		io.Fonts->AddFontFromFileTTF("./data/fonts/consola.ttf", 42.0f);
 		io.Fonts->AddFontFromFileTTF("./data/fonts/Cousine-Regular.ttf", 17.0f);
 		io.Fonts->AddFontFromFileTTF("./data/fonts/DroidSans.ttf", 17.0f);
+
+		io.Fonts->AddFontFromFileTTF("./data/fonts/cs_regular.ttf", 17.0f);
+		io.Fonts->AddFontFromFileTTF("./data/fonts/cs_regular.ttf", 25.0f);
+
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/ProggyTiny.ttf", 10.0f);
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/ProggyClean.ttf", 10.0f);
 		//io.Fonts->AddFontFromFileTTF("./data/fonts/Karla-Regular.ttf", 16.0f);
@@ -60,7 +64,7 @@ namespace Razor {
 
 		/// 0 = FLAT APPEARENCE
 		/// 1 = MORE "3D" LOOK
-		int is3D = 1;
+		int is3D = 0;
 
 		colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
@@ -106,7 +110,7 @@ namespace Razor {
 		colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
 		colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
 
-		style.PopupRounding = 3;
+		style.PopupRounding = 0;
 
 		style.WindowPadding = ImVec2(4, 4);
 		style.FramePadding = ImVec2(6, 4);
@@ -121,13 +125,13 @@ namespace Razor {
 
 		style.WindowRounding = 0;
 		style.ChildRounding = 0;
-		style.FrameRounding = 3;
-		style.ScrollbarRounding = 2;
-		style.GrabRounding = 3;
+		style.FrameRounding = 0;
+		style.ScrollbarRounding = 0;
+		style.GrabRounding = 0;
 
 #ifdef IMGUI_HAS_DOCK 
 		style.TabBorderSize = (float)is3D;
-		style.TabRounding = 3;
+		style.TabRounding = 0;
 
 		colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.38f, 0.38f, 0.38f, 1.00f);
 		colors[ImGuiCol_Tab] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
