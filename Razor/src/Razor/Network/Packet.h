@@ -32,11 +32,14 @@ namespace Razor {
 		GAME_CREATED,
 		GAME_DESTROYED,
 		JOIN_GAME,
+		LEAVE_GAME,
 		REFRESH_GAMES_LIST,
 		PLAYER_INFO,
 		PLAYERS_LIST,
 		PLAYER_READY,
-		PLAYER_JOINED,
+		PLAYER_STRANGER_JOINED,
+		PLAYER_SELF_JOINED,
+		PLAYER_LEAVED,
 		MARK_PLAYER_READY,
 		NULL_PACKET
 	};
@@ -102,10 +105,16 @@ namespace Razor {
 				return PacketType::PLAYERS_LIST;
 			if constexpr (std::is_same_v<T, PlayerReady>)
 				return PacketType::PLAYER_READY;
-			if constexpr (std::is_same_v<T, PlayerJoined>)
-				return PacketType::PLAYER_JOINED;
+			if constexpr (std::is_same_v<T, PlayerStrangerJoined>)
+				return PacketType::PLAYER_STRANGER_JOINED;
+			if constexpr (std::is_same_v<T, PlayerSelfJoined>)
+				return PacketType::PLAYER_SELF_JOINED;
 			if constexpr (std::is_same_v<T, MarkPlayerReady>)
 				return PacketType::MARK_PLAYER_READY;
+			if constexpr (std::is_same_v<T, LeaveGame>)
+				return PacketType::LEAVE_GAME;
+			if constexpr (std::is_same_v<T, PlayerLeaved>)
+				return PacketType::PLAYER_LEAVED;
 		}
 
 		inline std::string to_string() {
@@ -131,8 +140,11 @@ namespace Razor {
 			case PacketType::PLAYER_INFO: return "PLAYER_INFO";
 			case PacketType::PLAYERS_LIST: return "PLAYERS_LIST";
 			case PacketType::PLAYER_READY: return "PLAYER_READY";
-			case PacketType::PLAYER_JOINED: return "PLAYERS_JOINED";
+			case PacketType::PLAYER_STRANGER_JOINED: return "PLAYER_STRANGER_JOINED";
+			case PacketType::PLAYER_SELF_JOINED: return "PLAYER_SELF_JOINED";
 			case PacketType::MARK_PLAYER_READY: return "MARK_PLAYER_READY";
+			case PacketType::LEAVE_GAME: return "LEAVE_GAME";
+			case PacketType::PLAYER_LEAVED: return "PLAYER_LEAVED";
 			}
 		}
 	};
@@ -198,17 +210,18 @@ namespace Razor {
 
 	struct PlayerReady : public Packet {
 		uint32_t userId = 0;
+		bool ready = false;
 	};
+
 	struct MarkPlayerReady : public Packet {
+		uint32_t gameId = 0;
+		bool ready = false;
 	};
 
 	struct PlayerInfo : public Packet {
 		uint32_t userId = 0;
 		char username[MAX_USERNAME_LENGTH];
-	};
-
-	struct PlayerJoined : public Packet {
-		PlayerInfo info;
+		bool ready = false;
 	};
 
 	struct PlayersList : public Packet {
@@ -226,6 +239,22 @@ namespace Razor {
 		uint32_t players_count = 0;
 		PlayersList players;
 		bool started = false;
+	};
+
+	struct PlayerStrangerJoined : public Packet {
+		PlayerInfo info;
+	};
+
+	struct PlayerSelfJoined : public Packet {
+		GameInfo info;
+	};
+
+	struct LeaveGame : public Packet {
+		uint32_t gameId = 0;
+	};
+
+	struct PlayerLeaved : public Packet {
+		PlayerInfo info;
 	};
 
 	struct RefreshGamesList : public Packet {

@@ -284,10 +284,11 @@ namespace Razor {
 
 											auto players = Packet::create<PlayersList>();
 											auto player = Packet::create<PlayerInfo>();
-
+											player.ready = false;
+											player.userId = clients[sock].id;
 											std::strncpy(player.username, clients[sock].name, sizeof(PlayerInfo::username));
-											players.players[0] = player;
 
+											players.players[0] = player;
 											info.players = players;
 
 											channels_infos[channel] = info;
@@ -303,21 +304,117 @@ namespace Razor {
 									}
 								}
 							}
+							else if (packet->id == PacketType::LEAVE_GAME) {
+								auto request = reinterpret_cast<LeaveGame*>(packet);
+								auto it = channels_infos.begin();
+
+								std::cout << "Game leave requested:" << request->gameId << std::endl;
+
+								for (; it != channels_infos.end(); ++it) {
+									if (it->second.gameId == request->gameId) {
+										auto list = channels[it->first];
+										list.erase(std::remove(list.begin(), list.end(), sock), list.end());
+										std::cout << "Game erased" << std::endl;
+									}
+								}
+							}
 							else if (packet->id == PacketType::JOIN_GAME) {
 								auto request = reinterpret_cast<JoinGame*>(packet);
-								auto response = Packet::create<PlayerJoined>();
+								auto it = channels_infos.begin();
+			
+								std::cout << "Game join requested:" << request->gameId << std::endl;
 
-								auto index = channels_infos.find(request->gameId);
+								for (; it != channels_infos.end(); ++it) {
+									if (it->second.gameId == request->gameId) {
+										std::cout << "Game found!" << std::endl;
+										size_t count = 0;
 
-								if (index != channels_infos.end()) {
-									
+										for (auto& p : it->second.players.players)
+											if (strlen(p.username) > 0)
+												count++;
+
+										if (count + 1 > it->second.max_players)
+											break;
+
+										bool found = false;
+										for (auto& player : it->second.players.players) {
+											if (player.userId == clients[sock].id) {
+												found = true;
+											}
+										}
+
+										std::cout << "Player count:" << count << std::endl;
+										std::cout << "Exists:" << (found ? "yes" : "no") <<  std::endl;
+
+										if (!found) {
+											size_t len = sizeof(it->second.players.players) / sizeof(it->second.players.players[0]);
+
+											for (unsigned int i = 0; i < len; ++i) {
+												auto& player = it->second.players.players[i];
+
+												if (strlen(player.username) == 0) {
+													std::cout << "Slot found" << std::endl;
+													channels[it->first].push_back(sock);
+
+													PlayerInfo infos;
+													infos.userId = clients[sock].id;
+													std::strncpy(infos.username, clients[sock].name, sizeof(PlayerInfo::username));
+													it->second.players.players[i] = infos;
+													it->second.players_count++;
+
+													auto chan_it = channels.begin();
+
+													for (auto s : channels[it->first]) {
+														if (s == sock) {
+															auto response = Packet::create<PlayerSelfJoined>();
+															response.info = channels_infos[it->first];
+															send(s, reinterpret_cast<char*>(&response), sizeof(PlayerSelfJoined), 0);
+														}
+														else {
+
+															auto response = Packet::create<PlayerStrangerJoined>();
+															response.info = infos;
+															send(s, reinterpret_cast<char*>(&response), sizeof(PlayerStrangerJoined), 0);
+														}
+													}
+
+													break;
+												}
+											}
+										}
+
+										break;
+									}
 								}
 							}
 							else if (packet->id == PacketType::MARK_PLAYER_READY) {
 								auto request = reinterpret_cast<MarkPlayerReady*>(packet);
-								auto response = Packet::create<PlayerReady>();
 
+								if (request != nullptr) {
+									auto it = channels_infos.begin();
 
+									for (; it != channels_infos.end(); ++it) {
+										if (it->second.gameId == request->gameId) {
+											for (auto& player : it->second.players.players) {
+												if (player.userId == clients[sock].id) {
+													player.ready = request->ready;
+
+													auto response = Packet::create<PlayerReady>();
+													response.userId = player.userId;
+													response.ready = player.ready;
+
+													auto chan_it = channels.begin();
+
+													for (auto s : channels[it->first]) {
+														send(s, reinterpret_cast<char*>(&response), sizeof(PlayerReady), 0);
+													}
+
+													break;
+												}
+											}
+										}
+									}
+								}
 							}
 							else if (packet->id == PacketType::REFRESH_GAMES_LIST)
 							{

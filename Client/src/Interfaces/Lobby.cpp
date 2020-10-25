@@ -5,7 +5,9 @@
 #include "../Controllers/MultiplayerController.h"
 #include "../Controllers/ChatController.h"
 
-Lobby::Lobby() : Interface()
+Lobby::Lobby() :
+	Interface(),
+	ready_button_hovered(false)
 {
 }
 
@@ -96,9 +98,25 @@ void Lobby::render()
 	ImGui::SetCursorPosX(40);
 
 	ImGui::PushFont(font1);
-	if (ImGui::Button("READY", ImVec2(240, 0))) {
+
+	if (ctrl->is_player_ready) {
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 100, 0, 0.7));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(100, 0, 0, 0.8));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(100, 0, 0, 0.9));
+	}
+
+	if (ImGui::Button(ready_button_hovered && ctrl->is_player_ready ? "NOT READY" : "READY", ImVec2(240, 0))) {
 		ctrl->set_player_ready();
 	}
+
+	ready_button_hovered = ImGui::IsItemHovered();
+
+	if (ctrl->is_player_ready) {
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+	}
+
 	ImGui::PopFont();
 
 	ImGui::SetCursorPosX(40);
@@ -120,7 +138,16 @@ void Lobby::render()
 
 	for (auto& player : ctrl->current_game_infos.players.players) {
 		if (strlen(player.username) > 0) {
-			if (ImGui::Selectable(player.username, false, 0, ImVec2(220, 0))) {
+
+			if (player.ready) {
+				ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0, 100, 0, 0.7));
+			}
+
+			ImGui::SetCursorPosX(10);
+			ImGui::Selectable(player.username, player.ready, 0, ImVec2(220, 0));
+
+			if (player.ready) {
+				ImGui::PopStyleColor();
 			}
 		}
 	}

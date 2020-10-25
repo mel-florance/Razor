@@ -13,5 +13,7 @@ public:
 	~Lobby();
 
 	virtual void render() override;
+
+	bool ready_button_hovered;
 };
 
