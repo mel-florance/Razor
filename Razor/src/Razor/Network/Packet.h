@@ -177,10 +177,8 @@ namespace Razor {
 
 	struct LoginResponse : public Packet {
 		Protocol::RequestStatus status;
-		char message[MAX_MESSAGE_LENGTH];
 		uint32_t userId = 0;
 		char token[MAX_TOKEN_LENGTH];
-		ClientsList clients;
 	};
 
 	//----------------------------------------

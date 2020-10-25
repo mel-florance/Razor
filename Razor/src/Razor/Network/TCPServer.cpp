@@ -202,9 +202,6 @@ namespace Razor {
 										auto response = Packet::create<LoginResponse>();
 										response.status = Protocol::RequestStatus::LOGGED;
 
-										auto message = std::string("Welcome to the server ") + login->username;
-										std::strncpy(response.message, message.data(), sizeof(LoginResponse::message));
-
 										auto token = Utils::random_string(64);
 										std::strncpy(response.token, token.data(), sizeof(LoginResponse::token));
 
@@ -214,26 +211,8 @@ namespace Razor {
 
 										clients.insert(std::make_pair(sock, client));
 
-										unsigned int i = 0;
-										std::unordered_map<SOCKET, Client>::iterator it = clients.begin();
-										auto pkt = Packet::create<ClientsList>();
-
-										for (; it != clients.end(); ++it, ++i) {
-											auto info = Packet::create<ClientInfo>();
-											info.userId = (*it).second.id;
-											std::strncpy(info.username, (*it).second.name, sizeof(ClientInfo::username));
-											pkt.clients[i] = info;
-										}
-
 										response.userId = clients[sock].id;
-										response.clients = pkt;
 										send(out, reinterpret_cast<char*>(&response), sizeof(LoginResponse), 0);
-									}
-									else if (out != listening && out != sock) {
-										auto response = Packet::create<ClientJoined>();
-
-										std::strncpy(response.username, login->username, sizeof(ClientJoined::username));
-										send(out, reinterpret_cast<char*>(&response), sizeof(ClientJoined), 0);
 									}
 								}
 							} 
