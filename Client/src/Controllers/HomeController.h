@@ -1,30 +1,23 @@
 #pragma once
 
 #include "../Controller.h"
-#include "../Interfaces/Lobby.h"
+#include "../Interfaces/Home.h"
 
 namespace Razor {
 	class Texture;
 }
 
-class LobbyController : public Controller
+class HomeController : public Controller
 {
 public:
-	LobbyController(
+	HomeController(
 		std::shared_ptr<Razor::TCPClient> client,
 		const std::unordered_map<std::string, Razor::Texture*>& textures
 	);
-	~LobbyController();
+	~HomeController();
 
 	void OnEvent(Razor::Event& event) override;
 	void OnUpdate(float delta) override;
 	void OnRender() override;
-
-	void set_player_ready();
-
-	static void onPlayerReady(Razor::Packet* packet);
-	static void onGameCreated(Razor::Packet* packet);
-
-	static Razor::GameInfo current_game_infos;
 };
 

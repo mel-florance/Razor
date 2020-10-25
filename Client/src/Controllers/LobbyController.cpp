@@ -6,12 +6,11 @@
 
 using namespace Razor;
 
-
 Razor::GameInfo LobbyController::current_game_infos = {};
 
 LobbyController::LobbyController(
-	std::shared_ptr<Razor::TCPClient> client,
-	const std::unordered_map<std::string, Razor::Texture*>& textures
+	std::shared_ptr<TCPClient> client,
+	const std::unordered_map<std::string, Texture*>& textures
 ) :
 	Controller(client, State::LOBBY)
 {
@@ -35,6 +34,13 @@ void LobbyController::OnRender()
 	this->interface->render();
 }
 
+
+void LobbyController::set_player_ready()
+{
+	auto packet = Packet::create<MarkPlayerReady>(TCPClient::session_token);
+	client->emit(client->handle, packet);
+}
+
 void LobbyController::onPlayerReady(Razor::Packet* packet)
 {
 	auto player = reinterpret_cast<PlayerReady*>(packet);
@@ -44,19 +50,19 @@ void LobbyController::onPlayerReady(Razor::Packet* packet)
 	}
 }
 
-void LobbyController::onGameCreated(Razor::Packet* packet)
+void LobbyController::onGameCreated(Packet* packet)
 {
 	std::cout << "ON_GAME_CREATED: " << packet->to_string() << std::endl;
 
-	auto game_infos = reinterpret_cast<Razor::GameCreated*>(packet);
+	auto game_infos = reinterpret_cast<GameCreated*>(packet);
 
 	if (game_infos != nullptr) {
-		auto infos = reinterpret_cast<Razor::GameInfo*>(&game_infos->infos);
+		auto infos = reinterpret_cast<GameInfo*>(&game_infos->infos);
 
 		auto ctrl = TestLayer::getController<MultiplayerController>("multiplayer");
 		ctrl->games.push_back(*infos);
 
-		if (Razor::TCPClient::session_user_id == infos->creator) {
+		if (ctrl->session_user_id == infos->creator) {
 			current_game_infos = *infos;
 			
 			std::cout << "Received new game infos:" << std::endl;
@@ -67,7 +73,7 @@ void LobbyController::onGameCreated(Razor::Packet* packet)
 			std::cout << "Max Players: " << infos->max_players << std::endl;
 			std::cout << "Ping: " << infos->ping << std::endl;
 
-			Razor::TestLayer::current_state = Controller::State::LOBBY;
+			TestLayer::current_state = Controller::State::LOBBY;
 		}
 	}
 }

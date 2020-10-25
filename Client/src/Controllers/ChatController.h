@@ -1,30 +1,32 @@
 #pragma once
 
 #include "../Controller.h"
-#include "../Interfaces/Lobby.h"
+#include "../Interfaces/Chat.h"
 
 namespace Razor {
 	class Texture;
 }
 
-class LobbyController : public Controller
+class ChatController : public Controller
 {
 public:
-	LobbyController(
+	ChatController(
 		std::shared_ptr<Razor::TCPClient> client,
 		const std::unordered_map<std::string, Razor::Texture*>& textures
 	);
-	~LobbyController();
+	~ChatController();
 
 	void OnEvent(Razor::Event& event) override;
 	void OnUpdate(float delta) override;
 	void OnRender() override;
 
-	void set_player_ready();
+	static void onMessage(Razor::Packet* packet);
 
-	static void onPlayerReady(Razor::Packet* packet);
-	static void onGameCreated(Razor::Packet* packet);
+	void send();
 
-	static Razor::GameInfo current_game_infos;
+	char input_message[128];
+	bool scroll_to_bottom;
+	static std::vector<Razor::TCPClient::Message> messages;
+	Razor::TCPClient::Message* last_message;
 };
 

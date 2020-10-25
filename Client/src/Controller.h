@@ -31,9 +31,9 @@ public:
 	virtual void OnRender() {};
 
 	State state;
+	Interface* interface;
 
 protected:
-	Interface* interface;
 	std::shared_ptr<Razor::TCPClient> client;
 };
 

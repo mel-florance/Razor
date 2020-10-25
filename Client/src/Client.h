@@ -28,14 +28,6 @@ namespace Razor {
 		void OnImGuiRender();
 		void OnEvent(Razor::Event& event);
 
-		void Send();
-		void SetPlayerReady();
-
-		void display_connect();
-		void display_game();
-		void display_main_menu();
-		void display_options();
-
 		template<typename T>
 		static inline std::shared_ptr<T> getController(const std::string& name) {
 			auto it = controllers.find(name);

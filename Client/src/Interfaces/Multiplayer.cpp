@@ -38,7 +38,7 @@ void Multiplayer::render()
 		//
 		//}
 
-	ImGui::Image((void*)textures["background"]->getId(), ImGui::GetWindowSize(), ImVec2(), ImVec2(1, -1));
+	ImGui::Image((void*)textures["background"]->getId(), ImGui::GetWindowSize(), ImVec2(), ImVec2(-1, -1));
 
 	ImGui::SetCursorPosX(20);
 	ImGui::SetCursorPosY(20);
@@ -60,29 +60,28 @@ void Multiplayer::render()
 	ImGui::SetColumnWidth(0, 320);
 	ImGui::SetColumnWidth(1, ImGui::GetWindowWidth() - 340);
 
-
 	draw_list->AddRectFilled(
-		ImVec2(ImGui::GetWindowPos().x + 20, ImGui::GetWindowPos().y + 105),
-		ImVec2(ImGui::GetWindowPos().x + 300, ImGui::GetWindowPos().y + 400),
+		ImVec2(ImGui::GetWindowPos().x + 20, ImGui::GetWindowPos().y + 80),
+		ImVec2(ImGui::GetWindowPos().x + 300, ImGui::GetWindowPos().y + ImGui::GetWindowHeight() - 20),
 		IM_COL32(0, 0, 0, 180)
 	);
 
 	ImGui::SetCursorPosX(40);
-	ImGui::SetCursorPosY(125);
-
+	ImGui::SetCursorPosY(95);
+	ImGui::PushFont(font1);
 	ImGui::Text("GAME PARAMETERS");
-	ImGui::Dummy(ImVec2(0, 16));
+	ImGui::PopFont();
 
 	ImVec2 screen_pos = ImGui::GetCursorScreenPos();
 
 	draw_list->AddRectFilled(
-		ImVec2(ImGui::GetWindowPos().x + 40, ImGui::GetWindowPos().y + 150),
-		ImVec2(ImGui::GetWindowPos().x + 280, ImGui::GetWindowPos().y + 151),
+		ImVec2(ImGui::GetWindowPos().x + 20, ImGui::GetWindowPos().y + 130),
+		ImVec2(ImGui::GetWindowPos().x + 300, ImGui::GetWindowPos().y + 131),
 		ImColor(255, 255, 255, 100)
 	);
 
 	ImGui::SetCursorPosX(40);
-	ImGui::SetCursorPosY(165);
+	ImGui::SetCursorPosY(155);
 
 	if (show_game_name_error)
 		ImGui::TextColored(ImVec4(255.0f, 0.0f, 0.0f, 0.8f), game_name_error);
@@ -175,7 +174,7 @@ void Multiplayer::render()
 	ImGui::NextColumn();
 
 	draw_list->AddRectFilled(
-		ImVec2(ImGui::GetWindowPos().x + 325, ImGui::GetWindowPos().y + 105),
+		ImVec2(ImGui::GetWindowPos().x + 326, ImGui::GetWindowPos().y + 105),
 		ImVec2(ImGui::GetWindowPos().x + (ImGui::GetWindowWidth() - 25), ImGui::GetWindowPos().y + ImGui::GetWindowHeight() - 300),
 		IM_COL32(0, 0, 0, 180)
 	);
@@ -236,7 +235,7 @@ void Multiplayer::render()
 			ImGui::NextColumn();
 
 			int hovered = -1;
-			int i = 1;
+			int i = 0;
 
 
 			for (auto& game : ctrl->games) {
@@ -275,8 +274,12 @@ void Multiplayer::render()
 				auto base_y = mouse_pos.y - win_pos.y;
 
 				if ((base_x > 325 && base_x < win_width - win_pos.x)
-					&& (base_y + (line_height * i) > 115 + line_height + line_height * i && base_y < 140 + line_height + line_height * i)) {
+					&& (base_y > 115 + line_height + line_height * i && base_y < 140 + line_height + line_height * i)) {
 					y_start = ImGui::GetWindowPos().y + 162;
+
+					if (ImGui::IsMouseDoubleClicked(0)) {
+						ctrl->join_game(i);
+					}
 
 					hovered = i;
 				}
@@ -288,8 +291,8 @@ void Multiplayer::render()
 
 				if (hovered != -1) {
 					draw_list->AddRectFilled(
-						ImVec2(ImGui::GetWindowPos().x + 325, y_start + 1 - (2 * line_height) + (line_height * hovered)),
-						ImVec2(win_width, y_start + (line_height * hovered) - line_height),
+						ImVec2(ImGui::GetWindowPos().x + 325, y_start - line_height + (line_height * hovered)),
+						ImVec2(win_width, y_start + (line_height * hovered)),
 						ImColor(255, 255, 255, 80)
 					);
 				}
@@ -364,16 +367,20 @@ void Multiplayer::render()
 		ctrl->refresh_games();
 	}
 
-	if (ctrl->connected) {
-		ImGui::SetCursorPosX(20);
-		ImGui::SetCursorPosY(ImGui::GetWindowSize().y - 60);
-		ImGui::Text("Connected to %s:%d as %s   Ping %d", ctrl->host, ctrl->port, ctrl->input_name, Razor::TCPClient::ping);
-	}
+	//if (ctrl->connected) {
+	//	ImGui::SetCursorPosX(20);
+	//	ImGui::SetCursorPosY(ImGui::GetWindowSize().y - 60);
+	//	ImGui::Text("Connected to %s:%d as %s   Ping %d", ctrl->host, ctrl->port, ctrl->input_name, Razor::TCPClient::ping);
+	//}
 
-	ImGui::SetCursorPosX(20);
-	ImGui::SetCursorPosY(ImGui::GetWindowSize().y - 36);
+	ImGui::SetCursorPosX(40);
+	ImGui::SetCursorPosY(ImGui::GetWindowSize().y - 71);
+
+	ImGui::PushFont(font1);
 
 	if (ImGui::Button("BACK", ImVec2(240, 0))) {
 		Razor::TestLayer::current_state = Controller::State::MAIN_MENU;
 	}
+
+	ImGui::PopFont();
 }

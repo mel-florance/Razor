@@ -4,7 +4,6 @@
 #include "../Interfaces/Multiplayer.h"
 
 namespace Razor {
-	class Packet;
 	struct GameInfo;
 }
 
@@ -97,9 +96,12 @@ public:
 	void login();
 	void create_game();
 	void refresh_games();
+	void join_game(uint32_t gameId);
 
 
 	static void onLoginResponse(Razor::Packet* packet);
+	static void onGameDestroyed(Razor::Packet* packet);
+	static void onGamesList(Razor::Packet* packet);
 
 	static std::vector<Razor::GameInfo> games;
 
@@ -111,6 +113,9 @@ public:
 	const char* current_game_map;
 	int input_game_max_players;
 	bool refreshing_server_list;
+
+	static uint32_t session_user_id;
+	static char session_token[64];
 
 	int port;
 	std::string host;

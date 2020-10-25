@@ -178,7 +178,7 @@ namespace Razor {
 					}
 					else {
 						auto packet = reinterpret_cast<Packet*>(buffer);
-
+		
 						if (packet != nullptr) {
 							if (packet->id != PacketType::PING) {
 								getpeername(sock, (sockaddr*)&addr, &addrlen);
@@ -187,7 +187,7 @@ namespace Razor {
 									"[IN] %s - %s (%s:%d)", 
 									packet->to_string().c_str(),
 									Utils::bytesToSize(bytes).c_str(),
-									inet_ntoa(addr.sin_addr), 
+									inet_ntoa(addr.sin_addr),
 									ntohs(addr.sin_port)
 								);
 							}
@@ -225,9 +225,6 @@ namespace Razor {
 
 								if (chatMessage != nullptr) {
 									std::strncpy(chatMessage->username, clients[sock].name, sizeof(ChatMessage::username));
-
-									// Broadcast the message
-									Log::info(std::string("> " + std::string(buffer)).c_str());
 
 									for (int i = 0; i < master.fd_count; i++) {
 										SOCKET out = master.fd_array[i];
@@ -315,6 +312,12 @@ namespace Razor {
 								if (index != channels_infos.end()) {
 									
 								}
+							}
+							else if (packet->id == PacketType::MARK_PLAYER_READY) {
+								auto request = reinterpret_cast<MarkPlayerReady*>(packet);
+								auto response = Packet::create<PlayerReady>();
+
+
 							}
 							else if (packet->id == PacketType::REFRESH_GAMES_LIST)
 							{
