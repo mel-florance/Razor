@@ -66,6 +66,7 @@ namespace Razor {
 		client->bind(PacketType::PLAYER_READY, &LobbyController::onPlayerReady);
 		client->bind(PacketType::PLAYER_STRANGER_JOINED, &LobbyController::onPlayerStrangerJoined);
 		client->bind(PacketType::PLAYER_SELF_JOINED, &LobbyController::onPlayerSelfJoined);
+		client->bind(PacketType::PLAYER_LEAVED, &LobbyController::onPlayerLeaved);
 		client->bind(PacketType::CHAT_MESSAGE, &ChatController::onMessage);
 	}
 

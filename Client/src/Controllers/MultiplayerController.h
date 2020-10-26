@@ -97,7 +97,7 @@ public:
 	void create_game();
 	void refresh_games();
 	void join_game(uint32_t gameId);
-
+	void set_default_game_name();
 
 	static void onLoginResponse(Razor::Packet* packet);
 	static void onGameDestroyed(Razor::Packet* packet);

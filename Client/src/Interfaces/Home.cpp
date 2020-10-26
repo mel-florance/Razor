@@ -2,6 +2,7 @@
 #include "../Controller.h"
 #include "../Client.h"
 #include "../Controllers/HomeController.h"
+#include "../Controllers/MultiplayerController.h"
 
 Home::Home() : Interface()
 {
@@ -14,6 +15,7 @@ Home::~Home()
 void Home::render()
 {
 	auto ctrl = dynamic_cast<HomeController*>(controller);
+	auto multi = Razor::TestLayer::getController<MultiplayerController>("multiplayer");
 
 	ImGui::Image((void*)textures["background"]->getId(), ImGui::GetWindowSize(), ImVec2(), ImVec2(-1, -1));
 
@@ -45,10 +47,18 @@ void Home::render()
 	ImGui::TextColored(ImVec4(100, 100, 100, 0.95f), "STRIKES");
 	ImGui::SetCurrentFont(font1);
 
+	ImGui::SetCursorPosY(ImGui::GetWindowSize().y - 350);
+	ImGui::SetCursorPosX(40);
+
+	ImGui::Text("Username: ");
+	ImGui::SetCursorPosX(40);
+	ImGui::PushItemWidth(240);
+	ImGui::InputText("##username", multi->input_name, sizeof(MultiplayerController::input_name));
 	ImGui::SetCursorPosY(ImGui::GetWindowSize().y - 145);
 
 	ImGui::SetCursorPosX(40);
 	if (ImGui::Button("MULTIPLAYER", ImVec2(240, 0))) {
+		multi->set_default_game_name();
 		Razor::TestLayer::current_state = Controller::State::GAMES_LIST;
 	}
 

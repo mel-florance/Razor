@@ -23,7 +23,6 @@ MultiplayerController::MultiplayerController(
 ) :
 	Controller(client, State::GAMES_LIST),
 	input_name("Guest"),
-	input_game_name("Guest's game"),
 	input_game_mode(GameMode::CASUAL),
 	current_game_mode("Casual"),
 	input_game_map(0),
@@ -102,6 +101,10 @@ void MultiplayerController::join_game(uint32_t gameId)
 	auto packet = Razor::Packet::create<Razor::JoinGame>();
 	packet.gameId = gameId;
 	client->emit(client->handle, packet);
+}
+
+void MultiplayerController::set_default_game_name() {
+	std::strncpy(input_game_name, (std::string(input_name) + "'s game").c_str(), sizeof(MultiplayerController::input_game_name));
 }
 
 void MultiplayerController::onLoginResponse(Razor::Packet* packet)

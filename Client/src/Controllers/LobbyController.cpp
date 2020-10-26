@@ -102,13 +102,23 @@ void LobbyController::onGameCreated(Packet* packet)
 void LobbyController::onPlayerStrangerJoined(Razor::Packet* packet)
 {
 	auto request = reinterpret_cast<PlayerStrangerJoined*>(packet);
+	std::cout << "STRANGER JOINED: " << request->userId << std::endl;
 
 	if (request != nullptr) {
-		auto info = reinterpret_cast<PlayerInfo*>(&request->info);
+		auto infos = reinterpret_cast<GameInfo*>(&request->info);
+		current_game_infos = *infos;
+		tm* tm_local = Utils::getLocalTime();
+		auto ctrl = TestLayer::getController<ChatController>("chat");
 
-		if (info != nullptr) {
-			current_game_infos.players.players[current_game_infos.players_count] = *info;
-			current_game_infos.players_count++;
+		for (auto& p : current_game_infos.players.players) {
+			if (p.userId == request->userId) {
+				TCPClient::Message message;
+				message.username = p.username;
+				message.text = "has joined the lobby";
+				message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
+				ctrl->messages.push_back(message);
+				return;
+			}
 		}
 	}
 }
@@ -122,5 +132,45 @@ void LobbyController::onPlayerSelfJoined(Razor::Packet* packet)
 
 		current_game_infos = *infos;
 		TestLayer::current_state = Controller::State::LOBBY;
+	}
+}
+
+void LobbyController::onPlayerLeaved(Razor::Packet* packet)
+{
+	auto request = reinterpret_cast<PlayerLeaved*>(packet);
+
+	if (request != nullptr) {
+
+		auto infos = reinterpret_cast<PlayerInfo*>(&request->info);
+
+		if (infos != nullptr) {
+
+			std::cout << "infos: " << infos->userId << std::endl;
+			tm* tm_local = Utils::getLocalTime();
+			auto ctrl = TestLayer::getController<ChatController>("chat");
+
+			for (auto& p : current_game_infos.players.players) {
+
+				if (p.userId == infos->userId) {
+
+					TCPClient::Message message;
+					message.username = p.username;
+					message.text = "has leaved the lobby";
+					message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
+					ctrl->messages.push_back(message);
+
+					PlayerInfo inf;
+
+					inf.userId = 0;
+					inf.ready = false;
+					std::strncpy(inf.username, "\0", sizeof(PlayerInfo::username));
+					p = inf;
+
+					current_game_infos.players_count--;
+
+					break;
+				}
+			}
+		}
 	}
 }

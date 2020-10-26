@@ -242,9 +242,6 @@ void Multiplayer::render()
 
 				ImGui::Dummy(ImVec2(0, 5));
 				ImGui::TextColored(ImVec4(255, 255, 255, 0.5), (' ' + std::string(game.name)).c_str());
-				if (ImGui::IsItemClicked()) {
-					std::cout << "ok" << std::endl;
-				}
 				ImGui::NextColumn();
 
 				ImGui::Dummy(ImVec2(0, 5));

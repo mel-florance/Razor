@@ -27,6 +27,7 @@ public:
 	static void onGameCreated(Razor::Packet* packet);
 	static void onPlayerStrangerJoined(Razor::Packet* packet);
 	static void onPlayerSelfJoined(Razor::Packet* packet);
+	static void onPlayerLeaved(Razor::Packet* packet);
 
 	static Razor::GameInfo current_game_infos;
 	static bool is_player_ready;

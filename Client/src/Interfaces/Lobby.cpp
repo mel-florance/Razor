@@ -205,6 +205,11 @@ void Lobby::render()
 	ImGui::PushFont(font1);
 
 	if (ImGui::Button("QUIT LOBBY", ImVec2(240, 0))) {
+
+		ctrl->leave_lobby();
+		ctrl->is_player_ready = false;
+		ChatController::messages.clear();
+
 		Razor::TestLayer::current_state = Controller::State::GAMES_LIST;
 	}
 
