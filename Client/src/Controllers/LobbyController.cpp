@@ -4,11 +4,17 @@
 #include "../Client.h"
 #include "MultiplayerController.h"
 #include "ChatController.h"
+#include "Razor/Core/Clock.h"
 
 using namespace Razor;
 
 GameInfo LobbyController::current_game_infos = {};
 bool LobbyController::is_player_ready = false;
+bool LobbyController::match_started = false;
+float LobbyController::match_countdown_total = 3.0f;
+float LobbyController::match_countdown_elapsed = 0.0f;
+unsigned int LobbyController::countdown_print_status = 3;
+std::unique_ptr<Razor::Clock> LobbyController::match_countdown = std::make_unique<Razor::Clock>();
 
 LobbyController::LobbyController(
 	std::shared_ptr<TCPClient> client,
@@ -29,6 +35,29 @@ void LobbyController::OnEvent(Event& event)
 
 void LobbyController::OnUpdate(float delta)
 {
+	if (match_started) {
+		match_countdown_elapsed += delta;
+
+		auto rounded = std::ceil(match_countdown_elapsed);
+		auto ctrl = TestLayer::getController<ChatController>("chat");
+
+		if (rounded == 1 && countdown_print_status == 3) {
+			ctrl->add_message("[SERVER]", "Starting in 3...");
+			countdown_print_status = 2;
+		}
+		else if (rounded == 2 && countdown_print_status == 2) {
+			ctrl->add_message("[SERVER]", "Starting in 2...");
+			countdown_print_status = 1;
+		}
+		else if (rounded == 3 && countdown_print_status == 1) {
+			ctrl->add_message("[SERVER]", "Starting in 1...");
+			countdown_print_status = 0;
+		}
+		else if (match_countdown_elapsed >= match_countdown_total) {
+			ctrl->add_message("[SERVER]", "Match started !");
+			match_started = false;
+		}
+	}
 }
 
 void LobbyController::OnRender()
@@ -112,11 +141,7 @@ void LobbyController::onPlayerStrangerJoined(Razor::Packet* packet)
 
 		for (auto& p : current_game_infos.players.players) {
 			if (p.userId == request->userId) {
-				TCPClient::Message message;
-				message.username = p.username;
-				message.text = "has joined the lobby";
-				message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
-				ctrl->messages.push_back(message);
+				ctrl->add_message(p.username, "has joined the lobby");
 				return;
 			}
 		}
@@ -152,12 +177,7 @@ void LobbyController::onPlayerLeaved(Razor::Packet* packet)
 			for (auto& p : current_game_infos.players.players) {
 
 				if (p.userId == infos->userId) {
-
-					TCPClient::Message message;
-					message.username = p.username;
-					message.text = "has leaved the lobby";
-					message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
-					ctrl->messages.push_back(message);
+					ctrl->add_message(p.username, "has leaved the lobby");
 
 					PlayerInfo inf;
 
@@ -172,5 +192,15 @@ void LobbyController::onPlayerLeaved(Razor::Packet* packet)
 				}
 			}
 		}
+	}
+}
+
+void LobbyController::onMatchReady(Razor::Packet* packet)
+{
+	auto request = reinterpret_cast<MatchReady*>(packet);
+
+	if (request != nullptr) {
+		std::cout << "The match is ready" << std::endl;
+		match_started = true;
 	}
 }

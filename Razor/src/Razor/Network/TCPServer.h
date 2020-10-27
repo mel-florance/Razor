@@ -4,6 +4,7 @@
 #include "Network.h"
 
 #define MAX_GENERATED_CLIENT_ID 100000
+#define MAX_TOKEN_LENGTH 64
 
 namespace Razor {
 
@@ -24,6 +25,7 @@ namespace Razor {
 		struct Client {
 			uint32_t id;
 			char name[20];
+			char token[MAX_TOKEN_LENGTH];
 		};
 
 		struct Game {

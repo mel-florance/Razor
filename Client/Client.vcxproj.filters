@@ -14,7 +14,13 @@
     <ClInclude Include="src\Controllers\ChatController.h">
       <Filter>Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Controllers\GameController.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Controllers\HomeController.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controllers\LoadingController.h">
       <Filter>Controllers</Filter>
     </ClInclude>
     <ClInclude Include="src\Controllers\LobbyController.h">
@@ -36,6 +42,9 @@
     <ClInclude Include="src\Interfaces\Home.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="src\Interfaces\Loading.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
     <ClInclude Include="src\Interfaces\Lobby.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
@@ -52,7 +61,13 @@
     <ClCompile Include="src\Controllers\ChatController.cpp">
       <Filter>Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Controllers\GameController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Controllers\HomeController.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controllers\LoadingController.cpp">
       <Filter>Controllers</Filter>
     </ClCompile>
     <ClCompile Include="src\Controllers\LobbyController.cpp">
@@ -72,6 +87,9 @@
       <Filter>Interfaces</Filter>
     </ClCompile>
     <ClCompile Include="src\Interfaces\Home.cpp">
+      <Filter>Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Interfaces\Loading.cpp">
       <Filter>Interfaces</Filter>
     </ClCompile>
     <ClCompile Include="src\Interfaces\Lobby.cpp">

@@ -180,6 +180,14 @@ namespace Razor {
 						auto packet = reinterpret_cast<Packet*>(buffer);
 		
 						if (packet != nullptr) {
+							bool authenticated = false;
+
+							for (auto it = clients.begin(); it != clients.end(); ++it) { 
+								if (it->second.token == packet->token) {
+									authenticated = true;
+								}
+							}
+
 							if (packet->id != PacketType::PING) {
 								getpeername(sock, (sockaddr*)&addr, &addrlen);
 
@@ -208,6 +216,7 @@ namespace Razor {
 										Client client;
 										client.id = generateClientId();
 										std::strncpy(client.name, login->username, sizeof(Client::name));
+										std::strncpy(client.token, token.data(), sizeof(Client::token));
 
 										clients.insert(std::make_pair(sock, client));
 
@@ -312,9 +321,31 @@ namespace Razor {
 
 								for (; it != channels_infos.end(); ++it) {
 									if (it->second.gameId == request->gameId) {
-										auto list = channels[it->first];
+										auto& list = channels[it->first];
 										list.erase(std::remove(list.begin(), list.end(), sock), list.end());
-										std::cout << "Game erased" << std::endl;
+										it->second.players_count--;
+
+										PlayerInfo info;
+										info.userId = clients[sock].id;
+										std::strncpy(info.username, clients[sock].name, sizeof(PlayerInfo::username));
+
+										for (auto& p : it->second.players.players) {
+											if (p.userId == info.userId) {
+												p.userId = 0;
+												p.ready = false;
+												std::strncpy(p.username, "", sizeof(PlayerInfo::username));
+											}
+										}
+
+										std::cout << "player has leaved" << std::endl;
+
+										for (auto s : list) {
+											auto response = Packet::create<PlayerLeaved>();
+											response.info = info;
+											send(s, reinterpret_cast<char*>(&response), sizeof(PlayerLeaved), 0);
+										}
+
+										break;
 									}
 								}
 							}
@@ -362,7 +393,11 @@ namespace Razor {
 													it->second.players.players[i] = infos;
 													it->second.players_count++;
 
+													std::cout << "PLAYER COUNT: " << it->second.players_count << std::endl;
+
 													auto chan_it = channels.begin();
+
+													std::cout << "CHANNEL SIZE: " << channels[it->first].size() << std::endl;
 
 													for (auto s : channels[it->first]) {
 														if (s == sock) {
@@ -371,9 +406,9 @@ namespace Razor {
 															send(s, reinterpret_cast<char*>(&response), sizeof(PlayerSelfJoined), 0);
 														}
 														else {
-
 															auto response = Packet::create<PlayerStrangerJoined>();
-															response.info = infos;
+															response.info = channels_infos[it->first];
+															response.userId = infos.userId;
 															send(s, reinterpret_cast<char*>(&response), sizeof(PlayerStrangerJoined), 0);
 														}
 													}
@@ -403,13 +438,24 @@ namespace Razor {
 													response.userId = player.userId;
 													response.ready = player.ready;
 
-													auto chan_it = channels.begin();
-
 													for (auto s : channels[it->first]) {
 														send(s, reinterpret_cast<char*>(&response), sizeof(PlayerReady), 0);
 													}
 
 													break;
+												}
+											}
+
+											int ready = 0;
+											for (auto& player : it->second.players.players)
+												if (player.ready)
+													ready++;
+
+											if (ready == it->second.players_count) {
+												auto response = Packet::create<MatchReady>();
+
+												for (auto s : channels[it->first]) {
+													send(s, reinterpret_cast<char*>(&response), sizeof(MatchReady), 0);
 												}
 											}
 										}

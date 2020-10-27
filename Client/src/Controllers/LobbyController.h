@@ -5,6 +5,7 @@
 
 namespace Razor {
 	class Texture;
+	class Clock;
 }
 
 class LobbyController : public Controller
@@ -28,8 +29,14 @@ public:
 	static void onPlayerStrangerJoined(Razor::Packet* packet);
 	static void onPlayerSelfJoined(Razor::Packet* packet);
 	static void onPlayerLeaved(Razor::Packet* packet);
+	static void onMatchReady(Razor::Packet* packet);
 
 	static Razor::GameInfo current_game_infos;
 	static bool is_player_ready;
+	static bool match_started;
+	static float match_countdown_total;
+	static float match_countdown_elapsed;
+	static std::unique_ptr<Razor::Clock> match_countdown;
+	static unsigned int countdown_print_status;
 };
 

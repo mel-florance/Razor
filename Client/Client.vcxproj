@@ -140,7 +140,9 @@
     <ClInclude Include="src\Client.h" />
     <ClInclude Include="src\Controller.h" />
     <ClInclude Include="src\Controllers\ChatController.h" />
+    <ClInclude Include="src\Controllers\GameController.h" />
     <ClInclude Include="src\Controllers\HomeController.h" />
+    <ClInclude Include="src\Controllers\LoadingController.h" />
     <ClInclude Include="src\Controllers\LobbyController.h" />
     <ClInclude Include="src\Controllers\MultiplayerController.h" />
     <ClInclude Include="src\Controllers\OptionsController.h" />
@@ -148,6 +150,7 @@
     <ClInclude Include="src\Interfaces\Chat.h" />
     <ClInclude Include="src\Interfaces\Game.h" />
     <ClInclude Include="src\Interfaces\Home.h" />
+    <ClInclude Include="src\Interfaces\Loading.h" />
     <ClInclude Include="src\Interfaces\Lobby.h" />
     <ClInclude Include="src\Interfaces\Multiplayer.h" />
     <ClInclude Include="src\Interfaces\Options.h" />
@@ -156,7 +159,9 @@
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\Controller.cpp" />
     <ClCompile Include="src\Controllers\ChatController.cpp" />
+    <ClCompile Include="src\Controllers\GameController.cpp" />
     <ClCompile Include="src\Controllers\HomeController.cpp" />
+    <ClCompile Include="src\Controllers\LoadingController.cpp" />
     <ClCompile Include="src\Controllers\LobbyController.cpp" />
     <ClCompile Include="src\Controllers\MultiplayerController.cpp" />
     <ClCompile Include="src\Controllers\OptionsController.cpp" />
@@ -164,6 +169,7 @@
     <ClCompile Include="src\Interfaces\Chat.cpp" />
     <ClCompile Include="src\Interfaces\Game.cpp" />
     <ClCompile Include="src\Interfaces\Home.cpp" />
+    <ClCompile Include="src\Interfaces\Loading.cpp" />
     <ClCompile Include="src\Interfaces\Lobby.cpp" />
     <ClCompile Include="src\Interfaces\Multiplayer.cpp" />
     <ClCompile Include="src\Interfaces\Options.cpp" />

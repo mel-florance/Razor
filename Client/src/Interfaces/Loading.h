@@ -6,11 +6,11 @@ namespace Razor {
 	class Texture;
 }
 
-class Game : public Interface
+class Loading : public Interface
 {
 public:
-	Game();
-	~Game();
+	Loading();
+	~Loading();
 
 	virtual void render() override;
 };

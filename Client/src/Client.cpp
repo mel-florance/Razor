@@ -9,6 +9,7 @@
 #include "Controllers/ChatController.h"
 #include "Controllers/OptionsController.h"
 #include "Controllers/HomeController.h"
+#include "Controllers/GameController.h"
 
 namespace Razor {
 
@@ -58,37 +59,37 @@ namespace Razor {
 		controllers["chat"] = std::make_shared<ChatController>(client, ui_textures);
 		controllers["options"] = std::make_shared<OptionsController>(client, ui_textures);
 		controllers["home"] = std::make_shared<HomeController>(client, ui_textures);
+		controllers["game"] = std::make_shared<GameController>(client, ui_textures);
 
 		client->bind(PacketType::LOGIN_RESPONSE, &MultiplayerController::onLoginResponse);
-		client->bind(PacketType::GAME_CREATED, &LobbyController::onGameCreated);
 		client->bind(PacketType::GAMES_LIST, &MultiplayerController::onGamesList);
 		client->bind(PacketType::GAME_DESTROYED, &MultiplayerController::onGameDestroyed);
+
+		client->bind(PacketType::GAME_CREATED, &LobbyController::onGameCreated);
 		client->bind(PacketType::PLAYER_READY, &LobbyController::onPlayerReady);
 		client->bind(PacketType::PLAYER_STRANGER_JOINED, &LobbyController::onPlayerStrangerJoined);
 		client->bind(PacketType::PLAYER_SELF_JOINED, &LobbyController::onPlayerSelfJoined);
 		client->bind(PacketType::PLAYER_LEAVED, &LobbyController::onPlayerLeaved);
+		client->bind(PacketType::MATCH_READY, &LobbyController::onMatchReady);
+
 		client->bind(PacketType::CHAT_MESSAGE, &ChatController::onMessage);
 	}
 
 	void TestLayer::OnUpdate(float delta)
 	{
-		for (auto it = controllers.begin(); it != controllers.end(); ++it) {
+		for (auto it = controllers.begin(); it != controllers.end(); ++it)
 			if (it->second->state == current_state)
 				it->second->OnUpdate(delta);
-		}
-
 	}
 
 	void TestLayer::OnAttach()
 	{
-
 	}
 
 	void TestLayer::OnEvent(Razor::Event& event) {
-		for (auto it = controllers.begin(); it != controllers.end(); ++it) {
+		for (auto it = controllers.begin(); it != controllers.end(); ++it)
 			if (it->second->state == current_state)
 				it->second->OnEvent(event);
-		}
 	}
 
 	void TestLayer::OnImGuiRender()
@@ -110,10 +111,9 @@ namespace Razor {
 		ImGui::Begin("Razor Client", &p_open, window_flags);
 		ImGui::PopStyleVar();
 
-		for (auto it = controllers.begin(); it != controllers.end(); ++it) {
+		for (auto it = controllers.begin(); it != controllers.end(); ++it)
 			if (it->second->state == current_state)
 				it->second->OnRender();
-		}
 
 		ImGui::End();
 	}

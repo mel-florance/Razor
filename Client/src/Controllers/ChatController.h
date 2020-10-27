@@ -20,6 +20,8 @@ public:
 	void OnUpdate(float delta) override;
 	void OnRender() override;
 
+	static void add_message(const std::string& username, const std::string& text, bool time = true);
+
 	static void onMessage(Razor::Packet* packet);
 
 	void send();

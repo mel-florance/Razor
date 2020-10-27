@@ -37,6 +37,20 @@ void ChatController::OnRender()
 	this->interface->render();
 }
 
+void ChatController::add_message(const std::string& username, const std::string& text, bool time)
+{
+	TCPClient::Message message;
+	message.username = username;
+	message.text = text;
+
+	if (time) {
+		tm* tm_local = Utils::getLocalTime();
+		message.time = Utils::pad(tm_local->tm_hour) + ':' + Utils::pad(tm_local->tm_min);
+	}
+
+	messages.push_back(message);
+}
+
 void ChatController::onMessage(Razor::Packet* packet)
 {
 	auto item = reinterpret_cast<ChatMessage*>(packet);

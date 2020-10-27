@@ -41,6 +41,7 @@ namespace Razor {
 		PLAYER_SELF_JOINED,
 		PLAYER_LEAVED,
 		MARK_PLAYER_READY,
+		MATCH_READY,
 		NULL_PACKET
 	};
 
@@ -115,6 +116,8 @@ namespace Razor {
 				return PacketType::LEAVE_GAME;
 			if constexpr (std::is_same_v<T, PlayerLeaved>)
 				return PacketType::PLAYER_LEAVED;
+			if constexpr (std::is_same_v<T, MatchReady>)
+				return PacketType::MATCH_READY;
 		}
 
 		inline std::string to_string() {
@@ -145,6 +148,7 @@ namespace Razor {
 			case PacketType::MARK_PLAYER_READY: return "MARK_PLAYER_READY";
 			case PacketType::LEAVE_GAME: return "LEAVE_GAME";
 			case PacketType::PLAYER_LEAVED: return "PLAYER_LEAVED";
+			case PacketType::MATCH_READY: return "MATCH_READY";
 			}
 		}
 	};
@@ -242,7 +246,8 @@ namespace Razor {
 	};
 
 	struct PlayerStrangerJoined : public Packet {
-		PlayerInfo info;
+		GameInfo info;
+		uint32_t userId;
 	};
 
 	struct PlayerSelfJoined : public Packet {
@@ -274,6 +279,9 @@ namespace Razor {
 
 	struct GameDestroyed : public Packet {
 		uint32_t gameId;
+	};
+
+	struct MatchReady : public Packet {
 	};
 
 	//----------------------------------------
