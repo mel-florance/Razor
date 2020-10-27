@@ -9,7 +9,8 @@ LoadingController::LoadingController(
 	std::shared_ptr<Razor::TCPClient> client,
 	const std::unordered_map<std::string, Razor::Texture*>& textures
 ) :
-	Controller(client, State::GAME)
+	Controller(client, State::LOADING),
+	progress(0.0f)
 {
 	this->setInterface(new Loading(), textures);
 }
@@ -24,6 +25,7 @@ void LoadingController::OnEvent(Event& event)
 
 void LoadingController::OnUpdate(float delta)
 {
+	progress += delta / 100;
 }
 
 void LoadingController::OnRender()

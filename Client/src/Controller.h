@@ -14,7 +14,8 @@ public:
 		MAIN_MENU,
 		GAMES_LIST,
 		OPTIONS,
-		LOBBY
+		LOBBY,
+		LOADING
 	};
 
 	Controller(std::shared_ptr<Razor::TCPClient> client, State state = State::UNDEFINED);

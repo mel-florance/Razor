@@ -19,5 +19,7 @@ public:
 	void OnEvent(Razor::Event& event) override;
 	void OnUpdate(float delta) override;
 	void OnRender() override;
+
+	float progress;
 };
 

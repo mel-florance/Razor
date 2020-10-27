@@ -10,6 +10,7 @@
 #include "Controllers/OptionsController.h"
 #include "Controllers/HomeController.h"
 #include "Controllers/GameController.h"
+#include "Controllers/LoadingController.h"
 
 namespace Razor {
 
@@ -60,6 +61,7 @@ namespace Razor {
 		controllers["options"] = std::make_shared<OptionsController>(client, ui_textures);
 		controllers["home"] = std::make_shared<HomeController>(client, ui_textures);
 		controllers["game"] = std::make_shared<GameController>(client, ui_textures);
+		controllers["loading"] = std::make_shared<LoadingController>(client, ui_textures);
 
 		client->bind(PacketType::LOGIN_RESPONSE, &MultiplayerController::onLoginResponse);
 		client->bind(PacketType::GAMES_LIST, &MultiplayerController::onGamesList);

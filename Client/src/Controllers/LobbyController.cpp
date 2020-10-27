@@ -55,6 +55,7 @@ void LobbyController::OnUpdate(float delta)
 		}
 		else if (match_countdown_elapsed >= match_countdown_total) {
 			ctrl->add_message("[SERVER]", "Match started !");
+			Razor::TestLayer::current_state = Controller::State::LOADING;
 			match_started = false;
 		}
 	}
@@ -200,7 +201,6 @@ void LobbyController::onMatchReady(Razor::Packet* packet)
 	auto request = reinterpret_cast<MatchReady*>(packet);
 
 	if (request != nullptr) {
-		std::cout << "The match is ready" << std::endl;
 		match_started = true;
 	}
 }
