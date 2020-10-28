@@ -149,12 +149,12 @@ namespace Razor
 				current_import_path = opts.toString();
 				import_callback = tf;
 				show_import_modal = true;
-				/*if (importer->importMesh(opts.toString()))
+				if (importer->importMesh(opts.toString()))
 				{
 					result = importer->getNodeData();
 					tf(result);
 					importer->resetRootNode();
-				}*/
+				}
 			}
 			else if (type == Type::Image) {
 				current_import_path = opts.toString();

@@ -309,6 +309,7 @@ project "Client"
 
 	includedirs
 	{
+		"%{IncludeDir.GLFW}",
 		"Razor/vendor/spdlog/include",
 		"Razor/src",
 		"Razor/vendor",

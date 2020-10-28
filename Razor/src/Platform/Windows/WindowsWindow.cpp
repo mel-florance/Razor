@@ -85,9 +85,6 @@ namespace Razor {
 			data.Width = (float)width;
 			data.Height = (float)height;
 
-
-			std::cout << data.Width << ", " << data.Height << std::endl;
-
 			WindowResizeEvent event(width, height);
 			data.EventCallback(event);
 		});

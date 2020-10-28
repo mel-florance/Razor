@@ -3,6 +3,7 @@
 #include "Razor/Network/Packet.h"
 #include "../Client.h"
 #include "MultiplayerController.h"
+#include "LoadingController.h"
 #include "ChatController.h"
 #include "Razor/Core/Clock.h"
 
@@ -40,6 +41,7 @@ void LobbyController::OnUpdate(float delta)
 
 		auto rounded = std::ceil(match_countdown_elapsed);
 		auto ctrl = TestLayer::getController<ChatController>("chat");
+		auto loader = TestLayer::getController<LoadingController>("loading");
 
 		if (rounded == 1 && countdown_print_status == 3) {
 			ctrl->add_message("[SERVER]", "Starting in 3...");
@@ -55,6 +57,7 @@ void LobbyController::OnUpdate(float delta)
 		}
 		else if (match_countdown_elapsed >= match_countdown_total) {
 			ctrl->add_message("[SERVER]", "Match started !");
+			loader->started = true;
 			Razor::TestLayer::current_state = Controller::State::LOADING;
 			match_started = false;
 		}

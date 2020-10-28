@@ -163,7 +163,7 @@ void TestLayer::OnUpdate(float delta)
 		glm::vec3 rot = glm::vec3(Utils::randomf(0, TAU), Utils::randomf(0, TAU), Utils::randomf(0, TAU));
 		t->setRotation(rot);
 
-		CubePhysicsBody* body = new CubePhysicsBody(nodeCube.get(), glm::vec3(1.0f, 1.0f, 1.0f), scene->getActiveCamera()->getPosition() + scene->getActiveCamera()->getDirection(), rot);
+		CubePhysicsBody* body = new CubePhysicsBody(nodeCube.get(), glm::vec3(1.0f, 1.0f, 1.0f), scene->getActiveCamera()->getPosition() + scene->getActiveCamera()->g(), rot);
 		body->init();
 
 		glm::vec3 dir = scene->getActiveCamera()->getDirection() * 60.0f;

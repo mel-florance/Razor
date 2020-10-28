@@ -5,6 +5,8 @@
 
 namespace Razor {
 	class Texture;
+	class SceneGraph;
+	class AssetsManager;
 }
 
 class LoadingController : public Controller
@@ -21,5 +23,7 @@ public:
 	void OnRender() override;
 
 	float progress;
+	bool started;
+	bool finished;
 };
 

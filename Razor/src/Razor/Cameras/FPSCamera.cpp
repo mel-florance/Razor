@@ -59,7 +59,8 @@ namespace Razor
 				return;
 		}
 
-		updateVectors();
+	
+		updateVectors(); 
 
 		if (glfwGetKey(native, GLFW_KEY_KP_5) == GLFW_PRESS && viewport->isHovered())
 			mode = mode == Camera::Mode::ORTHOGRAPHIC 
@@ -140,6 +141,7 @@ namespace Razor
 				if (pitch < -89.0f) pitch = -89.0f;
 			}
 
+			
 			updateVectors();
 		}
 	}

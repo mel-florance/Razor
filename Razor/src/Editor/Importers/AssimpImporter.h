@@ -4,10 +4,10 @@
 #include "Razor/Scene/Node.h"
 #include "Razor/Types/Variant.h"
 
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-#include "assimp/ProgressHandler.hpp"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/ProgressHandler.hpp>
 
 namespace Razor 
 {

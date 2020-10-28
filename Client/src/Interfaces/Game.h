@@ -13,5 +13,6 @@ public:
 	~Game();
 
 	virtual void render() override;
+	unsigned int current_pass;
 };
 

@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RZ_PLATFORM_WINDOWS;RZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Razor\vendor\spdlog\include;..\Razor\src;..\Razor\vendor;..\Razor\vendor\glm;..\Razor\vendor\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Razor\vendor\GLFW\include;..\Razor\vendor\spdlog\include;..\Razor\src;..\Razor\vendor;..\Razor\vendor\glm;..\Razor\vendor\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,7 +97,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RZ_PLATFORM_WINDOWS;RZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Razor\vendor\spdlog\include;..\Razor\src;..\Razor\vendor;..\Razor\vendor\glm;..\Razor\vendor\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Razor\vendor\GLFW\include;..\Razor\vendor\spdlog\include;..\Razor\src;..\Razor\vendor;..\Razor\vendor\glm;..\Razor\vendor\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -119,7 +119,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RZ_PLATFORM_WINDOWS;RZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Razor\vendor\spdlog\include;..\Razor\src;..\Razor\vendor;..\Razor\vendor\glm;..\Razor\vendor\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Razor\vendor\GLFW\include;..\Razor\vendor\spdlog\include;..\Razor\src;..\Razor\vendor;..\Razor\vendor\glm;..\Razor\vendor\bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

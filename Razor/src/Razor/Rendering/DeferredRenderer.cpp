@@ -177,6 +177,8 @@ namespace Razor
 		geometry_shader->setUniformMat4f("projection", camera->getProjectionMatrix());
 		geometry_shader->setUniformMat4f("view", camera->getViewMatrix());
 
+
+
 		for (auto node : nodes)
 		{
 			geometry_shader->setUniformMat4f("model", node->transform.getMatrix());
@@ -222,6 +224,7 @@ namespace Razor
 		glBindTexture(GL_TEXTURE_CUBE_MAP, pbr_pipeline->getEnvCubemap());
 		cube->getVao()->bind();
 		cube->draw();
+
 		glEnable(GL_DEPTH_TEST);
 
 		Shader* shader_pbr = pbr_pipeline->getShaderPBR();

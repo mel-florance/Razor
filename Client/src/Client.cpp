@@ -1,6 +1,7 @@
 #include "Client.h"
 
 #include "Razor/Cameras/FPSCamera.h"
+#include "Razor/Cameras/TPSCamera.h"
 #include "Razor/Scene/ScenesManager.h"
 #include "Razor/Network/Packet.h"
 
@@ -19,17 +20,13 @@ namespace Razor {
 	{
 		Razor::ScenesManager* sm = this->getScenesManager();
 		Razor::Engine* engine = this->getEngine();
-		auto camera = new FPSCamera(&Application::Get().GetWindow());
-
-		auto main = new ImGuiLayer(nullptr);
 
 		auto layer = new TestLayer(sm, engine);
+		auto main = new ImGuiLayer(nullptr);
 		PushLayer(layer);
 		PushOverlay(main);
 
-		auto scene = sm->getActiveScene();
-		scene->addCamera(camera);
-		scene->setActiveCamera(camera);
+		this->GetWindow().SetVSync(false);
 	}
 
 	Client::~Client()
@@ -75,6 +72,11 @@ namespace Razor {
 		client->bind(PacketType::MATCH_READY, &LobbyController::onMatchReady);
 
 		client->bind(PacketType::CHAT_MESSAGE, &ChatController::onMessage);
+
+		auto camera = new FPSCamera(&Application::Get().GetWindow());
+		auto scene = sm->getActiveScene();
+		scene->addCamera(camera);
+		scene->setActiveCamera(camera);
 	}
 
 	void TestLayer::OnUpdate(float delta)
